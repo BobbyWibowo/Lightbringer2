@@ -1,6 +1,6 @@
 # Folders
-./node_modules
-./storage
+/node_modules/
+/storage/
 
 # Files
-./config.json
+/config.json
