@@ -72,6 +72,42 @@ class ExtendedClientUtil extends ClientUtil {
     }
   }
 
+  getProp (object, props) {
+    if (!object || !props) return
+
+    if (typeof props === 'string') {
+      if (props.includes('.')) {
+        const propsArr = props.split('.')
+        props = []
+
+        for (let i = 0; i < propsArr.length; i++) {
+          let p = propsArr[i]
+
+          while (p[p.length - 1] === '\\' && propsArr[i + 1] !== undefined) {
+            p = p.slice(0, -1) + '.'
+            p += propsArr[++i]
+          }
+
+          props.push(p)
+        }
+      } else {
+        props = [props]
+      }
+    } else if (!props.constructor || props.constructor.name !== 'Array') {
+      return
+    }
+
+    for (let i = 0; i < props.length; i++) {
+      object = object[props[i]]
+
+      if (object === undefined) {
+        break
+      }
+    }
+
+    return object
+  }
+
   humanizeDuration (ms, maxUnits, short, fraction = true) {
     const round = ms > 0 ? Math.floor : Math.ceil
     const parsed = [

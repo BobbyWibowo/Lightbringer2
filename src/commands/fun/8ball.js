@@ -1,7 +1,7 @@
 const { Command } = require('discord-akairo')
 const snekfetch = require('snekfetch')
 
-class PingCommand extends Command {
+class EightBallCommand extends Command {
   constructor () {
     super('8ball', {
       aliases: ['8ball', '8b'],
@@ -36,4 +36,4 @@ class PingCommand extends Command {
   }
 }
 
-module.exports = PingCommand
+module.exports = EightBallCommand

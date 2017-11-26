@@ -4,7 +4,7 @@ const { stripIndent } = require('common-tags')
 const MAX_MATCHES_LENGTH = 20
 const MATCHES_LIST_TIMEOUT = 15000
 
-class UserinfoCommand extends Command {
+class UserInfoCommand extends Command {
   constructor () {
     super('userinfo', {
       aliases: ['userinfo', 'uinfo', 'info'],
@@ -179,4 +179,4 @@ class UserinfoCommand extends Command {
   }
 }
 
-module.exports = UserinfoCommand
+module.exports = UserInfoCommand
