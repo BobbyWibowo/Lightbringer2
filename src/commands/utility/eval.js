@@ -8,7 +8,7 @@ class EvalCommand extends Command {
       description: 'Evaluates arbritrary JavaScript codes.',
       args: [
         {
-          id: 'input',
+          id: 'content',
           match: 'content',
           description: 'The JavaScript codes that you want to be evaluated.'
         }
@@ -20,7 +20,7 @@ class EvalCommand extends Command {
     let result, type, isError
     const time = process.hrtime()
     try {
-      result = await eval(args.input) // eslint-disable-line no-eval
+      result = await eval(args.content) // eslint-disable-line no-eval
     } catch (error) {
       result = error.toString()
       isError = true
@@ -33,7 +33,7 @@ class EvalCommand extends Command {
     }
 
     let tempString = '•  **JavaScript codes:**\n' +
-      this.client.util.formatCode(args.input, 'js') + '\n' +
+      this.client.util.formatCode(args.content, 'js') + '\n' +
       `•  ${isError ? '**Evaluation error:**' : '**Result:**'}\n` +
       '%s\n' +
       `•  ${type ? `Type: ${type} | ` : ''}Execution time: ${this.client.util.formatTimeNs(diff[0] * 1e9 + diff[1])}`
