@@ -1,37 +1,33 @@
 const { Command } = require('discord-akairo')
 const snekfetch = require('snekfetch')
 
-const ANIMALS = [
-  {
-    name: 'cat',
+const ANIMALS = {
+  cat: {
     regex: /^c(at(s)?)?$/i,
     api: 'http://thecatapi.com/api/images/get?format=xml&type=jpg,png,gif',
     action: 'regex',
     data: /<url>\s*(.+?)\s*<\/url>/i
   },
-  {
-    name: 'dog',
+  dog: {
     regex: /^d(og(s)?)?$/i,
     api: 'https://random.dog/woof',
     action: 'append',
     data: 'https://random.dog/',
     exclude: /\.mp4$/i
   },
-  {
-    name: 'bird',
+  bird: {
     regex: /^b(ird(s)?)?$/i,
     api: 'http://random.birb.pw/tweet/',
     action: 'append',
     data: 'http://random.birb.pw/img/'
   },
-  {
-    name: 'lizard',
+  lizard: {
     regex: /^l(i(zard(s)?)?)?$/i,
     api: 'https://nekos.life/api/lizard',
     action: 'json',
     data: 'url'
   }
-]
+}
 
 const MAX_RETRY = 3
 
@@ -45,13 +41,13 @@ class AnimalsCommand extends Command {
           id: 'animal',
           match: 'rest',
           type: (word, message, args) => {
-            for (const ANIMAL of ANIMALS) {
-              if (ANIMAL.regex.test(word)) {
-                return ANIMAL
+            for (const key of Object.keys(ANIMALS)) {
+              if (ANIMALS[key].regex.test(word)) {
+                return key
               }
             }
             if (!word.length) {
-              return ANIMALS[Math.floor(Math.random() * ANIMALS.length)]
+              return Object.keys(ANIMALS)[Math.floor(Math.random() * Object.keys(ANIMALS).length)]
             }
           }
         },
@@ -75,34 +71,36 @@ class AnimalsCommand extends Command {
     }
 
     if (args.list) {
-      return message.edit(`🐱\u2000|\u2000**Available types for \`animals\` command:** ${ANIMALS.map(a => `\`${a.name}\``).join(', ')}.`)
+      return message.edit(`🐱\u2000|\u2000**Available types for \`animals\` command:** ${Object.keys(ANIMALS).join(', ')}.`)
     }
 
-    await message.status.progress(`Fetching a random ${args.animal.name} image\u2026`)
+    await message.status.progress(`Fetching a random ${args.animal} image\u2026`)
+
+    const animal = ANIMALS[args.animal]
 
     let image
     let attempts = 0
     while (!image && attempts <= 3) {
       attempts++
 
-      const result = await snekfetch.get(args.animal.api)
+      const result = await snekfetch.get(animal.api)
       if (result.status !== 200) {
         continue
       }
 
       let _image
-      switch (args.animal.action) {
+      switch (animal.action) {
         case 'regex':
-          const exec = args.animal.data.exec(result.body)
+          const exec = animal.data.exec(result.body)
           if (exec && exec[1]) {
             _image = exec[1]
           }
           break
         case 'append':
-          _image = args.animal.data + result.body
+          _image = animal.data + result.body
           break
         case 'json':
-          _image = this.client.util.getProp(result.body, args.animal.data)
+          _image = this.client.util.getProp(result.body, animal.data)
           break
         default:
           _image = result.body
@@ -110,7 +108,7 @@ class AnimalsCommand extends Command {
 
       // It will attempt to re-fetch till MAX_RETRY
       // if the image URL matched exclude regex
-      if (args.animal.exclude && args.animal.exclude.test(_image)) {
+      if (animal.exclude && animal.exclude.test(_image)) {
         continue
       }
 

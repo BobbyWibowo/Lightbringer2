@@ -18,7 +18,7 @@ class HugCommand extends Command {
       .get('https://nekos.life/api/hug')
       .set('Key', 'dnZ4fFJbjtch56pNbfrZeSRfgWqdPDgf')
 
-    await message.edit(`*Hugs ${message.mentions.users.first()}\u2026* ${result.body.url}`)
+    await message.edit(`*hugs ${message.mentions.users.first()}* \u2026 ${result.body.url}`)
   }
 }
 
