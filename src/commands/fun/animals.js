@@ -70,7 +70,7 @@ class AnimalsCommand extends Command {
   }
 
   async exec (message, args) {
-    if (!args.animal) {
+    if (args.animal === null) {
       return message.status.error('That type is not available! Use `--list` flag to list all available types!')
     }
 
