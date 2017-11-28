@@ -5,7 +5,7 @@ class KissCommand extends Command {
   constructor () {
     super('kiss', {
       aliases: ['kisses', 'kiss'],
-      description: 'Kisses someone using random GIFs from nekos.life'
+      description: 'Kisses someone using random GIFs from nekos.life.'
     })
   }
 

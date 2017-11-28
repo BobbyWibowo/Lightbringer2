@@ -5,7 +5,7 @@ class InsultCommand extends Command {
   constructor () {
     super('insult', {
       aliases: ['insults', 'insult'],
-      description: 'Insults some users',
+      description: 'Insults some users.',
       options: {
         credits: 'Twentysix#5252'
       }

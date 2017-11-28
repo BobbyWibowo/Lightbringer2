@@ -36,6 +36,19 @@ class ExtendedCommandHandler extends CommandHandler {
       this.client.stats.increment('messages-received')
     }
   }
+
+  reload (id) {
+    const mod = this.modules.get(id.toString())
+
+    // Attempt to tell Command that it's going to be reloaded.
+    // This will be useful on Commands that have its own
+    // Timeouts, so that they can be cleared first.
+    if (mod && typeof mod.onReload === 'function') {
+      mod.onReload()
+    }
+
+    return super.reload(id)
+  }
 }
 
 module.exports = ExtendedCommandHandler

@@ -16,7 +16,7 @@ class FortuneCommand extends Command {
   constructor () {
     super('fortune', {
       aliases: ['fortunecookie', 'fortune'],
-      description: 'Shows a random fortune cookie',
+      description: 'Shows a random fortune cookie.',
       args: [
         {
           id: 'type',

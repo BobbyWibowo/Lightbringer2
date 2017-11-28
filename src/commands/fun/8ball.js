@@ -5,7 +5,7 @@ class EightBallCommand extends Command {
   constructor () {
     super('8ball', {
       aliases: ['8ball', '8b'],
-      description: 'Pings the bot!',
+      description: 'Uses 8ball.delegator.com to ask the magic 8-ball for a question.',
       args: [
         {
           id: 'question',

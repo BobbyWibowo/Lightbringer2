@@ -5,7 +5,7 @@ class KillCommand extends Command {
   constructor () {
     super('kill', {
       aliases: ['kills', 'kill'],
-      description: 'Kills some users',
+      description: 'Kills some users.',
       options: {
         credits: 'Santa illu™#8235 <286011141619187712>'
       }

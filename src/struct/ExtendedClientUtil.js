@@ -1,17 +1,22 @@
 const { ClientUtil } = require('discord-akairo')
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, Util } = require('discord.js')
 const moment = require('moment')
-const { resolveColor } = require('discord.js').Util
+const { resolveColor } = Util
+const { TextChannel } = require('discord.js')
 
 const R_USER = /^<@!?(\d+?)>$/
 const R_ROLE = /^<@&?(\d+?)>$/
 const R_CHANNEL = /^<#(\d+?)>$/
+
+const MAX_MATCHES_LENGTH = 20
 
 class ExtendedClientUtil extends ClientUtil {
   constructor (client) {
     super(client)
 
     this.isClientUtilExtended = true
+
+    this.matchesListTimeout = 15000
   }
 
   embed (data) {
@@ -55,7 +60,7 @@ class ExtendedClientUtil extends ClientUtil {
 
       // Move value of author's icon property
       // to author's iconURL property
-      if (data.author.icon !== undefined) {
+      if (data.author && data.author.icon !== undefined) {
         data.author.iconURL = data.author.icon
         delete data.author.icon
       }
@@ -64,12 +69,75 @@ class ExtendedClientUtil extends ClientUtil {
     return new MessageEmbed(data)
   }
 
-  hasEmbedPermission (channel) {
-    if (channel.guild) {
-      return channel.permissionsFor(channel.guild.me).has('EMBED_LINKS')
-    } else {
+  resolveMemberOrUser (keyword, memberSource, userSource = this.client.users) {
+    const result = {
+      member: undefined,
+      user: undefined,
+      failed: undefined
+    }
+
+    if (!keyword) {
+      return result
+    }
+
+    // First of all, try to get GuildMembers matching the keyword
+    if (memberSource) {
+      const resolved = this.resolveMembers(keyword, memberSource)
+      if (resolved.size > 1) {
+        // Return the entire Collection
+        result.member = resolved
+      } else if (resolved.size === 1) {
+        result.member = resolved.first()
+        result.user = result.member.user
+      }
+    }
+
+    // If no GuildMember could be found, try to get User matching the keyword
+    if (!result.member && userSource) {
+      const resolved = this.resolveUsers(keyword, userSource)
+      if (resolved.size > 1) {
+        // Return the entire Collection
+        result.user = resolved
+      } else if (resolved.size === 1) {
+        result.user = resolved.first()
+      }
+    }
+
+    if (result.member === undefined && result.user === undefined) {
+      // An indicator of complete failure
+      result.failed = true
+    }
+
+    return result
+  }
+
+  formatMatchesList (matches) {
+    if (!matches) {
+      return 'Nobody could be found with that keyword. Please try again!'
+    }
+
+    const size = matches.size
+
+    let list = matches
+      .map(u => u.tag || u.user.tag)
+      .sort((a, b) => a.localeCompare(b))
+
+    list.length = Math.min(MAX_MATCHES_LENGTH, size)
+
+    if (size > MAX_MATCHES_LENGTH) {
+      list.push(`and ${size - list.length} more ...`)
+    }
+
+    return 'Multiple users found, please be more specific:\n' +
+      this.client.util.formatCode(list.join(', '), 'css')
+  }
+
+  hasPermissions (channel, permissions) {
+    if (!(channel instanceof TextChannel)) {
       return true
     }
+
+    return channel.permissionsFor(channel.guild.me).has(permissions)
   }
 
   getProp (object, props) {

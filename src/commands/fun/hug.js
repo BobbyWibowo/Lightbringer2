@@ -5,7 +5,7 @@ class HugCommand extends Command {
   constructor () {
     super('hug', {
       aliases: ['hugs', 'hug'],
-      description: 'Hugs someone using random GIFs from nekos.life'
+      description: 'Hugs someone using random GIFs from nekos.life.'
     })
   }
 

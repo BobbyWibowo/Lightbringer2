@@ -5,7 +5,7 @@ class FeedCommand extends Command {
   constructor () {
     super('feed', {
       aliases: ['feed'],
-      description: 'Forces an item down someone\'s throat'
+      description: 'Forces an item down someone\'s throat.'
     })
   }
 

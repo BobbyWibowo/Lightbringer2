@@ -15,8 +15,8 @@ if (config.token) {
       prefix: config.prefix || 'lb',
       allowMention: false,
       automateCategories: true,
-      commandStatusLifetime: 120000,
-      commandStatusDeleteTimeout: 8000,
+      commandStatusLifetime: 60000,
+      commandStatusDeleteTimeout: 7500,
       emitters: {
         process
       },

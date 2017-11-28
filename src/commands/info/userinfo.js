@@ -1,8 +1,6 @@
+const { Collection } = require('discord.js')
 const { Command } = require('discord-akairo')
 const { stripIndent } = require('common-tags')
-
-const MAX_MATCHES_LENGTH = 20
-const MATCHES_LIST_TIMEOUT = 15000
 
 class UserInfoCommand extends Command {
   constructor () {
@@ -32,42 +30,32 @@ class UserInfoCommand extends Command {
       await message.guild.members.fetch()
     }
 
-    let member, user
+    let member, user, profile
 
-    // First attempt to get an instance of GuildMember from the keyword
-    if (message.guild) {
-      if (args.keyword) {
-        const resolved = this.client.util.resolveMembers(args.keyword, message.guild.members)
-        if (resolved.size > 1) {
-          return message.status.error(this.formatMatchesList(resolved), { timeout: MATCHES_LIST_TIMEOUT })
-        } else if (resolved.size === 1) {
-          member = resolved.first()
-          user = member.user
-        }
-      } else {
-        member = message.member
-        user = member.user
+    if (args.keyword) {
+      const resolved = this.client.util.resolveMemberOrUser(
+        args.keyword,
+        message.guild ? message.guild.members : null
+      )
+
+      if (resolved.failed) {
+        return message.status.error('Could not find matching users!')
       }
+
+      if ((resolved.member || resolved.user) instanceof Collection) {
+        return message.status.error(
+          this.client.util.formatMatchesList(resolved.member || resolved.user),
+          { timeout: this.client.util.matchesListTimeout }
+        )
+      }
+
+      member = resolved.member
+      user = resolved.user
+    } else {
+      member = message.guild ? message.member : null
+      user = message.author
     }
 
-    // If no GuildMember could be found, attempt to get an instance
-    // of User from this.client.users (all users cached by the bot)
-    if (!user) {
-      if (args.keyword) {
-        const resolved = this.client.util.resolveUsers(args.keyword, this.client.users)
-        if (resolved.size > 1) {
-          return message.status.error(this.formatMatchesList(resolved), { timeout: MATCHES_LIST_TIMEOUT })
-        } else if (resolved.size === 1) {
-          user = resolved.first()
-        } else {
-          return message.status.error('No users could be found with that keyword!')
-        }
-      } else {
-        user = message.author
-      }
-    }
-
-    let profile
     try {
       profile = !user.bot && await user.fetchProfile()
     } catch (error) {}
@@ -155,27 +143,6 @@ class UserInfoCommand extends Command {
         embed: this.client.util.embed(embed)
       })
     }
-  }
-
-  formatMatchesList (matches) {
-    if (!matches) {
-      return 'Nobody could be found with that keyword. Please try again!'
-    }
-
-    const size = matches.size
-
-    let list = matches
-      .map(u => u.tag || u.user.tag)
-      .sort((a, b) => a.localeCompare(b))
-
-    list.length = Math.min(MAX_MATCHES_LENGTH, size)
-
-    if (size > MAX_MATCHES_LENGTH) {
-      list.push(`and ${size - list.length} more ...`)
-    }
-
-    return 'Multiple users found, please be more specific:\n' +
-      this.client.util.formatCode(list.join(', '), 'css')
   }
 }
 
