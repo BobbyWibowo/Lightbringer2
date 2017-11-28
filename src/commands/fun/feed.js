@@ -5,17 +5,11 @@ class FeedCommand extends Command {
   constructor () {
     super('feed', {
       aliases: ['feed'],
-      description: 'Forces an item down someone\'s throat',
-      args: [
-        {
-          id: 'content',
-          match: 'content'
-        }
-      ]
+      description: 'Forces an item down someone\'s throat'
     })
   }
 
-  async exec (message, args) {
+  async exec (message) {
     if (!message.mentions.users.size) {
       return message.status.error('@mention some people to feed!')
     }

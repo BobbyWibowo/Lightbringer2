@@ -51,13 +51,13 @@ class FortuneCommand extends Command {
     }
 
     await message.edit('🔄\u2000Getting a fortune cookie\u2026')
-    const res = await snekfetch.get(`http://yerkee.com/api/fortune/${args.type}`)
+    const result = await snekfetch.get(`http://yerkee.com/api/fortune/${args.type}`)
 
-    if (res.status !== 200) {
+    if (result.status !== 200) {
       return message.status.error('Could not retrieve fortune!')
     }
 
-    await message.edit(`🔮\u2000|\u2000**Fortune cookie${args.type.length ? ` (${args.type})` : ''}:**\n\n${res.body.fortune}`)
+    await message.edit(`🔮\u2000|\u2000**Fortune cookie${args.type.length ? ` (${args.type})` : ''}:**\n\n${result.body.fortune}`)
   }
 }
 

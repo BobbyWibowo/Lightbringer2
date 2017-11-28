@@ -297,11 +297,11 @@ delegates@^1.0.0:
 
 discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-dev"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/d23668772513916ef1dc2733e7e5a62b134e4cae"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/edde928b3f2e312f13faa78bc2eec62c2d0b912a"
 
 discord.js@hydrabolt/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/950e65c7f12dc618ecfc47dd4136daeec30cf6be"
+  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/efd1c4c51625fd3c16ce3535f4bd340551dbd8ae"
   dependencies:
     pako "^1.0.0"
     prism-media "^0.0.2"
@@ -317,11 +317,10 @@ doctrine@1.5.0, doctrine@^1.2.2:
     isarray "^1.0.0"
 
 doctrine@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-2.0.0.tgz#c73d8d2909d22291e1a007a395804da8b665fe63"
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-2.0.2.tgz#68f96ce8efc56cc42651f1faadb4f175273b0075"
   dependencies:
     esutils "^2.0.2"
-    isarray "^1.0.0"
 
 end-of-stream@^1.0.0, end-of-stream@^1.1.0:
   version "1.4.0"
@@ -762,8 +761,8 @@ inquirer@^0.12.0:
     through "^2.3.6"
 
 interpret@^1.0.0:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.0.4.tgz#820cdd588b868ffb191a809506d6c9c8f212b1b0"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.1.0.tgz#7ed1b1410c6a0e0f78cf95d3b8440c63f78b8614"
 
 is-arrayish@^0.2.1:
   version "0.2.1"
