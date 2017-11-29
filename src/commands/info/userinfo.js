@@ -73,6 +73,7 @@ class UserInfoCommand extends Command {
             value: stripIndent`
               •  **ID:** ${user.id}
               •  **Status:** ${user.presence.status}
+              •  **Mention:** ${user.toString()}
               •  **Created:** ${this.client.util.formatFromNow(user.createdAt)}
             `
           }
