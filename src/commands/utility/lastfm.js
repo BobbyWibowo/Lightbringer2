@@ -162,10 +162,14 @@ class LastfmCommand extends Command {
       return
     }
 
-    const result = await snekfetch.get(`http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&format=json&user=${this.storage.username}&api_key=${this.storage.apiKey}&limit=1`)
-
-    if (result.status !== 200) {
-      console.error(`[lastfm-s] ${result.text}`)
+    let result
+    try {
+      result = await snekfetch.get(`http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&format=json&user=${this.storage.get('username')}&api_key=${this.storage.get('apiKey')}&limit=1`)
+      if (result.status !== 200) {
+        throw new Error(result.text)
+      }
+    } catch (error) {
+      console.error(`[lastfm-s] ${error.toString()}`)
       return this.setRecentTrackTimeout(true)
     }
 
