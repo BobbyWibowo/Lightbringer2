@@ -1,7 +1,7 @@
 const { ClientUtil } = require('discord-akairo')
 const { MessageEmbed, Util } = require('discord.js')
 const moment = require('moment')
-const { resolveColor } = Util
+const { resolveColor, escapeMarkdown } = Util
 const { TextChannel } = require('discord.js')
 
 const R_USER = /^<@!?(\d+?)>$/
@@ -119,7 +119,7 @@ class ExtendedClientUtil extends ClientUtil {
     const size = matches.size
 
     let list = matches
-      .map(u => u.tag || u.user.tag)
+      .map(u => escapeMarkdown(u.tag || u.user.tag, true))
       .sort((a, b) => a.localeCompare(b))
 
     list.length = Math.min(MAX_MATCHES_LENGTH, size)
@@ -258,11 +258,11 @@ class ExtendedClientUtil extends ClientUtil {
     return `${moment(date).format('ddd, MMM Do YYYY @ h:mm:ss a')} (${this.fromNow(date)})`
   }
 
-  formatCode (text, lang = '', inline = false) {
+  formatCode (text, lang, inline) {
     if (inline) {
-      return `\`${text}\`` // `${text}`
+      return `\`${text}\``
     } else {
-      return `\`\`\`${lang}\n${text}\n\`\`\`` // ```${lang}${text}\n```
+      return `\`\`\`${lang || ''}\n${text}\n\`\`\``
     }
   }
 

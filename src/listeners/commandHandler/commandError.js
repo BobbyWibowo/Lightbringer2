@@ -20,6 +20,8 @@ class CommandErrorListener extends Listener {
         this.client.util.formatCode(error.stack || error, 'js'),
         { timeout: 30000 })
     }
+
+    this.client.commandHandler.clearStatus(message)
   }
 }
 

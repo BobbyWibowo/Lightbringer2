@@ -80,13 +80,8 @@ class AvatarCommand extends Command {
       avatarURL += '&f=.gif'
     }
 
-    let appendMessage = ''
-    if (message.guild && !member) {
-      appendMessage = '\n*This user is not a member of the current guild.*'
-    }
-
     if (args.plain) {
-      return message.edit(`${mention ? user : user.tag}'s avatar:\n${avatarURL}${appendMessage}`)
+      return message.edit(`${mention ? user : user.tag}'s avatar:\n${avatarURL}`)
     }
 
     let content = 'My avatar:'
@@ -98,7 +93,7 @@ class AvatarCommand extends Command {
 
     const embed = {
       title: user.tag,
-      description: `[Click here to view in a browser](${avatarURL})${appendMessage}`,
+      description: `[Click here to view in a browser](${avatarURL})`,
       color: member ? member.displayColor : 0,
       image: avatarURL
     }

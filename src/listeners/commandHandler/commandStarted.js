@@ -6,11 +6,9 @@ class CommandStartedListener extends Listener {
       emitter: 'commandHandler',
       event: 'commandStarted'
     })
-
-    this.initiated = false
   }
 
-  async exec (message, command) {
+  async exec (message, command, args) {
     this.client.stats.increment('commands-started')
   }
 }

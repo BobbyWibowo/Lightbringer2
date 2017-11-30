@@ -1,4 +1,5 @@
 const { Command } = require('discord-akairo')
+const { escapeMarkdown } = require('discord.js').Util
 const { inspect } = require('util')
 
 class EvalCommand extends Command {
@@ -29,11 +30,11 @@ class EvalCommand extends Command {
 
     if (!isError) {
       type = result !== undefined && result.constructor ? result.constructor.name : 'undefined'
-      result = inspect(result, { depth: 0 })
+      result = escapeMarkdown(inspect(result, { depth: 0 }), true)
     }
 
     let tempString = '•  **JavaScript codes:**\n' +
-      this.client.util.formatCode(args.content, 'js') + '\n' +
+      this.client.util.formatCode(escapeMarkdown(args.content, true), 'js') + '\n' +
       `•  ${isError ? '**Evaluation error:**' : '**Result:**'}\n` +
       '%s\n' +
       `•  ${type ? `Type: ${type} | ` : ''}Execution time: ${this.client.util.formatTimeNs(diff[0] * 1e9 + diff[1])}`

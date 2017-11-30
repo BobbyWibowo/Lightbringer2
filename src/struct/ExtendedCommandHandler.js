@@ -1,5 +1,5 @@
-const { CommandHandler } = require('discord-akairo')
 const { Collection } = require('discord.js')
+const { CommandHandler } = require('discord-akairo')
 const CommandStatus = require('./CommandStatus')
 
 class ExtendedCommandHandler extends CommandHandler {
@@ -7,16 +7,15 @@ class ExtendedCommandHandler extends CommandHandler {
     super(client)
 
     const {
-      commandStatusLifetime = 0
+      commandStatusLifetime = 60000 // default
     } = client.akairoOptions
 
     this.commandStatusLifetime = commandStatusLifetime
+
     this.commandStatuses = new Collection()
   }
 
   async handle (message) {
-    super.handle(message)
-
     if (message.author.id === this.client.user.id) {
       this.client.stats.increment('messages-sent')
 
@@ -27,22 +26,42 @@ class ExtendedCommandHandler extends CommandHandler {
         this.commandStatuses.set(message.id, message.status)
 
         if (this.commandStatusLifetime) {
-          this.client.setTimeout(() => {
-            this.commandStatuses.delete(message.id)
-          }, this.commandStatusLifetime)
+          message.statusTimeout = this.client.setTimeout(() => this.clearStatus(message), this.commandStatusLifetime)
         }
       }
     } else {
       this.client.stats.increment('messages-received')
     }
+
+    return super.handle(message)
+  }
+
+  clearStatus (message) {
+    this.commandStatuses.delete(message.id)
+
+    if (message.statusTimeout !== undefined) {
+      this.client.clearTimeout(message.statusTimeout)
+      delete message.statusTimeout
+    }
+
+    if (message.status !== undefined) {
+      delete message.status
+    }
+  }
+
+  load (thing, isReload) {
+    const mod = super.load(thing, isReload)
+
+    if (this.client.stats.get('initiated') && isReload && mod && typeof mod.onReady === 'function') {
+      mod.onReady()
+    }
+
+    return mod
   }
 
   reload (id) {
     const mod = this.modules.get(id.toString())
 
-    // Attempt to tell Command that it's going to be reloaded.
-    // This will be useful on Commands that have its own
-    // Timeouts, so that they can be cleared first.
     if (mod && typeof mod.onReload === 'function') {
       mod.onReload()
     }

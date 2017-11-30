@@ -7,7 +7,7 @@ class CommandStatus {
     })
 
     const {
-      commandStatusDeleteTimeout = 0
+      commandStatusDeleteTimeout = 7500 // default
     } = client.akairoOptions
 
     this.message = message

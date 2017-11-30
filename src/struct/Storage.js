@@ -1,3 +1,4 @@
+const fse = require('fs-extra')
 const path = require('path')
 const StorageAdapter = require('./StorageAdapter')
 
@@ -17,6 +18,10 @@ class Storage {
     const {
       storageDirectory = './../storage/'
     } = client.akairoOptions
+
+    if (!fse.existsSync(storageDirectory)) {
+      fse.mkdirSync(storageDirectory)
+    }
 
     const cache = this.cache = {}
 

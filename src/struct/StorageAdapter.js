@@ -82,7 +82,7 @@ class StorageAdapter {
     }
 
     try {
-      fse.writeJSONSync(this.storageFile, this.data)
+      fse.writeJSONSync(this.storageFile, this.data, { spaces: 2 })
     } catch (error) {
       console.error(`Failed to save data to ${this.storageFile}!`, error)
     }
@@ -138,4 +138,4 @@ class StorageAdapter {
   }
 }
 
-exports.module = StorageAdapter
+module.exports = StorageAdapter
