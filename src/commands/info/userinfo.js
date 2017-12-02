@@ -20,12 +20,20 @@ class UserInfoCommand extends Command {
   }
 
   async exec (message, args) {
+    /*
+     * Refresh GuildMemberStore
+     */
+
     if (message.guild) {
       await message.status.progress('Refreshing guild members information\u2026')
       await message.guild.members.fetch()
     }
 
     let member, user, profile
+
+    /*
+     * Resolve GuildMember or User
+     */
 
     if (args.keyword) {
       const resolved = this.client.util.resolveMemberOrUser(
@@ -51,12 +59,20 @@ class UserInfoCommand extends Command {
       user = message.author
     }
 
+    /*
+     * Fetch UserProfile
+     */
+
     try {
       profile = !user.bot && await user.fetchProfile()
     } catch (error) {}
 
     const mention = this.client.util.isKeywordMentionable(args.keyword)
     const avatarURL = user.displayAvatarURL({ size: 256 })
+
+    /*
+     * Account Information field
+     */
 
     const embed = {
       fields: [
@@ -72,11 +88,16 @@ class UserInfoCommand extends Command {
       ]
     }
 
+    /*
+     * Account Information field:
+     * Bot for bots;
+     * Nitro and Mutual guilds for normal users
+     */
+
     if (user.bot) {
       embed.fields[0].value += `\n•  **Bot:** yes`
     } else {
-      embed.fields[0].value += `\n•  **Nitro${profile.premiumSince ? ' since' : ''}:** ` +
-        (profile.premiumSince ? this.client.util.formatFromNow(profile.premiumSince) : 'no')
+      embed.fields[0].value += `\n•  **Nitro${profile.premiumSince ? ' since' : ''}:** ${profile.premiumSince ? this.client.util.formatFromNow(profile.premiumSince) : 'no'}`
       if (user.id !== message.author.id) {
         embed.fields[0].value += `\n•  **Mutual guilds:** ${profile.mutualGuilds.size.toLocaleString() || '0'}`
       }
@@ -85,6 +106,22 @@ class UserInfoCommand extends Command {
     embed.fields[0].value += `\n•  **Avatar:** ${avatarURL
       ? `[${this.client.util.getHostName(avatarURL)}](${avatarURL})`
       : 'N/A'}`
+
+    /*
+     * Activity message
+     */
+
+    if (user.presence.activity) {
+      embed.description = `${this.client.util.formatActivityType(user.presence.activity.type)} **${user.presence.activity.name}**`
+    } else if (user.id === this.client.user.id) {
+      embed.description = '*I do not have any activity message\u2026*'
+    } else {
+      embed.description = '*This user does not have any activity message\u2026*'
+    }
+
+    /*
+     * Guild Membership field
+     */
 
     if (member) {
       embed.fields.push(
@@ -118,12 +155,20 @@ class UserInfoCommand extends Command {
       )
     }
 
+    /*
+     * Message content
+     */
+
     let content = 'My information:'
     if (args.keyword && mention) {
       content = `${(member || user).toString()}'s information:`
     } else if (args.keyword) {
       content = `Information of the user who matched \`${args.keyword}\`:`
     }
+
+    /*
+     * Embed options
+     */
 
     embed.thumbnail = avatarURL
     embed.color = member ? member.displayColor : 0

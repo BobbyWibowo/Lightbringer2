@@ -1,5 +1,5 @@
 const { DiscordAPIError } = require('discord.js')
-const { Listener } = require('discord-akairo')
+const { AkairoError, Listener } = require('discord-akairo')
 
 class CommandErrorListener extends Listener {
   constructor () {
@@ -10,8 +10,7 @@ class CommandErrorListener extends Listener {
   }
 
   async exec (error, message, command) {
-    if (error instanceof DiscordAPIError) {
-      // console.error(error.toString())
+    if (error instanceof DiscordAPIError || error instanceof AkairoError) {
       await message.status.error(error.toString())
     } else {
       console.error(error.stack || error)

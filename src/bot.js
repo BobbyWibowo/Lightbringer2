@@ -13,6 +13,7 @@ if (config.token) {
     {
       selfbot: true,
       prefix: config.prefix || 'lb',
+      statusChannel: config.statusChannel,
       allowMention: false,
       automateCategories: true,
       emitters: {

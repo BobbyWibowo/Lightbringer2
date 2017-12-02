@@ -12,7 +12,8 @@ class ReadyListener extends Listener {
 
   async exec () {
     if (this.client.stats.get('initiated')) {
-      return console.log('Connection resumed!')
+      console.log('Connection resumed!')
+      return this.client.util.sendStatus(`🔄\u2000Connection resumed!`)
     }
 
     console.log('Successfully logged in!')
@@ -48,10 +49,15 @@ class ReadyListener extends Listener {
     console.log('Created readline interface.')
     console.log('You can now evaluate arbritary JavaScript codes straight from your terminal.')
 
+    if (this.client.akairoOptions.statusChannel) {
+      this.client.statusChannel = this.client.channels.get(this.client.akairoOptions.statusChannel)
+    }
+
     this.triggerCommands()
     console.log('Bot is ready!')
 
     this.client.stats.set('initiated', true)
+    await this.client.util.sendStatus(`👍\u2000Bot is ready!`)
   }
 
   triggerCommands () {

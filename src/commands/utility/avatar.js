@@ -1,6 +1,7 @@
 const { Collection } = require('discord.js')
-const { Command, Constants } = require('discord-akairo')
-const { CommandHandlerEvents } = Constants
+const { Command } = require('discord-akairo')
+const { CommandHandlerEvents } = require('discord-akairo').Constants
+const { escapeMarkdown } = require('discord.js').Util
 
 class AvatarCommand extends Command {
   constructor () {
@@ -34,12 +35,20 @@ class AvatarCommand extends Command {
       return this.handler.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, this, 'client', ['EMBED_LINKS'])
     }
 
+    /*
+     * Refresh GuildMemberStore
+     */
+
     if (message.guild) {
       await message.status.progress('Refreshing guild members information\u2026')
       await message.guild.members.fetch()
     }
 
     let member, user
+
+    /*
+     * Resolve GuildMember or User
+     */
 
     if (args.keyword) {
       const resolved = this.client.util.resolveMemberOrUser(
@@ -80,9 +89,17 @@ class AvatarCommand extends Command {
       avatarURL += '&f=.gif'
     }
 
+    /*
+     * Send a plain message if --plain flag was used
+     */
+
     if (args.plain) {
-      return message.edit(`${mention ? user : user.tag}'s avatar:\n${avatarURL}`)
+      return message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s avatar:\n${avatarURL}`)
     }
+
+    /*
+     * Otherwise, build then send embed
+     */
 
     let content = 'My avatar:'
     if (args.keyword && mention) {

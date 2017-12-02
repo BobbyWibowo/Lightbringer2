@@ -53,11 +53,6 @@ class LastfmCommand extends Command {
           id: 'smallImageID',
           match: 'prefix',
           prefix: ['--smallImage=', '--small=']
-        },
-        {
-          id: 'statusChannel',
-          match: 'prefix',
-          prefix: ['--statuschannel=', '--status=', '--channel=']
         }
       ]
     })
@@ -75,9 +70,6 @@ class LastfmCommand extends Command {
 
     // Is Last.fm status updater disabled
     this._disabled = true
-
-    // A channel into which status messages should be sent
-    this._statusChannel = null
 
     // Total consecutive errors
     this._error = 0
@@ -110,10 +102,6 @@ class LastfmCommand extends Command {
     }
 
     if (storageHit) {
-      if (this.storage.get('statusChannel')) {
-        this._statusChannel = this.client.channels.get(this.storage.get('statusChannel')) || null
-      }
-
       this.storage.save()
       return message.status.success('Successfully saved new value(s) to configuration file!')
     }
@@ -202,25 +190,17 @@ class LastfmCommand extends Command {
       if (!artist || !trackName || !fullName) {
         this.nowPlaying = ''
         await this.client.user.setPresence({ activity: null })
-        await this.sendStatus('Cleared Last fm status message!')
+        await this.client.util.sendStatus('🎵\u2000Cleared Last fm status message!')
       } else {
         this.nowPlaying = fullName
         await this.setPresenceToTrack(artist, trackName)
-        await this.sendStatus(`Last fm: ${fullName}`)
+        await this.client.util.sendStatus(`🎵\u2000Last fm: ${fullName}`)
       }
       return this.setRecentTrackTimeout()
     } catch (error) {
       console.error(`[lastfm-t] ${error}`)
       return this.setRecentTrackTimeout(true)
     }
-  }
-
-  async sendStatus (message) {
-    if (!this._statusChannel) {
-      return
-    }
-
-    this._statusChannel.send(`🎵\u2000${message}`)
   }
 
   setRecentTrackTimeout (isError) {
@@ -236,7 +216,7 @@ class LastfmCommand extends Command {
       }
 
       if (this._error >= 3) {
-        this.sendStatus(`Stopped Last.fm status updater due to **${MAX_RETRY}** consecutive errors.`)
+        this.client.util.sendStatus(`🎵\u2000Last.fm status updater stopped due to **${MAX_RETRY}** consecutive errors.`)
         return
       }
     }

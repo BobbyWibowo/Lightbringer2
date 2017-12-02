@@ -11,7 +11,8 @@ class ConfigManager {
       // Configuration template
       fse.outputJsonSync(this.path, {
         prefix: 'lb',
-        token: ''
+        token: '',
+        statusChannel: ''
       }, { spaces: 2 })
 
       console.log(`Configuration template saved to: ${this.path}`)

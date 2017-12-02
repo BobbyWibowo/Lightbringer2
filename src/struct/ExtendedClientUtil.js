@@ -1,8 +1,8 @@
+const { ActivityTypes } = require('discord.js').Constants
 const { ClientUtil } = require('discord-akairo')
-const { MessageEmbed, Util } = require('discord.js')
+const { MessageEmbed, TextChannel } = require('discord.js')
 const moment = require('moment')
-const { resolveColor, escapeMarkdown } = Util
-const { TextChannel } = require('discord.js')
+const { resolveColor, escapeMarkdown } = require('discord.js').Util
 
 const R_USER = /^<@!?(\d+?)>$/
 const R_ROLE = /^<@&?(\d+?)>$/
@@ -14,9 +14,13 @@ class ExtendedClientUtil extends ClientUtil {
   constructor (client) {
     super(client)
 
-    this.isClientUtilExtended = true
-
     this.matchesListTimeout = 15000
+  }
+
+  async sendStatus (message, options) {
+    if (this.client.statusChannel && this.client.statusChannel instanceof TextChannel) {
+      await this.client.statusChannel.send(message, options || {})
+    }
   }
 
   embed (data) {
@@ -297,6 +301,20 @@ class ExtendedClientUtil extends ClientUtil {
   getHostName (url) {
     const match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i)
     return match ? match[2] : ''
+  }
+
+  formatActivityType (type) {
+    if (typeof type !== 'string') {
+      type = ActivityTypes[type]
+    }
+
+    type = type.charAt(0) + type.slice(1).toLowerCase()
+
+    if (type === 'Listening') {
+      type += ' to'
+    }
+
+    return type
   }
 }
 
