@@ -37,7 +37,7 @@ class ReadyListener extends Listener {
       prompt: ''
     }).on('line', line => {
       try {
-        const restart = () => process.exit() // eslint-disable-line no-unused-vars
+        const restart = () => process.exit(0) // eslint-disable-line no-unused-vars
         console.log(eval(line) || 'undefined') // eslint-disable-line no-eval
       } catch (err) {
         console.error(err)

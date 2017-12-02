@@ -24,14 +24,19 @@ class KickCommand extends Command {
   }
 
   async exec (message, args) {
+    if (!message.guild) {
+      return message.status.error('You can only use this command in a guild!')
+    }
+
+    if (!args.keyword) {
+      return message.status.error('You must specify a member to kick!')
+    }
+
     /*
      * Refresh GuildMemberStore
      */
 
-    if (message.guild) {
-      await message.status.progress('Refreshing guild members information\u2026')
-      await message.guild.members.fetch()
-    }
+    await message.guild.members.fetch()
 
     /*
      * Resolve GuildMember then kick
@@ -42,9 +47,15 @@ class KickCommand extends Command {
     if (resolved.size === 1) {
       const target = resolved.first()
       await target.kick(args.reason)
-      return message.status.success(`Successfully kicked ${escapeMarkdown(target.user.tag)} (ID: ${target.user.id}).`, { timeout: -1 })
+      return message.status.success(`Successfully kicked ${escapeMarkdown(target.user.tag)} (ID: ${target.user.id}).`, -1)
     } else if (resolved.size > 1) {
-      return message.status.error(this.client.util.formatMatchesList(resolved, { timeout: this.client.util.matchesListTimeout }))
+      return message.status.error(
+        this.client.util.formatMatchesList(resolved, {
+          name: 'members',
+          prop: 'user.tag'
+        }),
+        this.client.util.matchesListTimeout
+      )
     } else {
       return message.status.error('Could not find matching guild members!')
     }

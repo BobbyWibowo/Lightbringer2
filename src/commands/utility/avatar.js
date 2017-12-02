@@ -62,8 +62,11 @@ class AvatarCommand extends Command {
 
       if ((resolved.member || resolved.user) instanceof Collection) {
         return message.status.error(
-          this.client.util.formatMatchesList(resolved.member || resolved.user),
-          { timeout: this.client.util.matchesListTimeout }
+          this.client.util.formatMatchesList(resolved.member || resolved.user, {
+            name: 'users',
+            prop: ['tag', 'user.tag']
+          }),
+          this.client.util.matchesListTimeout
         )
       }
 

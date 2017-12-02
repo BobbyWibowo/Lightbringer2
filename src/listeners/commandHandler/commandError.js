@@ -17,7 +17,8 @@ class CommandErrorListener extends Listener {
       await message.status.error(
         'An unexpected error occurred (this message will self-destruct in 30 seconds):\n' +
         this.client.util.formatCode(error.stack || error, 'js'),
-        { timeout: 30000 })
+        30000 // timeout (30s)
+      )
     }
 
     this.client.commandHandler.clearStatus(message)

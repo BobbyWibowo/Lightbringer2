@@ -11,7 +11,7 @@ class UserInfoCommand extends Command {
       args: [
         {
           id: 'keyword',
-          match: 'rest',
+          match: 'content',
           description: 'The user that you want to display the information of.'
         }
       ],
@@ -47,8 +47,11 @@ class UserInfoCommand extends Command {
 
       if ((resolved.member || resolved.user) instanceof Collection) {
         return message.status.error(
-          this.client.util.formatMatchesList(resolved.member || resolved.user),
-          { timeout: this.client.util.matchesListTimeout }
+          this.client.util.formatMatchesList(resolved.member || resolved.user, {
+            name: 'users',
+            prop: ['tag', 'user.tag']
+          }),
+          this.client.util.matchesListTimeout
         )
       }
 
@@ -63,9 +66,7 @@ class UserInfoCommand extends Command {
      * Fetch UserProfile
      */
 
-    try {
-      profile = !user.bot && await user.fetchProfile()
-    } catch (error) {}
+    profile = !user.bot && await user.fetchProfile().catch(() => { })
 
     const mention = this.client.util.isKeywordMentionable(args.keyword)
     const avatarURL = user.displayAvatarURL({ size: 256 })
@@ -113,10 +114,6 @@ class UserInfoCommand extends Command {
 
     if (user.presence.activity) {
       embed.description = `${this.client.util.formatActivityType(user.presence.activity.type)} **${user.presence.activity.name}**`
-    } else if (user.id === this.client.user.id) {
-      embed.description = '*I do not have any activity message\u2026*'
-    } else {
-      embed.description = '*This user does not have any activity message\u2026*'
     }
 
     /*

@@ -39,7 +39,7 @@ class CurrencyCommand extends Command {
 
   async exec (message, args) {
     if (args.source) {
-      return message.status.success('Exchange rate provided by http://fixer.io/.', { timeout: -1 })
+      return message.status.success('Exchange rate provided by http://fixer.io/.', -1)
     }
 
     if (!this.data || args.refresh) {

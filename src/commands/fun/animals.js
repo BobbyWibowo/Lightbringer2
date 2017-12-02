@@ -41,13 +41,14 @@ class AnimalsCommand extends Command {
           id: 'animal',
           match: 'rest',
           type: (word, message, args) => {
-            for (const key of Object.keys(ANIMALS)) {
+            const keys = Object.keys(ANIMALS)
+            for (const key of keys) {
               if (ANIMALS[key].regex.test(word)) {
                 return key
               }
             }
             if (!word.length) {
-              return Object.keys(ANIMALS)[Math.floor(Math.random() * Object.keys(ANIMALS).length)]
+              return keys[Math.floor(Math.random() * keys.length)]
             }
           }
         },
@@ -66,12 +67,12 @@ class AnimalsCommand extends Command {
   }
 
   async exec (message, args) {
-    if (args.animal === null) {
+    if (!args.animal) {
       return message.status.error('That type is not available! Use `--list` flag to list all available types!')
     }
 
     if (args.list) {
-      return message.edit(`🐱\u2000|\u2000**Available types for \`animals\` command:** ${Object.keys(ANIMALS).join(', ')}.`)
+      return message.edit(`🐱\u2000|\u2000**Available types:** ${Object.keys(ANIMALS).join(', ')}.`)
     }
 
     await message.status.progress(`Fetching a random ${args.animal} image\u2026`)

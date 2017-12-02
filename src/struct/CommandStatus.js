@@ -15,15 +15,17 @@ class CommandStatus {
     this.commandStatusDeleteTimeout = commandStatusDeleteTimeout
   }
 
-  async _delete (options = {}) {
-    if (options.timeout === undefined) {
-      options.timeout = this.commandStatusDeleteTimeout
+  async _delete (options) {
+    if (typeof options === 'number') {
+      options = { timeout: options }
+    }
+
+    if (options === undefined || options.timeout === undefined) {
+      options = { timeout: this.commandStatusDeleteTimeout }
     }
 
     if (options.timeout >= 0) {
-      try {
-        return this.message.delete(options)
-      } catch (error) {}
+      return this.message.delete(options).catch(() => {})
     }
   }
 

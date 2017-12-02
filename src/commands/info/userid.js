@@ -1,6 +1,5 @@
 const { Collection } = require('discord.js')
 const { Command } = require('discord-akairo')
-const { escapeMarkdown } = require('discord.js').Util
 
 class UserIdCommand extends Command {
   constructor () {
@@ -10,7 +9,7 @@ class UserIdCommand extends Command {
       args: [
         {
           id: 'keyword',
-          match: 'rest',
+          match: 'content',
           description: 'The user that you want to display the ID of.'
         }
       ]
@@ -45,8 +44,11 @@ class UserIdCommand extends Command {
 
       if ((resolved.member || resolved.user) instanceof Collection) {
         return message.status.error(
-          this.client.util.formatMatchesList(resolved.member || resolved.user),
-          { timeout: this.client.util.matchesListTimeout }
+          this.client.util.formatMatchesList(resolved.member || resolved.user, {
+            name: 'users',
+            prop: ['tag', 'user.tag']
+          }),
+          this.client.util.matchesListTimeout
         )
       }
 
@@ -57,7 +59,7 @@ class UserIdCommand extends Command {
 
     const mention = this.client.util.isKeywordMentionable(args.keyword)
 
-    await message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s ID: ${user.id}`)
+    await message.edit(`${mention ? user : user.tag}'s ID: ${user.id}`)
   }
 }
 

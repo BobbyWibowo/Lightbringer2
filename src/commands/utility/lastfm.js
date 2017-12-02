@@ -10,7 +10,7 @@ const MAX_RETRY = 3
 
 // ID of prefix-type arguments that will be regarded
 // as things that may be saved to storage file (temporary)
-const STORAGE_KEYS = ['apiKey', 'username', 'clientID', 'largeImageID', 'smallImageID', 'statusChannel']
+const STORAGE_KEYS = ['apiKey', 'username', 'clientID', 'largeImageID', 'smallImageID']
 
 class LastfmCommand extends Command {
   constructor () {
@@ -80,7 +80,12 @@ class LastfmCommand extends Command {
       this.storage.set('disabled', !this.storage.get('disabled'))
       this._disabled = this.storage.get('disabled')
       this.storage.save()
-      this.storage.get('disabled') ? this.clearRecentTrackTimeout() : this.getRecentTrack()
+      if (this.storage.get('disabled')) {
+        this.clearRecentTrackTimeout()
+        this.client.user.setPresence({ activity: null }) // no need to wait for this
+      } else {
+        this.getRecentTrack()
+      }
       return message.status.success(`${this.storage.get('disabled') ? 'Disabled' : 'Enabled'} Last fm status updater.`)
     }
 
@@ -88,6 +93,7 @@ class LastfmCommand extends Command {
       this.storage.set('rich', !this.storage.get('rich'))
       this.storage.save()
       this.nowPlaying = ''
+      this.clearRecentTrackTimeout()
       this.getRecentTrack()
       return message.status.success(`${this.storage.get('rich') ? 'Enabled' : 'Disabled'} Rich Presence mode.`)
     }
@@ -150,14 +156,18 @@ class LastfmCommand extends Command {
       return
     }
 
-    let result
-    try {
-      result = await snekfetch.get(`http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&format=json&user=${this.storage.get('username')}&api_key=${this.storage.get('apiKey')}&limit=1`)
-      if (result.status !== 200) {
-        throw new Error(result.text)
+    const result = await this.client.util.snek('http://ws.audioscrobbler.com/2.0/', {
+      query: {
+        method: 'user.getrecenttracks',
+        format: 'json',
+        user: this.storage.get('username'),
+        api_key: this.storage.get('apiKey'),
+        limit: 1
       }
-    } catch (error) {
-      console.error(`[lastfm-s] ${error.toString()}`)
+    })
+
+    if (result.status !== 200) {
+      console.error(`[lastfm-s] ${result.text}`)
       return this.setRecentTrackTimeout(true)
     }
 

@@ -18,18 +18,20 @@ class EvalCommand extends Command {
   }
 
   async exec (message, args) {
-    let result, type, isError
     const time = process.hrtime()
+    let result, isError, type
     try {
       result = await eval(args.content) // eslint-disable-line no-eval
     } catch (error) {
-      result = error.toString()
+      result = error
       isError = true
     }
     const diff = process.hrtime(time)
 
     if (!isError) {
-      type = result !== undefined && result.constructor ? result.constructor.name : 'undefined'
+      if (result && result.constructor) {
+        type = result.constructor.name
+      }
       result = escapeMarkdown(inspect(result, { depth: 0 }), true)
     }
 

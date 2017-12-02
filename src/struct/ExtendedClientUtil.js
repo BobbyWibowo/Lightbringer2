@@ -3,6 +3,7 @@ const { ClientUtil } = require('discord-akairo')
 const { MessageEmbed, TextChannel } = require('discord.js')
 const moment = require('moment')
 const { resolveColor, escapeMarkdown } = require('discord.js').Util
+const snekfetch = require('snekfetch')
 
 const R_USER = /^<@!?(\d+?)>$/
 const R_ROLE = /^<@&?(\d+?)>$/
@@ -21,6 +22,18 @@ class ExtendedClientUtil extends ClientUtil {
     if (this.client.statusChannel && this.client.statusChannel instanceof TextChannel) {
       await this.client.statusChannel.send(message, options || {})
     }
+  }
+
+  async snek (url, options) {
+    return snekfetch
+      .get(url, options)
+      .catch(error => {
+        console.error(error)
+        return {
+          status: 0,
+          text: error.toString()
+        }
+      })
   }
 
   embed (data) {
@@ -115,15 +128,23 @@ class ExtendedClientUtil extends ClientUtil {
     return result
   }
 
-  formatMatchesList (matches) {
-    if (!matches) {
-      return 'Nobody could be found with that keyword. Please try again!'
+  formatMatchesList (matches, options = { name: 'matches' }) {
+    if (typeof options.prop === 'string') {
+      options.prop = [options.prop]
     }
 
     const size = matches.size
 
     let list = matches
-      .map(u => escapeMarkdown(u.tag || u.user.tag, true))
+      .map(match => {
+        if (!options.prop) return match
+        let value
+        for (const prop of options.prop) {
+          if (value !== undefined) break
+          value = this.getProp(match, prop)
+        }
+        return value ? escapeMarkdown(value, true) : 'undefined'
+      })
       .sort((a, b) => a.localeCompare(b))
 
     list.length = Math.min(MAX_MATCHES_LENGTH, size)
@@ -132,7 +153,7 @@ class ExtendedClientUtil extends ClientUtil {
       list.push(`and ${size - list.length} more ...`)
     }
 
-    return 'Multiple users found, please be more specific:\n' +
+    return `Multiple ${options.name} found, please be more specific:\n` +
       this.client.util.formatCode(list.join(', '), 'css')
   }
 
@@ -165,8 +186,8 @@ class ExtendedClientUtil extends ClientUtil {
       } else {
         props = [props]
       }
-    } else if (!props.constructor || props.constructor.name !== 'Array') {
-      return
+    } else if (!(props instanceof Array)) {
+      return object
     }
 
     for (let i = 0; i < props.length; i++) {
@@ -303,14 +324,14 @@ class ExtendedClientUtil extends ClientUtil {
     return match ? match[2] : ''
   }
 
-  formatActivityType (type) {
+  formatActivityType (type, lower) {
     if (typeof type !== 'string') {
       type = ActivityTypes[type]
     }
 
-    type = type.charAt(0) + type.slice(1).toLowerCase()
+    type = lower ? type.toLowerCase() : type.charAt(0) + type.slice(1).toLowerCase()
 
-    if (type === 'Listening') {
+    if (/^listening$/i.test(type)) {
       type += ' to'
     }
 

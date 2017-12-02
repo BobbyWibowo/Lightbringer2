@@ -47,7 +47,7 @@ class FortuneCommand extends Command {
     }
 
     if (args.list) {
-      return message.edit(`🔮\u2000|\u2000**Available types for \`fortune\` command:** ${Object.keys(CATEGORIES).join(', ')}.`)
+      return message.edit(`🔮\u2000|\u2000**Available types:** ${Object.keys(CATEGORIES).join(', ')}.`)
     }
 
     await message.edit('🔄\u2000Getting a fortune cookie\u2026')

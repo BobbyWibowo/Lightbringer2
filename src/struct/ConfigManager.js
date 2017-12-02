@@ -17,11 +17,16 @@ class ConfigManager {
 
       console.log(`Configuration template saved to: ${this.path}`)
       console.log('Please edit the file then start the bot again!')
-      process.exit(0)
+      return process.exit(0)
     }
 
-    this.config = fse.readJSONSync(this.path)
-    return this.config
+    try {
+      this.config = fse.readJSONSync(this.path)
+      return this.config
+    } catch (error) {
+      console.error(error)
+      return process.exit(1)
+    }
   }
 
   _backup () {
