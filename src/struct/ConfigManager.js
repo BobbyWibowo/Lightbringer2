@@ -2,27 +2,44 @@ const fse = require('fs-extra')
 
 class ConfigManager {
   constructor (path) {
-    this.path = path
-    this.config = {}
+    this._path = path
+
+    this._config = {}
+
+    this._validKeys = {
+      prefix: {
+        default: 'lb'
+      },
+      token: {
+        protected: true // This is only protected by the get/set functions
+      },
+      statusChannel: {}
+    }
+  }
+
+  _template () {
+    const template = {}
+    for (const key of Object.keys(this._validKeys)) {
+      if (this._validKeys[key].default !== undefined) {
+        template[key] = this._validKeys[key].default
+      } else {
+        template[key] = ''
+      }
+    }
+    return template
   }
 
   load () {
-    if (!fse.existsSync(this.path)) {
-      // Configuration template
-      fse.outputJsonSync(this.path, {
-        prefix: 'lb',
-        token: '',
-        statusChannel: ''
-      }, { spaces: 2 })
-
-      console.log(`Configuration template saved to: ${this.path}`)
+    if (!fse.existsSync(this._path)) {
+      fse.outputJsonSync(this._path, this._template(), { spaces: 2 })
+      console.log(`Configuration template saved to: ${this._path}`)
       console.log('Please edit the file then start the bot again!')
       return process.exit(0)
     }
 
     try {
-      this.config = fse.readJSONSync(this.path)
-      return this.config
+      this._config = fse.readJSONSync(this._path)
+      return this._config
     } catch (error) {
       console.error(error)
       return process.exit(1)
@@ -30,23 +47,44 @@ class ConfigManager {
   }
 
   _backup () {
-    const backupPath = `${this.path}.${new Date().toISOString().replace(/(:|.)/g, '_')}.bak`
-    fse.copySync(this.path, backupPath)
+    const backupPath = `${this._path}.${new Date().toISOString().replace(/(:|.)/g, '_')}.bak`
+    fse.copySync(this._path, backupPath)
     return backupPath
   }
 
   save () {
-    const backupPath = this._backup()
     try {
-      fse.outputJsonSync(this.path, this.config, { spaces: 2 })
+      const backupPath = this._backup()
+      fse.outputJsonSync(this._path, this._config, { spaces: 2 })
       fse.removeSync(backupPath)
     } catch (error) {
-      console.error('Failed to save configuration file!')
+      console.error(error)
+      throw new Error('Failed to save configuration file. Check your console!')
     }
   }
 
+  get (key) {
+    if (this._validKeys[key] === undefined) {
+      throw new Error('The key you specified is not valid!')
+    }
+
+    if (this._validKeys[key].protected) {
+      return `<protected>`
+    }
+
+    return this._config[key]
+  }
+
   set (key, value) {
-    this.config[String(key)] = value
+    if (this._validKeys[key] === undefined) {
+      throw new Error('The key you specified is not valid!')
+    }
+
+    if (this._validKeys[key].protected) {
+      throw new Error('The key you specified is protected!')
+    }
+
+    this._config[String(key)] = value
     this.save()
   }
 }

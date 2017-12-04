@@ -1,11 +1,11 @@
 const { Command } = require('discord-akairo')
-const snekfetch = require('snekfetch')
 
 class HugCommand extends Command {
   constructor () {
     super('hug', {
       aliases: ['hugs', 'hug'],
-      description: 'Hugs someone using random GIFs from nekos.life.'
+      description: 'Hugs someone using random GIFs from nekos.life.',
+      clientPermissions: ['EMBED_LINKS']
     })
   }
 
@@ -14,11 +14,17 @@ class HugCommand extends Command {
       return message.status.error('@mention someone to hug!')
     }
 
-    const result = await snekfetch
-      .get('https://nekos.life/api/hug')
-      .set('Key', 'dnZ4fFJbjtch56pNbfrZeSRfgWqdPDgf')
+    const result = await this.client.util.snek('https://nekos.life/api/hug', {
+      headers: {
+        Key: 'dnZ4fFJbjtch56pNbfrZeSRfgWqdPDgf'
+      }
+    })
 
-    await message.edit(`*hugs ${message.mentions.users.first()}* \u2026 ${result.body.url}`)
+    await message.edit(`*hugs ${message.mentions.users.first()}*`, {
+      embed: this.client.util.embed({
+        image: result.body.url
+      })
+    })
   }
 }
 

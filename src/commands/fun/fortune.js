@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo')
-const snekfetch = require('snekfetch')
 
 const CATEGORIES = {
   all: /^a(ll)?$/,
@@ -51,7 +50,7 @@ class FortuneCommand extends Command {
     }
 
     await message.edit('🔄\u2000Getting a fortune cookie\u2026')
-    const result = await snekfetch.get(`http://yerkee.com/api/fortune/${args.type}`)
+    const result = await this.client.util.snek(`http://yerkee.com/api/fortune/${args.type}`)
 
     if (result.status !== 200) {
       return message.status.error('Could not retrieve fortune!')

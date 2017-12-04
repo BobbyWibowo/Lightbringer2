@@ -31,7 +31,6 @@ class StatsCommand extends Command {
           value: stripIndent`
             •  **Sent:** ${this.client.stats.get('messages-sent').toLocaleString()}
             •  **Received:** ${this.client.stats.get('messages-received').toLocaleString()}
-            •  **Mentioned:** ${this.client.stats.get('mentions').toLocaleString()}
             •  **Executed:** ${this.client.stats.get('commands-started').toLocaleString()}
             •  **Guilds:** ${this.client.guilds.size.toLocaleString()}
             •  **Channels:** ${this.client.channels.size.toLocaleString()}

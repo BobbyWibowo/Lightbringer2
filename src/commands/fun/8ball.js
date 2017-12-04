@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo')
-const snekfetch = require('snekfetch')
 
 class EightBallCommand extends Command {
   constructor () {
@@ -22,7 +21,7 @@ class EightBallCommand extends Command {
     }
 
     await message.status.progress('Asking the question to 8-ball\u2026')
-    const result = await snekfetch.get(`https://8ball.delegator.com/magic/JSON/${args.question}`)
+    const result = await this.client.util.snek(`https://8ball.delegator.com/magic/JSON/${args.question}`)
 
     if (result.status !== 200) {
       return message.status.error('Could not retrieve answer from 8-ball!')

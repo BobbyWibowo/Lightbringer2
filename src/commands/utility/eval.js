@@ -10,8 +10,14 @@ class EvalCommand extends Command {
       args: [
         {
           id: 'content',
-          match: 'content',
+          match: 'rest',
           description: 'The JavaScript codes that you want to be evaluated.'
+        },
+        {
+          id: 'silent',
+          match: 'flag',
+          prefix: ['--silent', '-s'],
+          description: 'Silent mode.'
         }
       ]
     })
@@ -27,6 +33,10 @@ class EvalCommand extends Command {
       isError = true
     }
     const diff = process.hrtime(time)
+
+    if (args.silent) {
+      return console.log(inspect(result, { depth: 0 }))
+    }
 
     if (!isError) {
       if (result && result.constructor) {

@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo')
-const snekfetch = require('snekfetch')
 
 class KissCommand extends Command {
   constructor () {
@@ -14,11 +13,17 @@ class KissCommand extends Command {
       return message.status.error('@mention someone to kiss!')
     }
 
-    const result = await snekfetch
-      .get('https://nekos.life/api/kiss')
-      .set('Key', 'dnZ4fFJbjtch56pNbfrZeSRfgWqdPDgf')
+    const result = await this.client.util.snek('https://nekos.life/api/kiss', {
+      headers: {
+        Key: 'dnZ4fFJbjtch56pNbfrZeSRfgWqdPDgf'
+      }
+    })
 
-    await message.edit(`*kisses ${message.mentions.users.first()}* \u2026 ${result.body.url}`)
+    await message.edit(`*kisses ${message.mentions.users.first()}*`, {
+      embed: this.client.util.embed({
+        image: result.body.url
+      })
+    })
   }
 }
 

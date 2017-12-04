@@ -75,11 +75,15 @@ class ExtendedClientUtil extends ClientUtil {
         data.thumbnail = { url: data.thumbnail }
       }
 
-      // Move value of author's icon property
-      // to author's iconURL property
-      if (data.author && data.author.icon !== undefined) {
+      // Move values of icon property to iconURL property
+      if (data.author !== undefined && data.author.icon !== undefined) {
         data.author.iconURL = data.author.icon
         delete data.author.icon
+      }
+
+      if (data.footer !== undefined && data.footer.icon !== undefined) {
+        data.footer.iconURL = data.footer.icon
+        delete data.footer.icon
       }
     }
 
@@ -150,7 +154,7 @@ class ExtendedClientUtil extends ClientUtil {
     list.length = Math.min(MAX_MATCHES_LENGTH, size)
 
     if (size > MAX_MATCHES_LENGTH) {
-      list.push(`and ${size - list.length} more ...`)
+      list.push(`and ${size - list.length} more \u2026`)
     }
 
     return `Multiple ${options.name} found, please be more specific:\n` +

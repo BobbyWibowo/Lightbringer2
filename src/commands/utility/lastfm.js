@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo')
-const snekfetch = require('snekfetch') // eslint-disable-line no-unused-vars
 const { stripIndent } = require('common-tags')
 
 // Timeout between each polls to Last.fm
@@ -9,50 +8,56 @@ const POLL_TIMEOUT = 7500
 const MAX_RETRY = 3
 
 // ID of prefix-type arguments that will be regarded
-// as things that may be saved to storage file (temporary)
+// as things that may be saved to storage file (temporary method)
 const STORAGE_KEYS = ['apiKey', 'username', 'clientID', 'largeImageID', 'smallImageID']
 
 class LastfmCommand extends Command {
   constructor () {
     super('lastfm', {
       aliases: ['lastfm'],
-      description: 'Manage Last.fm status updater',
-      // These arguments are currently temporary
+      description: 'Manage Last.fm scrobbling status updater.',
       args: [
         {
           id: 'toggle',
           match: 'flag',
-          prefix: ['--toggle', '-t']
+          prefix: ['--toggle', '-t'],
+          description: 'Toggle Last.fm polls. State will be saved to the configuration file.'
         },
         {
           id: 'toggleRich',
           match: 'flag',
-          prefix: ['--rich', '-r']
+          prefix: ['--rich', '-r'],
+          description: 'Toggle Rich Presence. State will be saved to the configuration file.'
         },
         {
           id: 'apiKey',
           match: 'prefix',
-          prefix: ['--apikey=', '--api=']
+          prefix: ['--apikey=', '--api=', '--key='],
+          description: 'Saves your Last.fm Developer API key to the storage file.'
         },
         {
           id: 'username',
           match: 'prefix',
-          prefix: ['--username=', '--user=']
+          prefix: ['--username=', '--user='],
+          description: 'Saves your Last.fm username to the storage file (required to use the API).'
         },
         {
           id: 'clientID',
           match: 'prefix',
-          prefix: ['--clientid=', '--client=']
+          prefix: ['--clientid=', '--client='],
+          description: 'Saves the Client ID of your Discord API Application to the storage file (required to use Rich Presence).'
         },
         {
           id: 'largeImageID',
           match: 'prefix',
-          prefix: ['--largeimage=', '--large=']
+          prefix: ['--largeimage=', '--large='],
+          description: 'Saves the ID of the "large image" that you want to use with your Rich Presence.'
         },
         {
           id: 'smallImageID',
           match: 'prefix',
-          prefix: ['--smallImage=', '--small=']
+          prefix: ['--smallImage=', '--small='],
+          description: 'Saves the ID of the "small image" that you want to use with your Rich Presence.'
         }
       ]
     })
@@ -78,13 +83,12 @@ class LastfmCommand extends Command {
   async exec (message, args) {
     if (args.toggle) {
       this.storage.set('disabled', !this.storage.get('disabled'))
-      this._disabled = this.storage.get('disabled')
       this.storage.save()
       if (this.storage.get('disabled')) {
         this.clearRecentTrackTimeout()
-        this.client.user.setPresence({ activity: null }) // no need to wait for this
+        this.client.user.setPresence({ activity: null }) // no need to wait the Promise
       } else {
-        this.getRecentTrack()
+        this.getRecentTrack(true)
       }
       return message.status.success(`${this.storage.get('disabled') ? 'Disabled' : 'Enabled'} Last fm status updater.`)
     }
@@ -92,9 +96,7 @@ class LastfmCommand extends Command {
     if (args.toggleRich) {
       this.storage.set('rich', !this.storage.get('rich'))
       this.storage.save()
-      this.nowPlaying = ''
-      this.clearRecentTrackTimeout()
-      this.getRecentTrack()
+      this.getRecentTrack(true)
       return message.status.success(`${this.storage.get('rich') ? 'Enabled' : 'Disabled'} Rich Presence mode.`)
     }
 
@@ -109,7 +111,7 @@ class LastfmCommand extends Command {
 
     if (storageHit) {
       this.storage.save()
-      return message.status.success('Successfully saved new value(s) to configuration file!')
+      return message.status.success('Successfully saved new value(s) to storage file!')
     }
 
     await message.edit(this.client.util.formatCode(stripIndent`
@@ -147,7 +149,13 @@ class LastfmCommand extends Command {
     }
   }
 
-  async getRecentTrack () {
+  async getRecentTrack (reset) {
+    if (reset) {
+      this.clearRecentTrackTimeout()
+      this.nowPlaying = ''
+      this._disabled = false
+    }
+
     if (this._disabled || !this.storage.get('username') || !this.storage.get('apiKey')) {
       if (!this.storage.get('disabled')) {
         this.storage.set('disabled', true)

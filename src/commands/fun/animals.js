@@ -1,5 +1,4 @@
 const { Command } = require('discord-akairo')
-const snekfetch = require('snekfetch')
 
 const ANIMALS = {
   cat: {
@@ -84,7 +83,7 @@ class AnimalsCommand extends Command {
     while (!image && attempts <= 3) {
       attempts++
 
-      const result = await snekfetch.get(animal.api)
+      const result = await this.client.util.snek(animal.api)
       if (result.status !== 200) {
         continue
       }

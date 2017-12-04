@@ -1,7 +1,6 @@
 const { Command } = require('discord-akairo')
 const mathjs = require('mathjs')
 const moment = require('moment')
-const snekfetch = require('snekfetch')
 
 class CurrencyCommand extends Command {
   constructor () {
@@ -24,7 +23,10 @@ class CurrencyCommand extends Command {
           match: 'flag',
           prefix: ['--source', '-s']
         }
-      ]
+      ],
+      options: {
+        usage: 'currency <value> <from> <to>'
+      }
     })
 
     // Exchange rates data fetched from fixer.io
@@ -51,8 +53,8 @@ class CurrencyCommand extends Command {
       }
     }
 
-    if (args.input.length < 3) {
-      return message.status.error(`Usage: \`currency <value> <from> <to>\``)
+    if (!args.input || args.input.length < 3) {
+      return message.status.error(`Usage: \`${this.options.usage}\``)
     }
 
     const val = parseFloat(args.input[0])
@@ -107,7 +109,11 @@ class CurrencyCommand extends Command {
 
     this._updatingRates = true
 
-    const result = await snekfetch.get('https://api.fixer.io/latest?base=USD')
+    const result = await this.client.util.snek('https://api.fixer.io/latest', {
+      query: {
+        base: 'USD'
+      }
+    })
     if (result.status !== 200) {
       throw new Error(result.text)
     }
