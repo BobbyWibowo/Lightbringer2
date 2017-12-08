@@ -4,7 +4,11 @@ class PatCommand extends Command {
   constructor () {
     super('pat', {
       aliases: ['pats', 'pat'],
-      description: 'Pats someone using random GIFs from nekos.life.'
+      description: 'Pats someone using random GIFs from nekos.life.',
+      options: {
+        usage: 'hug <@mention>'
+      },
+      clientPermissions: ['EMBED_LINKS']
     })
   }
 

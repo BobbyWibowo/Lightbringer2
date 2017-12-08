@@ -8,10 +8,6 @@ class DictionaryCommand extends Command {
       description: 'Looks up a word on Merriam-Webster.',
       args: [
         {
-          id: 'keyword',
-          match: 'rest'
-        },
-        {
           id: 'index',
           type: 'integer',
           match: 'prefix',
@@ -25,12 +21,19 @@ class DictionaryCommand extends Command {
           description: 'Lists the rest of the search result if available.'
         },
         {
+          id: 'keyword',
+          match: 'rest'
+        },
+        {
           id: 'apiKey',
           match: 'prefix',
           prefix: ['--apikey=', '--api=', '--key='],
           description: 'Saves your Merriam-Webster\'s Collegiate® Dictionary API key to the storage file.'
         }
       ],
+      options: {
+        usage: 'dictionary < [--index=] [--more] <keyword> | --apikey= >'
+      },
       clientPermissions: ['EMBED_LINKS']
     })
 

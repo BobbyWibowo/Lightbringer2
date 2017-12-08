@@ -1,4 +1,5 @@
 const { Listener } = require('discord-akairo')
+const { OnlineStatuses } = require('./../../util/Constants')
 const readline = require('readline')
 const { stripIndents } = require('common-tags')
 
@@ -49,8 +50,19 @@ class ReadyListener extends Listener {
     console.log('Created readline interface.')
     console.log('You can now evaluate arbritary JavaScript codes straight from your terminal.')
 
-    if (this.client.akairoOptions.statusChannel) {
-      this.client.statusChannel = this.client.channels.get(this.client.akairoOptions.statusChannel)
+    const {
+      statusChannel,
+      onlineStatus
+    } = this.client.akairoOptions
+
+    if (statusChannel) {
+      this.client._statusChannel = this.client.channels.get(statusChannel)
+    }
+
+    if (OnlineStatuses.includes(onlineStatus)) {
+      await this.client.user.setStatus(onlineStatus)
+        .then(() => console.log(`Updated bot's online status to '${onlineStatus}'.`))
+        .catch(console.error)
     }
 
     this.triggerCommands()

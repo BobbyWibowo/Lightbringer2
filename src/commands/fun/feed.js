@@ -4,8 +4,11 @@ const { Foods } = require('../../util/Constants')
 class FeedCommand extends Command {
   constructor () {
     super('feed', {
-      aliases: ['feed'],
-      description: 'Forces an item down someone\'s throat.'
+      aliases: ['feeds', 'feed'],
+      description: 'Forces an item down someone\'s throat.',
+      options: {
+        usage: 'feed <@mention-1> [@mention-2] [...] [@mention-n]'
+      }
     })
   }
 

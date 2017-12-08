@@ -9,21 +9,16 @@ class BanCommand extends Command {
       split: 'sticky',
       args: [
         {
-          id: 'keyword',
-          match: 'rest',
-          description: 'The guild member that you want to ban.'
-        },
-        {
           id: 'reason',
           match: 'prefix',
-          prefix: '--reason=',
+          prefix: ['--reason=', '-r='],
           description: 'Reason for banning.'
         },
         {
           id: 'days',
           type: 'integer',
           match: 'prefix',
-          prefix: ['--days=', '--day=', '--delete='],
+          prefix: ['--days=', '--day=', '--delete=', '-d='],
           description: 'Number of days of messages to delete.',
           default: 0
         },
@@ -32,8 +27,16 @@ class BanCommand extends Command {
           match: 'flag',
           prefix: ['--soft', '-s'],
           description: 'Soft-ban (will immediately unban the user after the ban).'
+        },
+        {
+          id: 'keyword',
+          match: 'rest',
+          description: 'The guild member that you want to ban.'
         }
-      ]
+      ],
+      options: {
+        usage: 'ban [--reason=] [--days=] [--soft] <keyword>'
+      }
     })
   }
 

@@ -12,7 +12,10 @@ class UserIdCommand extends Command {
           match: 'content',
           description: 'The user that you want to display the ID of.'
         }
-      ]
+      ],
+      options: {
+        usage: 'userid [keyword]'
+      }
     })
   }
 

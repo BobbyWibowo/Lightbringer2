@@ -12,8 +12,6 @@ if (config.token) {
   const client = new LightbringerClient(
     {
       selfbot: true,
-      prefix: config.prefix || 'lb',
-      statusChannel: config.statusChannel,
       allowMention: false,
       automateCategories: true,
       emitters: {
@@ -23,7 +21,10 @@ if (config.token) {
       inhibitorDirectory: './src/inhibitors/',
       listenerDirectory: './src/listeners/',
       storageDirectory: './storage/',
-      configManager
+      configManager,
+      prefix: config.prefix || 'lb',
+      statusChannel: config.statusChannel,
+      onlineStatus: config.onlineStatus
     },
     {
       disableEveryone: true

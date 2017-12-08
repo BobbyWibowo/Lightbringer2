@@ -34,8 +34,20 @@ class AnimalsCommand extends Command {
   constructor () {
     super('animals', {
       aliases: ['animals', 'animal', 'a'],
-      description: 'Shows you random animal picture',
+      description: 'Shows you random animal pictures.',
       args: [
+        {
+          id: 'list',
+          match: 'flag',
+          prefix: ['--list', '-l'],
+          description: 'Lists all available types.'
+        },
+        {
+          id: 'upload',
+          match: 'flag',
+          prefix: ['--upload', '-u'],
+          description: 'Uploads the image as an attachment instead.'
+        },
         {
           id: 'animal',
           match: 'rest',
@@ -49,19 +61,13 @@ class AnimalsCommand extends Command {
             if (!word.length) {
               return keys[Math.floor(Math.random() * keys.length)]
             }
-          }
-        },
-        {
-          id: 'list',
-          match: 'flag',
-          prefix: ['--list', '-l']
-        },
-        {
-          id: 'upload',
-          match: 'flag',
-          prefix: ['--upload', '-u']
+          },
+          description: 'The type of animal (randomized when not specified).'
         }
-      ]
+      ],
+      options: {
+        usage: 'animals [ --list | [--upload] [animal] ]'
+      }
     })
   }
 

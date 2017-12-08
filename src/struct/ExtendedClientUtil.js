@@ -2,7 +2,7 @@ const { ActivityTypes } = require('discord.js').Constants
 const { ClientUtil } = require('discord-akairo')
 const { MessageEmbed, TextChannel } = require('discord.js')
 const moment = require('moment')
-const { resolveColor, escapeMarkdown } = require('discord.js').Util
+const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
 const snekfetch = require('snekfetch')
 
 const R_USER = /^<@!?(\d+?)>$/
@@ -15,7 +15,11 @@ class ExtendedClientUtil extends ClientUtil {
   constructor (client) {
     super(client)
 
-    this.matchesListTimeout = 15000
+    const {
+      matchesListTimeout = 15000 // default
+    } = client.akairoOptions
+
+    this.matchesListTimeout = matchesListTimeout
   }
 
   async sendStatus (message, options) {
@@ -25,12 +29,22 @@ class ExtendedClientUtil extends ClientUtil {
   }
 
   async snek (url, options) {
+    // Since this will return the finished Promise, any snek's
+    // functions which could have been used to alter the options,
+    // such as.set(), etc. will not be usable on the returned value.
+    // Thus make sure to get used to using SnekfetchOptions when
+    // using snekfetch with this function.
     return snekfetch
       .get(url, options)
       .catch(error => {
+        // On some failures such as 403 Forbidden, snekfetch will throw an Error
+        // instead of returning things with 403 on its 'status' property, so
+        // instead catch it and format it like below to less complicate things
+        // when using snekfetch anywhere else (meaning there's no need for
+        // .catch() but instead simply make sure the 'status' property is 200).
         console.error(error)
         return {
-          status: 0,
+          status: -1,
           text: error.toString()
         }
       })
@@ -38,15 +52,15 @@ class ExtendedClientUtil extends ClientUtil {
 
   embed (data) {
     // If data Object exists, attempt
-    // to apply some extended behavior
+    // to apply some extended behavior.
     if (data) {
-      // ColorResolvable to number
+      // Resolve ColorResolvable to number.
       if (data.color !== undefined) {
         data.color = resolveColor(data.color)
       }
 
       // Apply default 'inline' property if available
-      // to fields that do not have them
+      // onto fields that do NOT yet have them.
       if (data.inline !== undefined) {
         if (data.fields !== undefined) {
           for (let i = 0; i < data.fields.length; i++) {
@@ -58,7 +72,7 @@ class ExtendedClientUtil extends ClientUtil {
         }
       }
 
-      // String to its proper Object equivalent
+      // String data to its proper Object equivalent.
       if (typeof data.author === 'string') {
         data.author = { name: data.author }
       }
@@ -75,7 +89,8 @@ class ExtendedClientUtil extends ClientUtil {
         data.thumbnail = { url: data.thumbnail }
       }
 
-      // Move values of icon property to iconURL property
+      // Move 'icon' property to 'iconURL' property since
+      // 'icon' will often be used as a shortcut to 'iconURL'.
       if (data.author !== undefined && data.author.icon !== undefined) {
         data.author.iconURL = data.author.icon
         delete data.author.icon
@@ -91,6 +106,7 @@ class ExtendedClientUtil extends ClientUtil {
   }
 
   resolveMemberOrUser (keyword, memberSource, userSource = this.client.users) {
+    // TODO: Probably make formatMatchesList() a part of this function.
     const result = {
       member: undefined,
       user: undefined,
@@ -101,23 +117,26 @@ class ExtendedClientUtil extends ClientUtil {
       return result
     }
 
-    // First of all, try to get GuildMembers matching the keyword
+    // First of all, try to get GuildMembers matching the keyword.
     if (memberSource) {
       const resolved = this.resolveMembers(keyword, memberSource)
       if (resolved.size > 1) {
-        // Return the entire Collection
+        // Return the entire Collection when there are more than 1 result.
+        // This is so that it can be then sent to formatMatchesList().
         result.member = resolved
       } else if (resolved.size === 1) {
+        // Return the result when there is exactly 1 result.
         result.member = resolved.first()
         result.user = result.member.user
       }
     }
 
-    // If no GuildMember could be found, try to get User matching the keyword
+    // If no GuildMember could be found, try to get User matching the keyword instead.
     if (!result.member && userSource) {
       const resolved = this.resolveUsers(keyword, userSource)
       if (resolved.size > 1) {
-        // Return the entire Collection
+        // Return the entire Collection. Same reason as the
+        // one for resolving GuildMembers.
         result.user = resolved
       } else if (resolved.size === 1) {
         result.user = resolved.first()
@@ -125,7 +144,7 @@ class ExtendedClientUtil extends ClientUtil {
     }
 
     if (result.member === undefined && result.user === undefined) {
-      // An indicator of complete failure
+      // An indicator of complete failure.
       result.failed = true
     }
 
@@ -162,6 +181,10 @@ class ExtendedClientUtil extends ClientUtil {
   }
 
   hasPermissions (channel, permissions) {
+    // NOTICE: Not to be used when checking certain permissions
+    // like MANAGE_MESSAGES. This function was made to be primarily
+    // used to check EMBED_LINKS permission since it's bound
+    // to be always available in DMChannel and GroupDMChannel.
     if (!(channel instanceof TextChannel)) {
       return true
     }
@@ -287,11 +310,11 @@ class ExtendedClientUtil extends ClientUtil {
     return `${moment(date).format('ddd, MMM Do YYYY @ h:mm:ss a')} (${this.fromNow(date)})`
   }
 
-  formatCode (text, lang, inline) {
+  formatCode (text, lang = '', inline) {
     if (inline) {
-      return `\`${text}\``
+      return '`' + text + '`'
     } else {
-      return `\`\`\`${lang || ''}\n${text}\n\`\`\``
+      return '```' + lang + '\n' + text + '\n' + '```'
     }
   }
 
@@ -340,6 +363,42 @@ class ExtendedClientUtil extends ClientUtil {
     }
 
     return type
+  }
+
+  pad (padding, string, paddingLeft) {
+    if (string === undefined) {
+      return padding
+    }
+
+    if (paddingLeft) {
+      return (padding + string).slice(-padding.length)
+    } else {
+      return (string + padding).substring(0, padding.length)
+    }
+  }
+
+  async multiSend (channel, text, options) {
+    let maxLength = options.maxLength || 2000
+
+    if (options.code) {
+      // 3 (```); options.code; 1 (\n); 1 (\n); 3 (```)
+      maxLength -= 3 + options.code.length + 1 + 1 + 3
+    }
+
+    let split = splitMessage(text, {
+      maxLength,
+      char: options.char || '\n'
+    })
+
+    if (!(split instanceof Array)) {
+      split = [split]
+    }
+
+    if (options.code) {
+      split = split.map(s => this.formatCode(s, options.code))
+    }
+
+    return Promise.all(split.map(s => channel.send(s)))
   }
 }
 

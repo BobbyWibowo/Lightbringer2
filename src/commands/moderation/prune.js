@@ -12,7 +12,10 @@ class PruneCommand extends Command {
           description: 'Number of messages to delete.',
           default: 1
         }
-      ]
+      ],
+      options: {
+        usage: 'prune [amount]'
+      }
     })
   }
 

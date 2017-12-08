@@ -6,7 +6,7 @@ class ReloadCommand extends Command {
   constructor () {
     super('reload', {
       aliases: ['reload', 'r'],
-      description: 'Reloads commands, inhibitors and/or listeners.',
+      description: 'Reloads modules.',
       args: [
         {
           id: 'all',
@@ -18,7 +18,7 @@ class ReloadCommand extends Command {
           id: 'type',
           match: 'prefix',
           prefix: '--type=',
-          description: 'Reloads module of a specific type. This will reload all modules of that type when being used with "all" flag.',
+          description: 'Type of the module. This will reload all modules of the type when being used with "all" flag.',
           type: (word, message, args) => {
             args._type = Boolean(word.length)
             if (/^c(ommand(s)?)?$/i.test(word)) return 0
@@ -34,10 +34,14 @@ class ReloadCommand extends Command {
             args._module = Boolean(word.length)
             if (args.type === 1) return this.client.inhibitorHandler.modules.get(word)
             if (args.type === 2) return this.client.listenerHandler.modules.get(word)
-            return this.client.commandHandler.findCommand(word)
-          }
+            return this.handler.findCommand(word)
+          },
+          description: 'ID of the module (aliases can be used for command modules).'
         }
-      ]
+      ],
+      options: {
+        usage: 'reload < --all [--type=] | [--type=] module >'
+      }
     })
   }
 

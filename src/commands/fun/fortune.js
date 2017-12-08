@@ -18,6 +18,12 @@ class FortuneCommand extends Command {
       description: 'Shows a random fortune cookie.',
       args: [
         {
+          id: 'list',
+          match: 'flag',
+          prefix: ['--list', '-l'],
+          description: 'Lists all available types.'
+        },
+        {
           id: 'type',
           match: 'rest',
           type: (word, message, args) => {
@@ -29,14 +35,13 @@ class FortuneCommand extends Command {
             if (!word.length) {
               return ''
             }
-          }
-        },
-        {
-          id: 'list',
-          match: 'flag',
-          prefix: ['--list', '-l']
+          },
+          description: 'The type of fortune cookie (randomized when not specified).'
         }
-      ]
+      ],
+      options: {
+        usage: 'fortune [ --list | [type] ]'
+      }
     })
   }
 

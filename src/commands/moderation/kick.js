@@ -9,17 +9,20 @@ class KickCommand extends Command {
       split: 'sticky',
       args: [
         {
+          id: 'reason',
+          match: 'prefix',
+          prefix: ['--reason=', '-r='],
+          description: 'Reason for kicking.'
+        },
+        {
           id: 'keyword',
           match: 'rest',
           description: 'The guild member that you want to kick.'
-        },
-        {
-          id: 'reason',
-          match: 'prefix',
-          prefix: '--reason=',
-          description: 'Reason for kicking.'
         }
-      ]
+      ],
+      options: {
+        usage: 'ban [--reason=] <keyword>'
+      }
     })
   }
 

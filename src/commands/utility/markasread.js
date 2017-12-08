@@ -7,11 +7,6 @@ class MarkAsReadCommand extends Command {
       description: 'Deletes a certain number of messages sent by bots.',
       args: [
         {
-          id: 'keyword',
-          match: 'rest',
-          description: 'The guild that you would want to be marked as read.'
-        },
-        {
           id: 'all',
           match: 'flag',
           prefix: ['--all', '-a'],
@@ -21,9 +16,17 @@ class MarkAsReadCommand extends Command {
           id: 'muted',
           match: 'flag',
           prefix: ['--muted', '-m'],
-          description: 'If using `--all`, include muted guilds.'
+          description: 'If using "--all", include muted guilds.'
+        },
+        {
+          id: 'keyword',
+          match: 'rest',
+          description: 'The guild that you would want to be marked as read.'
         }
-      ]
+      ],
+      options: {
+        usage: 'markasread [ --all [--muted] | keyword ]'
+      }
     })
   }
 

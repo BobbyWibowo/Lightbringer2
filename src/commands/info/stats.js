@@ -8,13 +8,11 @@ class StatsCommand extends Command {
       description: 'Shows you stats about Lightbringer.',
       clientPermissions: ['EMBED_LINKS']
     })
+
+    this.git = null
   }
 
   async exec (message, args) {
-    if (!this.options.git && this.client.package.repository) {
-      this.options.git = 'https://github.com/' + this.client.package.repository.replace(/^github:/, '')
-    }
-
     const embed = {
       fields: [
         {
@@ -56,14 +54,20 @@ class StatsCommand extends Command {
       footer: `Ps. Currently caching ${this.client.users.size.toLocaleString()} users\u2026`
     }
 
-    if (this.options.git) {
-      embed.description = `*[Click here](${this.options.git}) to view this self-bot's public GitHub repository\u2026*`
-      embed.author.url = this.options.git
+    if (this.git !== null) {
+      embed.description = `*[Click here](${this.git}) to view this self-bot's public GitHub repository\u2026*`
+      embed.author.url = this.git
     }
 
     await message.edit(message.content, {
       embed: this.client.util.embed(embed)
     })
+  }
+
+  onReady () {
+    if (this.client.package.repository) {
+      this.git = 'https://github.com/' + this.client.package.repository.replace(/^github:/, '')
+    }
   }
 }
 

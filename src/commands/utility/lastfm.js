@@ -59,7 +59,10 @@ class LastfmCommand extends Command {
           prefix: ['--smallImage=', '--small='],
           description: 'Saves the ID of the "small image" that you want to use with your Rich Presence.'
         }
-      ]
+      ],
+      options: {
+        usage: 'lastfm [ --toggle | --rich | [--apikey=] [--username=] [--clientid=] [--largeimage=] [--smallimage=] ]'
+      }
     })
 
     this.storage = null
@@ -67,8 +70,9 @@ class LastfmCommand extends Command {
     // Total scrobbles fetched from Last.fm
     this.totalScrobbles = 0
 
-    // Full name of the currently playing song
-    this.nowPlaying = ''
+    // Currently playing song
+    this.trackName = ''
+    this.artist = ''
 
     // Timeout instance
     this._timeout = null
@@ -114,45 +118,54 @@ class LastfmCommand extends Command {
       return message.status.success('Successfully saved new value(s) to storage file!')
     }
 
-    await message.edit(this.client.util.formatCode(stripIndent`
-      Now playing     :: ${this.nowPlaying || 'N/A'}
+    await message.edit('🎵\u2000Last fm configuration preview:\n' + this.client.util.formatCode(stripIndent`
+      Artist          :: ${this.artist}
+      Track name      :: ${this.trackName}
+      Username        :: ${this.storage.get('username')}
       Total scrobbles :: ${this.totalScrobbles}
       Disabled        :: ${String(this._disabled)}
       Rich Presence   :: ${String(this.storage.get('rich'))}
     `, 'asciidoc'))
   }
 
-  async setPresenceToTrack (artist, trackName) {
-    if (this.storage.get('rich') && this.storage.get('clientID')) {
+  async setPresenceToTrack () {
+    if (!this.artist || !this.trackName) {
+      return
+    }
+
+    const rich = this.storage.get('rich')
+    const clientID = this.storage.get('clientID')
+    const username = this.storage.get('username')
+
+    if (rich && clientID) {
       return this.client.user.setPresence({
         activity: {
-          application: this.storage.get('clientID'),
-          name: trackName,
+          application: clientID,
+          name: this.trackName,
           type: 'LISTENING',
-          details: artist,
-          state: `Last.fm: ${this.storage.get('username')}`,
+          details: this.trackName,
+          state: this.artist,
           assets: {
             largeImage: this.storage.get('largeImageID') || null,
             smallImage: this.storage.get('smallImageID') || null,
-            largeText: `Scrobbles: ${this.totalScrobbles.toLocaleString()}`,
-            smallText: `Last.fm status powered by Lightbringer ${this.client.package.version}`
+            largeText: `${this.totalScrobbles.toLocaleString()} scrobbles`,
+            smallText: `User: ${username}`
           }
         }
       })
-    } else {
-      return this.client.user.setPresence({
-        activity: {
-          name: `${this.nowPlaying} | ♪ Last.fm`,
-          type: 'LISTENING'
-        }
-      })
     }
+
+    return this.client.user.setPresence({
+      activity: {
+        name: `${this.artist} - ${this.trackName} | ♪ Last.fm`,
+        type: 'LISTENING'
+      }
+    })
   }
 
   async getRecentTrack (reset) {
     if (reset) {
       this.clearRecentTrackTimeout()
-      this.nowPlaying = ''
       this._disabled = false
     }
 
@@ -192,27 +205,26 @@ class LastfmCommand extends Command {
 
     let artist = ''
     let trackName = ''
-    let fullName = ''
 
     if (isNowPlaying) {
       artist = typeof track.artist === 'object' ? track.artist['#text'] : track.artist
       trackName = track.name
-      fullName = `${artist} - ${trackName}`
     }
 
-    if (this.nowPlaying === fullName) {
+    if (this.trackName === trackName && this.artist === artist) {
       return this.setRecentTrackTimeout()
     }
 
     try {
-      if (!artist || !trackName || !fullName) {
-        this.nowPlaying = ''
+      if (!artist || !trackName) {
+        this.artist = this.trackName = ''
         await this.client.user.setPresence({ activity: null })
         await this.client.util.sendStatus('🎵\u2000Cleared Last fm status message!')
       } else {
-        this.nowPlaying = fullName
-        await this.setPresenceToTrack(artist, trackName)
-        await this.client.util.sendStatus(`🎵\u2000Last fm: ${fullName}`)
+        this.artist = artist
+        this.trackName = trackName
+        await this.setPresenceToTrack()
+        await this.client.util.sendStatus(`🎵\u2000Last fm: ${artist} - ${trackName}`)
       }
       return this.setRecentTrackTimeout()
     } catch (error) {
@@ -243,6 +255,7 @@ class LastfmCommand extends Command {
   }
 
   clearRecentTrackTimeout () {
+    this.trackNow = this.artistNow = ''
     this._disabled = true
     this.client.clearTimeout(this._timeout)
     this._timeout = null

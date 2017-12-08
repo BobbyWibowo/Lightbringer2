@@ -4,14 +4,16 @@ class ConfigCommand extends Command {
   constructor () {
     super('config', {
       aliases: ['config'],
-      description: 'Modify value for the configuration file.',
+      description: 'Modify the configuration file (will have to restart bot in order for changes to take effect).',
       args: [
         {
-          id: 'key'
+          id: 'key',
+          description: 'The key in the configuration file.'
         },
         {
           id: 'value',
-          match: 'rest'
+          match: 'rest',
+          description: 'The value that you would like to set for the specified key.'
         }
       ],
       options: {
@@ -22,7 +24,7 @@ class ConfigCommand extends Command {
 
   async exec (message, args) {
     if (!args.key) {
-      return message.status.error(`Usage: \`${this.options.usage}\``)
+      return message.status.error(`Usage: \`${this.options.usage}\`.`)
     }
 
     if (!args.value) {

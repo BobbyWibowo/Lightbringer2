@@ -15,6 +15,9 @@ class UserInfoCommand extends Command {
           description: 'The user that you want to display the information of.'
         }
       ],
+      options: {
+        usage: 'userinfo [keyword]'
+      },
       clientPermissions: ['EMBED_LINKS']
     })
   }

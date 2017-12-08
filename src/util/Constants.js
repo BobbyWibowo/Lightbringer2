@@ -1,4 +1,10 @@
 module.exports = {
+  OnlineStatuses: [
+    'online',
+    'idle',
+    'invisible',
+    'dnd' // (do not disturb)
+  ],
   Foods: [
     '🍪',
     '🍣',

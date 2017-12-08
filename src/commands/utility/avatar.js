@@ -10,11 +10,6 @@ class AvatarCommand extends Command {
       description: 'Displays full size of yours or someone else\'s avatar.',
       args: [
         {
-          id: 'keyword',
-          match: 'rest',
-          description: 'The user that you want to display the avatar of.'
-        },
-        {
           id: 'direct',
           match: 'flag',
           prefix: ['--direct', '-d'],
@@ -25,8 +20,16 @@ class AvatarCommand extends Command {
           match: 'flag',
           prefix: ['--plain', '-p'],
           description: 'Uses plain message (no embed).'
+        },
+        {
+          id: 'keyword',
+          match: 'rest',
+          description: 'The user that you want to display the avatar of.'
         }
-      ]
+      ],
+      options: {
+        usage: 'avatar [--direct] [--plain] [keyword]'
+      }
     })
   }
 
@@ -97,7 +100,7 @@ class AvatarCommand extends Command {
      */
 
     if (args.plain) {
-      return message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s avatar:\n${avatarURL}`)
+      return message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s avatar: ${avatarURL}`)
     }
 
     /*

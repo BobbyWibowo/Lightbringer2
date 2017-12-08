@@ -9,21 +9,28 @@ class EvalCommand extends Command {
       description: 'Evaluates arbritrary JavaScript codes.',
       args: [
         {
-          id: 'content',
-          match: 'rest',
-          description: 'The JavaScript codes that you want to be evaluated.'
-        },
-        {
           id: 'silent',
           match: 'flag',
           prefix: ['--silent', '-s'],
           description: 'Silent mode.'
+        },
+        {
+          id: 'content',
+          match: 'rest',
+          description: 'The JavaScript codes that you want to be evaluated.'
         }
-      ]
+      ],
+      options: {
+        usage: 'evaluate [--silent] <content>'
+      }
     })
   }
 
   async exec (message, args) {
+    if (!args.content) {
+      return message.status.error(`Usage: \`${this.options.usage}\`.`)
+    }
+
     const time = process.hrtime()
     let result, isError, type
     try {

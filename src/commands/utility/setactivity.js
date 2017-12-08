@@ -15,9 +15,9 @@ class SetActivityCommand extends Command {
       split: 'sticky',
       args: [
         {
-          id: 'name',
-          match: 'rest',
-          description: 'Name of the activity that you would like to have.'
+          id: 'list',
+          match: 'flag',
+          prefix: ['--list', '-l']
         },
         {
           id: 'url',
@@ -39,11 +39,14 @@ class SetActivityCommand extends Command {
           }
         },
         {
-          id: 'list',
-          match: 'flag',
-          prefix: ['--list', '-l']
+          id: 'name',
+          match: 'rest',
+          description: 'Name of the activity that you would like to have.'
         }
-      ]
+      ],
+      options: {
+        usage: 'setactivity [ --list | --streaming= [name] | [--type=] name ]'
+      }
     })
   }
 

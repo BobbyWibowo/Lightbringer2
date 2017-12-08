@@ -5,6 +5,9 @@ class HugCommand extends Command {
     super('hug', {
       aliases: ['hugs', 'hug'],
       description: 'Hugs someone using random GIFs from nekos.life.',
+      options: {
+        usage: 'hug <@mention>'
+      },
       clientPermissions: ['EMBED_LINKS']
     })
   }

@@ -1,4 +1,5 @@
 const fse = require('fs-extra')
+const { OnlineStatuses } = require('./../util/Constants')
 
 class ConfigManager {
   constructor (path) {
@@ -13,7 +14,11 @@ class ConfigManager {
       token: {
         protected: true // This is only protected by the get/set functions
       },
-      statusChannel: {}
+      statusChannel: {},
+      onlineStatus: {
+        default: 'idle',
+        allowed: OnlineStatuses
+      }
     }
   }
 
@@ -82,6 +87,11 @@ class ConfigManager {
 
     if (this._validKeys[key].protected) {
       throw new Error('The key you specified is protected!')
+    }
+
+    const allowed = this._validKeys[key].allowed
+    if (allowed && !allowed.includes(value)) {
+      throw new Error('The key you specified can only be one of the following values: ' + allowed.join(', ') + '.')
     }
 
     this._config[String(key)] = value

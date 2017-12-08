@@ -6,26 +6,29 @@ class CurrencyCommand extends Command {
   constructor () {
     super('currency', {
       aliases: ['exchangerate', 'currency', 'curr'],
-      description: 'Converts currency using exchange rates from http://fixer.io/',
+      description: 'Converts currency using exchange rates from http://fixer.io/.',
       args: [
         {
           id: 'input',
           match: 'separate',
-          type: 'uppercase'
+          type: 'uppercase',
+          description: '<value> <from> <to>'
         },
         {
           id: 'refresh',
           match: 'flag',
-          prefix: ['--refresh', '-r']
+          prefix: ['--refresh', '-r'],
+          description: 'Refreshes the exchange rate.'
         },
         {
           id: 'source',
           match: 'flag',
-          prefix: ['--source', '-s']
+          prefix: ['--source', '-s'],
+          description: 'Displays the source of the exchange rate.'
         }
       ],
       options: {
-        usage: 'currency <value> <from> <to>'
+        usage: 'currency < input | --refresh | --source >'
       }
     })
 
@@ -54,7 +57,7 @@ class CurrencyCommand extends Command {
     }
 
     if (!args.input || args.input.length < 3) {
-      return message.status.error(`Usage: \`${this.options.usage}\``)
+      return message.status.error(`Usage: \`${this.options.usage}\`.`)
     }
 
     const val = parseFloat(args.input[0])

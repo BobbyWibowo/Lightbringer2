@@ -8,18 +8,21 @@ class PurgeCommand extends Command {
       split: 'sticky',
       args: [
         {
+          id: 'reason',
+          match: 'prefix',
+          prefix: ['--reason=', '-r='],
+          description: 'Reason for purging.'
+        },
+        {
           id: 'amount',
           type: 'integer',
           description: 'Number of messages to delete.',
           default: 1
-        },
-        {
-          id: 'reason',
-          match: 'prefix',
-          prefix: '--reason=',
-          description: 'Reason for purging.'
         }
-      ]
+      ],
+      options: {
+        usage: 'purge [--reason=] [amount]'
+      }
     })
   }
 

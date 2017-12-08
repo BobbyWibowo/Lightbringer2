@@ -8,18 +8,21 @@ class FlushCommand extends Command {
       split: 'sticky',
       args: [
         {
+          id: 'reason',
+          match: 'prefix',
+          prefix: ['--reason=', '-r='],
+          description: 'Reason for flushing.'
+        },
+        {
           id: 'amount',
           type: 'integer',
           description: 'Number of messages to delete.',
           default: 1
-        },
-        {
-          id: 'reason',
-          match: 'prefix',
-          prefix: '--reason=',
-          description: 'Reason for flushing.'
         }
-      ]
+      ],
+      options: {
+        usage: 'flush [--reason=] [amount]'
+      }
     })
   }
 

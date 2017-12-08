@@ -11,7 +11,10 @@ class EightBallCommand extends Command {
           match: 'content',
           description: 'The question that you would like to ask to 8-ball.'
         }
-      ]
+      ],
+      options: {
+        usage: '8ball <question>'
+      }
     })
   }
 
