@@ -18,6 +18,9 @@ class ConfigManager {
       onlineStatus: {
         default: 'idle',
         allowed: OnlineStatuses
+      },
+      maxUsersListing: {
+        default: 100
       }
     }
   }

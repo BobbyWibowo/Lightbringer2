@@ -24,7 +24,8 @@ if (config.token) {
       configManager,
       prefix: config.prefix || 'lb',
       statusChannel: config.statusChannel,
-      onlineStatus: config.onlineStatus
+      onlineStatus: config.onlineStatus,
+      maxUsersListing: config.maxUsersListing
     },
     {
       disableEveryone: true

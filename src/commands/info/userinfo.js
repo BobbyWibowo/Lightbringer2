@@ -43,7 +43,8 @@ class UserInfoCommand extends Command {
     const mention = this.client.util.isKeywordMentionable(args.keyword)
 
     // Get user's avatar to be used in the embed.
-    const avatarURL = user.displayAvatarURL({ size: 256 })
+    const thumbnail = user.displayAvatarURL({ size: 256 })
+    const avatarURL = user.displayAvatarURL({ size: 2048 })
 
     // Account Information field.
     const embed = {
@@ -54,7 +55,7 @@ class UserInfoCommand extends Command {
               •  **ID:** ${user.id}
               •  **Status:** ${user.presence.status}
               •  **Mention:** ${user.toString()}
-              •  **Created:** ${this.client.util.formatFromNow(user.createdAt)}
+              •  **Created at:** ${this.client.util.formatFromNow(user.createdAt)}
             `
         }
       ]
@@ -63,11 +64,13 @@ class UserInfoCommand extends Command {
     // Account Information field: Bot for bots, Nitro and Mutual guilds for regular users.
     if (user.bot) {
       embed.fields[0].value += `\n•  **Bot:** yes`
-    } else {
+    } else if (profile) {
       embed.fields[0].value += `\n•  **Nitro${profile.premiumSince ? ' since' : ''}:** ${profile.premiumSince ? this.client.util.formatFromNow(profile.premiumSince) : 'no'}`
       if (user.id !== message.author.id) {
         embed.fields[0].value += `\n•  **Mutual guilds:** ${profile.mutualGuilds.size.toLocaleString() || '0'}`
       }
+    } else {
+      embed.fields[0].value += '\n•  Could not load profile information. Try again?'
     }
 
     embed.fields[0].value += `\n•  **Avatar:** ${avatarURL
@@ -87,7 +90,7 @@ class UserInfoCommand extends Command {
           value: stripIndent`
               •  **Guild:** ${escapeMarkdown(member.guild.name)} (${member.guild.id})
               •  **Nickname:** ${member.nickname ? escapeMarkdown(member.nickname) : 'N/A'}
-              •  **Joined:** ${this.client.util.formatFromNow(member.joinedAt)}
+              •  **Joined at:** ${this.client.util.formatFromNow(member.joinedAt)}
             `
         }
       )
@@ -115,19 +118,19 @@ class UserInfoCommand extends Command {
     }
 
     // Message content (the thing being displayed above the embed).
-    let content = 'My information:'
+    let content = 'My informations:'
     if (args.keyword && mention) {
       content = `${(member || user).toString()}'s information:`
     } else if (args.keyword) {
-      content = `Information of the user who matched \`${args.keyword}\`:`
+      content = `Informations of the user who matched \`${args.keyword}\`:`
     }
 
     // Options for the embed.
-    embed.thumbnail = avatarURL
+    embed.thumbnail = thumbnail
     embed.color = member ? member.displayColor : 0
     embed.author = {
       name: user.tag,
-      icon: avatarURL
+      icon: thumbnail
     }
 
     await message.edit(content, {

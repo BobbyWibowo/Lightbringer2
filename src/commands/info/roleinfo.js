@@ -13,7 +13,7 @@ class RoleInfoCommand extends Command {
           id: 'guild',
           match: 'prefix',
           prefix: ['--guild=', '-g='],
-          description: 'Tries to use role from a specific guild instead.'
+          description: 'Tries to display information of a role from a specific guild instead.'
         },
         {
           id: 'keyword',
@@ -30,7 +30,7 @@ class RoleInfoCommand extends Command {
 
   async exec (message, args) {
     if (!args.keyword) {
-      return message.status.error('You must specify a guild role name!')
+      return message.status.error('You must specify a role name!')
     }
 
     const roleSource = args.guild || message.guild || null
@@ -57,7 +57,7 @@ class RoleInfoCommand extends Command {
           name: 'Information',
           value: stripIndent`
               •  **ID:** ${role.id}
-              •  **Created:** ${this.client.util.formatFromNow(role.createdAt)}
+              •  **Created at:** ${this.client.util.formatFromNow(role.createdAt)}
               •  **Position:** ${role.guild.roles.size - role.position} out of ${role.guild.roles.size}
               •  **Members:** ${role.members.size} - ${online.size} online
             `
@@ -77,9 +77,9 @@ class RoleInfoCommand extends Command {
     }
 
     // Message content (the thing being displayed above the embed).
-    let content = `Information of the role which matched \`${args.keyword}\`:`
+    let content = `Informations of the role which matched \`${args.keyword}\`:`
     if (mention) {
-      content = `${role}'s information:`
+      content = `${role}'s informations:`
     }
 
     await message.edit(content, {

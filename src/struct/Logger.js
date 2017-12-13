@@ -21,7 +21,7 @@ class Logger {
   }
 
   debug (message) {
-    this.info(inspect(message, { depth: 2 }))
+    this.info(inspect(message, { depth: 0 }))
   }
 
   inject () {

@@ -31,11 +31,13 @@ class InRoleCommand extends Command {
       },
       clientPermissions: ['EMBED_LINKS']
     })
+
+    this.maxUsersListing = 100
   }
 
   async exec (message, args) {
     if (!args.keyword) {
-      return message.status.error('You must specify a guild role name!')
+      return message.status.error('You must specify a role name!')
     }
 
     const roleSource = args.guild || message.guild || null
@@ -52,16 +54,22 @@ class InRoleCommand extends Command {
     // Check whether the keyword was a mention or not.
     const mention = this.client.util.isKeywordMentionable(args.keyword, 1)
 
+    let displayCapped
+    let members = role.members
+      .array()
+      .sort((a, b) => a.user.tag.localeCompare(b.user.tag))
+
+    if ((this.maxUsersListing > 0) && (this.maxUsersListing < members.length)) {
+      displayCapped = true
+      members.length = this.maxUsersListing
+    }
+
     const embed = {
       title: `${role.name} [${role.members.size}]`,
-      description: role.members
-        .map(m => escapeMarkdown(m.user.tag, true))
-        .sort((a, b) => a.localeCompare(b))
-        .join(', '),
+      description: members.map(m => escapeMarkdown(m.user.tag, true)).join(', '),
       color: role.hexColor
     }
 
-    // Message content (the thing being displayed above the embed).
     let content = `Members of the role which matched \`${args.keyword}\`:`
     if (mention) {
       content = `${role}'s members:`
@@ -70,10 +78,21 @@ class InRoleCommand extends Command {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      prefix: `**Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})\n`,
+      prefix: `**Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})\n` +
+        (displayCapped ? `Displaying the first ${this.maxUsersListing} users alphabetically\u2026` : ''),
       code: 'css',
       char: ', '
     })
+  }
+
+  onReady () {
+    const {
+      maxUsersListing
+    } = this.client.akairoOptions
+
+    if (maxUsersListing !== undefined) {
+      this.maxUsersListing = maxUsersListing
+    }
   }
 }
 

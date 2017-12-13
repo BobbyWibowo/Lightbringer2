@@ -1,14 +1,10 @@
 const { ActivityTypes } = require('discord.js').Constants
 const { ClientUtil } = require('discord-akairo')
-const { Guild, Message, MessageEmbed, TextChannel } = require('discord.js')
+const { Collection, Guild, Message, MessageEmbed, TextChannel } = require('discord.js')
 const LightbringerError = require('./../util/LightbringerError')
 const moment = require('moment')
 const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
 const snekfetch = require('snekfetch')
-
-const R_USER = /^<@!?(\d{17,19})>$/
-const R_ROLE = /^<@&(\d{17,19})>$/
-const R_CHANNEL = /^<#(\d{17,19})>$/
 
 class ExtendedClientUtil extends ClientUtil {
   constructor (client) {
@@ -81,69 +77,77 @@ class ExtendedClientUtil extends ClientUtil {
     return new MessageEmbed(data)
   }
 
-  resolveUsers (text, users, caseSensitive = false, wholeWord = false, tryExact = false) {
-    const filtered = users.filter(user => this.checkUser(text, user, caseSensitive, wholeWord))
-
-    if (tryExact && !(caseSensitive && wholeWord) && filtered.size > 1) {
-      const exact = filtered.filter(user => this.checkUser(text, user, true, true))
-      if (exact.size) {
-        return exact
-      }
+  resolveUsers (text, users, caseSensitive = false, wholeWord = false, tryExact = false, tryGlobalId = false) {
+    if (tryGlobalId) {
+      const get = this.client.users.get(text)
+      if (get) return new Collection([[ get.id, get ]])
     }
 
-    return filtered
+    const loose = users.filter(user => this.checkUser(text, user, caseSensitive, wholeWord))
+    if (tryExact && !(caseSensitive && wholeWord) && loose.size > 1) {
+      const strict = loose.filter(user => this.checkUser(text, user, true, true))
+      if (strict.size) return strict
+    }
+
+    return loose
   }
 
   resolveMembers (text, members, caseSensitive = false, wholeWord = false, tryExact = false) {
-    const filtered = members.filter(member => this.checkMember(text, member, caseSensitive, wholeWord))
-
-    if (tryExact && !(caseSensitive && wholeWord) && filtered.size > 1) {
-      const exact = filtered.filter(member => this.checkMember(text, member, true, true))
+    const loose = members.filter(member => this.checkMember(text, member, caseSensitive, wholeWord))
+    if (tryExact && !(caseSensitive && wholeWord) && loose.size > 1) {
+      const exact = loose.filter(member => this.checkMember(text, member, true, true))
       if (exact.size) {
         return exact
       }
     }
 
-    return filtered
+    return loose
   }
 
-  resolveChannels (text, channels, caseSensitive = false, wholeWord = false, tryExact = false) {
-    const filtered = channels.filter(channel => this.checkChannel(text, channel, caseSensitive, wholeWord))
+  resolveChannels (text, channels, caseSensitive = false, wholeWord = false, tryExact = false, tryGlobalId = false) {
+    if (tryGlobalId) {
+      const get = this.client.channels.get(text)
+      if (get) return new Collection([[ get.id, get ]])
+    }
 
-    if (tryExact && !(caseSensitive && wholeWord) && filtered.size > 1) {
-      const exact = filtered.filter(channel => this.checkChannel(text, channel, true, true))
+    const loose = channels.filter(channel => this.checkChannel(text, channel, caseSensitive, wholeWord))
+    if (tryExact && !(caseSensitive && wholeWord) && loose.size > 1) {
+      const exact = loose.filter(channel => this.checkChannel(text, channel, true, true))
       if (exact.size) {
         return exact
       }
     }
 
-    return filtered
+    return loose
   }
 
   resolveRoles (text, roles, caseSensitive = false, wholeWord = false, tryExact = false) {
-    const filtered = roles.filter(role => this.checkRole(text, role, caseSensitive, wholeWord))
-
-    if (tryExact && !(caseSensitive && wholeWord) && filtered.size > 1) {
-      const exact = filtered.filter(role => this.checkRole(text, role, true, true))
+    const loose = roles.filter(role => this.checkRole(text, role, caseSensitive, wholeWord))
+    if (tryExact && !(caseSensitive && wholeWord) && loose.size > 1) {
+      const exact = loose.filter(role => this.checkRole(text, role, true, true))
       if (exact.size) {
         return exact
       }
     }
 
-    return filtered
+    return loose
   }
 
-  resolveGuilds (text, guilds, caseSensitive = false, wholeWord = false, tryExact = false) {
-    const filtered = guilds.filter(guild => this.checkGuild(text, guild, caseSensitive, wholeWord))
+  resolveGuilds (text, guilds, caseSensitive = false, wholeWord = false, tryExact = false, tryGlobalId = false) {
+    if (tryGlobalId) {
+      const get = this.client.guilds.get(text)
+      if (get) return new Collection([[ get.id, get ]])
+    }
 
-    if (tryExact && !(caseSensitive && wholeWord) && filtered.size > 1) {
-      const exact = filtered.filter(guild => this.checkGuild(text, guild, true, true))
+    const loose = guilds.filter(guild => this.checkGuild(text, guild, caseSensitive, wholeWord))
+    if (tryExact && !(caseSensitive && wholeWord) && loose.size > 1) {
+      const exact = loose.filter(guild => this.checkGuild(text, guild, true, true))
       if (exact.size) {
         return exact
       }
     }
 
-    return filtered
+    return loose
   }
 
   // Extend with new functions.
@@ -176,27 +180,31 @@ class ExtendedClientUtil extends ClientUtil {
       })
   }
 
-  async assertUser (keyword, source = this.client.users, fallbackToClient = false, suppressNotFoundError = false) {
+  async assertSingleItem (items, { name = 'matches', prop, syntax }, disableNotFound = false) {
+    if (items.size === 1) {
+      return items.first()
+    } else if (items.size > 1) {
+      throw new LightbringerError(this.formatMatchesList(items, { name, prop, syntax }), this.matchesListTimeout)
+    } else if (!disableNotFound) {
+      throw new LightbringerError(`Could not find any ${name} matching the keyword!`)
+    }
+  }
+
+  async assertUser (keyword, source = this.client.users, fallbackToClient = false, disableNotFound = false) {
     // Return ClientUser.
     if (keyword === null && fallbackToClient) {
       return this.client.user
     }
 
-    const resolved = this.resolveUsers(keyword, source, false, false, true)
-
-    if (resolved.size === 1) {
-      return resolved.first()
-    } else if (resolved.size > 1) {
-      throw new LightbringerError(this.formatMatchesList(resolved, {
-        name: 'users',
-        prop: 'tag'
-      }), this.matchesListTimeout)
-    } else if (!suppressNotFoundError) {
-      throw new LightbringerError('Could not find any guild members matching the keyword!')
-    }
+    const resolved = this.resolveUsers(keyword, source, false, false, true, true)
+    return this.assertSingleItem(resolved, {
+      name: 'users',
+      prop: 'tag',
+      syntax: 'css'
+    }, disableNotFound)
   }
 
-  async assertMember (keyword, source, refreshStore = false, fallbackToClient = false, suppressNotFoundError = false) {
+  async assertMember (keyword, source, refreshStore = false, fallbackToClient = false, disableNotFound = false) {
     if (typeof source === 'string') {
       source = await this.assertGuild(source)
     }
@@ -216,20 +224,28 @@ class ExtendedClientUtil extends ClientUtil {
     }
 
     const resolved = this.resolveMembers(keyword, source, false, false, true)
-
-    if (resolved.size === 1) {
-      return resolved.first()
-    } else if (resolved.size > 1) {
-      throw new LightbringerError(this.formatMatchesList(resolved, {
-        name: 'members',
-        prop: 'user.tag'
-      }), this.matchesListTimeout)
-    } else if (!suppressNotFoundError) {
-      throw new LightbringerError('Could not find any members matching the keyword!')
-    }
+    return this.assertSingleItem(resolved, {
+      name: 'members',
+      prop: 'user.tag',
+      syntax: 'css'
+    }, disableNotFound)
   }
 
-  // TODO: assertChannel(keyword, source)
+  async assertChannel (keyword, source = this.client.channels) {
+    if (typeof source === 'string') {
+      source = await this.assertGuild(source)
+    }
+
+    if (source instanceof Guild) {
+      source = source.channels
+    }
+
+    const resolved = this.resolveChannels(keyword, source, false, false, true, true)
+    return this.assertSingleItem(resolved, {
+      name: 'channels',
+      prop: 'name'
+    })
+  }
 
   async assertRole (keyword, source) {
     if (typeof source === 'string') {
@@ -241,59 +257,40 @@ class ExtendedClientUtil extends ClientUtil {
     }
 
     const resolved = this.resolveRoles(keyword, source, false, false, true)
-
-    if (resolved.size === 1) {
-      return resolved.first()
-    } else if (resolved.size > 1) {
-      throw new LightbringerError(this.formatMatchesList(resolved, {
-        name: 'roles',
-        prop: 'name',
-        syntax: null
-      }), this.matchesListTimeout)
-    } else {
-      throw new LightbringerError('Could not find any roles matching the keyword!')
-    }
+    return this.assertSingleItem(resolved, {
+      name: 'roles',
+      prop: 'name'
+    })
   }
 
   async assertGuild (keyword, source = this.client.guilds) {
-    const resolved = this.resolveGuilds(keyword, source, false, false, true)
-
-    if (resolved.size === 1) {
-      return resolved.first()
-    } else if (resolved.size > 1) {
-      throw new LightbringerError(this.formatMatchesList(resolved, {
-        name: 'guilds',
-        prop: 'name',
-        syntax: null
-      }), this.matchesListTimeout)
-    } else {
-      throw new LightbringerError('Could not find any guilds matching the keyword!')
-    }
+    const resolved = this.resolveGuilds(keyword, source, false, false, true, true)
+    return this.assertSingleItem(resolved, {
+      name: 'guilds',
+      prop: 'name'
+    })
   }
 
-  async assertMemberOrUser (keyword, memberSource, refreshStore = false, userSource = undefined) {
-    const result = {
-      member: undefined,
-      user: undefined
-    }
+  async assertMemberOrUser (keyword, memberSource, refreshStore = false, userSource) {
+    const result = {}
 
     if (memberSource) {
-      const assertedGuildMember = await this.assertMember(keyword, memberSource, refreshStore, true, true)
-      if (assertedGuildMember) {
-        result.member = assertedGuildMember
-        result.user = assertedGuildMember.user
+      const asserted = await this.assertMember(keyword, memberSource, refreshStore, true, true)
+      if (asserted) {
+        result.member = asserted
+        result.user = asserted.user
       }
     }
 
     if (result.member === undefined) {
       // When userSource is missing, it will use default, which is this.client.users
-      const assertedUser = await this.assertUser(keyword, userSource, true, true)
-      if (assertedUser) {
-        result.user = assertedUser
-      }
+      const asserted = await this.assertUser(keyword, userSource, true, true)
+      if (asserted) result.user = asserted
     }
 
     if (result.user === undefined) {
+      // This shall not ever be triggered as "this.assertUser" will
+      // throw an Error when it can not find any matches.
       throw new LightbringerError('Could not find any members or users matching the keyword!')
     }
 
@@ -500,9 +497,12 @@ class ExtendedClientUtil extends ClientUtil {
   }
 
   isKeywordMentionable (keyword, type) {
-    if (type === 1) return R_ROLE.test(keyword)
-    if (type === 2) return R_CHANNEL.test(keyword)
-    return R_USER.test(keyword)
+    // Role mention.
+    if (type === 1) return /^<@&(\d{17,19})>$/.test(keyword)
+    // Channel mention.
+    if (type === 2) return /^<#(\d{17,19})>$/.test(keyword)
+    // User/Member mention.
+    return /^<@!?(\d{17,19})>$/.test(keyword)
   }
 
   formatYesNo (isYes) {
