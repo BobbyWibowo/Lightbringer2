@@ -1,4 +1,3 @@
-const { Collection } = require('discord.js')
 const { Command } = require('discord-akairo')
 const { CommandHandlerEvents } = require('discord-akairo').Constants
 const { escapeMarkdown } = require('discord.js').Util
@@ -34,79 +33,44 @@ class AvatarCommand extends Command {
   }
 
   async exec (message, args) {
+    // When "--plain" flag is not used in channels where user have no permission to use embeds.
     if (!args.plain && !this.client.util.hasPermissions(message.channel, ['EMBED_LINKS'])) {
       return this.handler.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, this, 'client', ['EMBED_LINKS'])
     }
 
-    /*
-     * Refresh GuildMemberStore
-     */
+    // Assert GuildMember or User.
+    const memberSource = message.guild || null
+    const resolved = await this.client.util.assertMemberOrUser(args.keyword, memberSource, true)
+    const member = resolved.member
+    const user = resolved.user
 
-    if (message.guild) {
-      await message.status.progress('Refreshing guild members information\u2026')
-      await message.guild.members.fetch()
-    }
-
-    let member, user
-
-    /*
-     * Resolve GuildMember or User
-     */
-
-    if (args.keyword) {
-      const resolved = this.client.util.resolveMemberOrUser(
-        args.keyword,
-        message.guild ? message.guild.members : null
-      )
-
-      if (resolved.failed) {
-        return message.status.error('Could not find matching users!')
-      }
-
-      if ((resolved.member || resolved.user) instanceof Collection) {
-        return message.status.error(
-          this.client.util.formatMatchesList(resolved.member || resolved.user, {
-            name: 'users',
-            prop: ['tag', 'user.tag']
-          }),
-          this.client.util.matchesListTimeout
-        )
-      }
-
-      member = resolved.member
-      user = resolved.user
-    } else {
-      member = message.guild ? message.member : null
-      user = message.author
-    }
-
+    // Check whether the keyword was a mention or not.
     const mention = this.client.util.isKeywordMentionable(args.keyword)
+
+    // Get user's avatar.
     let avatarURL = user.displayAvatarURL({ size: 2048 })
 
+    // If could not get avatar.
     if (!avatarURL) {
       return message.status.error('Could not get display avatar of the specified user!')
     }
 
+    // "--direct" flag.
     if (args.direct) {
       avatarURL = avatarURL.replace('cdn.discordapp.com', 'images.discordapp.net')
     }
 
+    // When the avatar is a GIF, append "&f=.gif" so that the Discord client will properly play it.
     if (/\.gif\?size=\d*?$/.test(avatarURL)) {
       avatarURL += '&f=.gif'
     }
 
-    /*
-     * Send a plain message if --plain flag was used
-     */
-
+    // Send a plain message when "--plain" flag is used.
     if (args.plain) {
-      return message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s avatar: ${avatarURL}`)
+      return message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s avatar:\n${avatarURL}`)
     }
 
-    /*
-     * Otherwise, build then send embed
-     */
-
+    // Otherwise, build embed then send it.
     let content = 'My avatar:'
     if (args.keyword && mention) {
       content = `${(member || user).toString()}'s avatar:`

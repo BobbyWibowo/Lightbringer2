@@ -7,10 +7,6 @@ const POLL_TIMEOUT = 7500
 // Maximum amount of consecutive errors
 const MAX_RETRY = 3
 
-// ID of prefix-type arguments that will be regarded
-// as things that may be saved to storage file (temporary method)
-const STORAGE_KEYS = ['apiKey', 'username', 'clientID', 'largeImageID', 'smallImageID']
-
 class LastfmCommand extends Command {
   constructor () {
     super('lastfm', {
@@ -65,6 +61,8 @@ class LastfmCommand extends Command {
       }
     })
 
+    this._storageKeys = ['apiKey', 'username', 'clientID', 'largeImageID', 'smallImageID']
+
     this.storage = null
 
     // Total scrobbles fetched from Last.fm
@@ -105,13 +103,12 @@ class LastfmCommand extends Command {
     }
 
     let storageHit
-
-    for (const key of STORAGE_KEYS) {
+    this._storageKeys.forEach(key => {
       if (args[key] !== null) {
         this.storage.set(key, args[key])
         storageHit = true
       }
-    }
+    })
 
     if (storageHit) {
       this.storage.save()

@@ -65,6 +65,8 @@ class ReadyListener extends Listener {
         .catch(console.error)
     }
 
+    await this.client.user.setAFK(true)
+
     this.triggerCommands()
     console.log('Bot is ready!')
 

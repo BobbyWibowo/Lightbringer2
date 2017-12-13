@@ -31,8 +31,11 @@ class HelpCommand extends Command {
   }
 
   async exec (message, args) {
-    if (args.all) {
-      // Use length of the longest command's ID as padding
+    // It may not be pretty, but it gets the jobs done.
+    // It should also not be too hard to understand what
+    // it does by merely reading the codes.
+    if (args.all) { // When using "--all" flag to list all commands.
+      // Use length of the longest command's ID as padding.
       const padding = ' '.repeat(this.handler.modules.reduce((a, v, k) => (a > k.length) ? a : k.length, 0))
 
       let formatted = ''
@@ -58,15 +61,14 @@ class HelpCommand extends Command {
         })
 
       if (this.git) {
-        await message.channel.send(this.git)
+        await message.edit(this.git)
       }
 
-      await this.client.util.multiSend(message.channel, formatted.trim(), {
+      return this.client.util.multiSend(message.channel, formatted.trim(), {
+        firstMessage: !this.git ? message : null,
         code: 'asciidoc'
       })
-
-      return message.delete()
-    } else if (args.command) {
+    } else if (args.command) { // When displaying help for a specific command.
       const id = args.command.id
 
       let formatted = ''
@@ -82,6 +84,9 @@ class HelpCommand extends Command {
 
       formatted += `Usage       :: ${args.command.options.usage || 'N/A'}` + '\n'
 
+      // For now, it will only list detailed explanation of
+      // the arguments if the command's args property is an
+      // array and the arguments are all instances of Argument.
       if (args.command.args instanceof Array) {
         const _args = args.command.args
           .filter(a => a instanceof Argument)
@@ -101,12 +106,14 @@ class HelpCommand extends Command {
           })
 
         if (_args.length) {
-          // Use length of the longest argument's "tag" as padding (11 is the minimum length)
+          // Use length of the longest argument's "tag" as padding.
+          // !1 chars is the minimum length to match the length of Aliases,
+          // Description, Credits, and so on (look above).
           const padding = ' '.repeat(_args.reduce((a, v) => (a > v.tag.length) ? a : v.tag.length, 11))
 
           formatted += '\n'
           formatted += 'Arguments' + '\n'
-          formatted += '~~~~~~~~~' + '\n'
+          formatted += '---------' + '\n'
 
           _args.forEach(a => {
             formatted += this.client.util.pad(padding, a.tag)
@@ -116,14 +123,13 @@ class HelpCommand extends Command {
         }
       }
 
-      await this.client.util.multiSend(message.channel, formatted.trim(), {
+      return this.client.util.multiSend(message.channel, formatted.trim(), {
+        firstMessage: message,
         code: 'asciidoc'
       })
-
-      return message.delete()
-    } else if (args._command) {
+    } else if (args._command) { // When keyword was specified but no matching commands could be found.
       return message.status.error('Could not find a module with that ID!')
-    } else {
+    } else { // When run without arguments.
       return message.status.error(`Usage: \`${this.options.usage}\`.`)
     }
   }

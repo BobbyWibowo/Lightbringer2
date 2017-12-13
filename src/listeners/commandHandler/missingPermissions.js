@@ -12,7 +12,7 @@ class MissingPermissionsListener extends Listener {
     await message.status.error(
       `Could not execute \`${command}\` command due to missing permissions: ` +
       missing.map(m => `\`${m}\``).join(', ') + '.',
-      15000 // timeout (15s)
+      15000
     )
 
     this.client.commandHandler.clearStatus(message)

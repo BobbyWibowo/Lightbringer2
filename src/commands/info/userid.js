@@ -1,4 +1,3 @@
-const { Collection } = require('discord.js')
 const { Command } = require('discord-akairo')
 
 class UserIdCommand extends Command {
@@ -20,49 +19,14 @@ class UserIdCommand extends Command {
   }
 
   async exec (message, args) {
-    /*
-     * Refresh GuildMemberStore
-     */
-
-    if (message.guild) {
-      await message.status.progress('Refreshing guild members information\u2026')
-      await message.guild.members.fetch()
-    }
-
-    let user
-
-    /*
-     * Resolve GuildMember or User
-     */
-
-    if (args.keyword) {
-      const resolved = this.client.util.resolveMemberOrUser(
-        args.keyword,
-        message.guild ? message.guild.members : null
-      )
-
-      if (resolved.failed) {
-        return message.status.error('Could not find matching users!')
-      }
-
-      if ((resolved.member || resolved.user) instanceof Collection) {
-        return message.status.error(
-          this.client.util.formatMatchesList(resolved.member || resolved.user, {
-            name: 'users',
-            prop: ['tag', 'user.tag']
-          }),
-          this.client.util.matchesListTimeout
-        )
-      }
-
-      user = resolved.user
-    } else {
-      user = message.author
-    }
+    // Assert GuildMember or User.
+    const memberSource = message.guild || null
+    const resolved = await this.client.util.assertMemberOrUser(args.keyword, memberSource, true)
+    const user = resolved.user
 
     const mention = this.client.util.isKeywordMentionable(args.keyword)
 
-    await message.edit(`${mention ? user : user.tag}'s ID: ${user.id}`)
+    await message.edit(`${mention ? user : user.tag}'s ID:\n${user.id}`)
   }
 }
 

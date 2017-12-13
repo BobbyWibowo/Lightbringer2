@@ -97,6 +97,10 @@ class ConfigManager {
     this._config[String(key)] = value
     this.save()
   }
+
+  getKeys () {
+    return this._validKeys
+  }
 }
 
 module.exports = ConfigManager

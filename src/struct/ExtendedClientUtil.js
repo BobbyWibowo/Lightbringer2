@@ -1,54 +1,30 @@
 const { ActivityTypes } = require('discord.js').Constants
 const { ClientUtil } = require('discord-akairo')
-const { MessageEmbed, TextChannel } = require('discord.js')
+const { Guild, Message, MessageEmbed, TextChannel } = require('discord.js')
+const LightbringerError = require('./../util/LightbringerError')
 const moment = require('moment')
 const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
 const snekfetch = require('snekfetch')
 
-const R_USER = /^<@!?(\d+?)>$/
-const R_ROLE = /^<@&?(\d+?)>$/
-const R_CHANNEL = /^<#(\d+?)>$/
-
-const MAX_MATCHES_LENGTH = 20
+const R_USER = /^<@!?(\d{17,19})>$/
+const R_ROLE = /^<@&(\d{17,19})>$/
+const R_CHANNEL = /^<#(\d{17,19})>$/
 
 class ExtendedClientUtil extends ClientUtil {
   constructor (client) {
     super(client)
 
     const {
-      matchesListTimeout = 15000 // default
+      matchesListTimeout = 15000,
+      maxMatchesListLength = 20
     } = client.akairoOptions
 
     this.matchesListTimeout = matchesListTimeout
+
+    this.maxMatchesListLength = maxMatchesListLength
   }
 
-  async sendStatus (message, options) {
-    if (this.client.statusChannel && this.client.statusChannel instanceof TextChannel) {
-      await this.client.statusChannel.send(message, options || {})
-    }
-  }
-
-  async snek (url, options) {
-    // Since this will return the finished Promise, any snek's
-    // functions which could have been used to alter the options,
-    // such as.set(), etc. will not be usable on the returned value.
-    // Thus make sure to get used to using SnekfetchOptions when
-    // using snekfetch with this function.
-    return snekfetch
-      .get(url, options)
-      .catch(error => {
-        // On some failures such as 403 Forbidden, snekfetch will throw an Error
-        // instead of returning things with 403 on its 'status' property, so
-        // instead catch it and format it like below to less complicate things
-        // when using snekfetch anywhere else (meaning there's no need for
-        // .catch() but instead simply make sure the 'status' property is 200).
-        console.error(error)
-        return {
-          status: -1,
-          text: error.toString()
-        }
-      })
-  }
+  // Override parent functions.
 
   embed (data) {
     // If data Object exists, attempt
@@ -91,12 +67,12 @@ class ExtendedClientUtil extends ClientUtil {
 
       // Move 'icon' property to 'iconURL' property since
       // 'icon' will often be used as a shortcut to 'iconURL'.
-      if (data.author !== undefined && data.author.icon !== undefined) {
+      if (data.author && data.author.icon) {
         data.author.iconURL = data.author.icon
         delete data.author.icon
       }
 
-      if (data.footer !== undefined && data.footer.icon !== undefined) {
+      if (data.footer && data.footer.icon) {
         data.footer.iconURL = data.footer.icon
         delete data.footer.icon
       }
@@ -105,79 +81,263 @@ class ExtendedClientUtil extends ClientUtil {
     return new MessageEmbed(data)
   }
 
-  resolveMemberOrUser (keyword, memberSource, userSource = this.client.users) {
-    // TODO: Probably make formatMatchesList() a part of this function.
+  resolveUsers (text, users, caseSensitive = false, wholeWord = false, tryExact = false) {
+    const filtered = users.filter(user => this.checkUser(text, user, caseSensitive, wholeWord))
+
+    if (tryExact && !(caseSensitive && wholeWord) && filtered.size > 1) {
+      const exact = filtered.filter(user => this.checkUser(text, user, true, true))
+      if (exact.size) {
+        return exact
+      }
+    }
+
+    return filtered
+  }
+
+  resolveMembers (text, members, caseSensitive = false, wholeWord = false, tryExact = false) {
+    const filtered = members.filter(member => this.checkMember(text, member, caseSensitive, wholeWord))
+
+    if (tryExact && !(caseSensitive && wholeWord) && filtered.size > 1) {
+      const exact = filtered.filter(member => this.checkMember(text, member, true, true))
+      if (exact.size) {
+        return exact
+      }
+    }
+
+    return filtered
+  }
+
+  resolveChannels (text, channels, caseSensitive = false, wholeWord = false, tryExact = false) {
+    const filtered = channels.filter(channel => this.checkChannel(text, channel, caseSensitive, wholeWord))
+
+    if (tryExact && !(caseSensitive && wholeWord) && filtered.size > 1) {
+      const exact = filtered.filter(channel => this.checkChannel(text, channel, true, true))
+      if (exact.size) {
+        return exact
+      }
+    }
+
+    return filtered
+  }
+
+  resolveRoles (text, roles, caseSensitive = false, wholeWord = false, tryExact = false) {
+    console.log(require('util').inspect(roles, { depth: 0 }))
+    const filtered = roles.filter(role => this.checkRole(text, role, caseSensitive, wholeWord))
+
+    if (tryExact && !(caseSensitive && wholeWord) && filtered.size > 1) {
+      const exact = filtered.filter(role => this.checkRole(text, role, true, true))
+      if (exact.size) {
+        return exact
+      }
+    }
+
+    return filtered
+  }
+
+  resolveGuilds (text, guilds, caseSensitive = false, wholeWord = false, tryExact = false) {
+    const filtered = guilds.filter(guild => this.checkGuild(text, guild, caseSensitive, wholeWord))
+
+    if (tryExact && !(caseSensitive && wholeWord) && filtered.size > 1) {
+      const exact = filtered.filter(guild => this.checkGuild(text, guild, true, true))
+      if (exact.size) {
+        return exact
+      }
+    }
+
+    return filtered
+  }
+
+  // Extend with new functions.
+
+  async sendStatus (message, options) {
+    if (this.client._statusChannel && this.client._statusChannel instanceof TextChannel) {
+      await this.client._statusChannel.send(message, options || {})
+    }
+  }
+
+  async snek (url, options) {
+    // Since this will return the finished Promise, any snek's
+    // functions which could have been used to alter the options,
+    // such as.set(), etc. will not be usable on the returned value.
+    // Thus make sure to get used to using SnekfetchOptions when
+    // using snekfetch with this function.
+    return snekfetch
+      .get(url, options)
+      .catch(error => {
+        // On some failures such as 403 Forbidden, snekfetch will throw an Error
+        // instead of returning things with 403 on its 'status' property, so
+        // instead catch it and format it like below to less complicate things
+        // when using snekfetch anywhere else (meaning there's no need for
+        // .catch() but instead simply make sure the 'status' property is 200).
+        console.error(error)
+        return {
+          status: -1,
+          text: error.toString()
+        }
+      })
+  }
+
+  async assertUser (keyword, source = this.client.users, fallbackToClient = false, suppressNotFoundError = false) {
+    // Return ClientUser.
+    if (keyword === null && fallbackToClient) {
+      return this.client.user
+    }
+
+    const resolved = this.resolveUsers(keyword, source, false, false, true)
+
+    if (resolved.size === 1) {
+      return resolved.first()
+    } else if (resolved.size > 1) {
+      throw new LightbringerError(this.formatMatchesList(resolved, {
+        name: 'users',
+        prop: 'tag'
+      }), this.matchesListTimeout)
+    } else if (!suppressNotFoundError) {
+      throw new LightbringerError('Could not find any guild members matching the keyword!')
+    }
+  }
+
+  async assertMember (keyword, source, refreshStore = false, fallbackToClient = false, suppressNotFoundError = false) {
+    if (typeof source === 'string') {
+      source = await this.assertGuild(source)
+    }
+
+    if (source instanceof Guild) {
+      // Return GuildMember instance of the client.
+      if (keyword === null && fallbackToClient) {
+        return source.me
+      }
+
+      // Refresh GuildMemberStore.
+      if (refreshStore) {
+        await source.members.fetch()
+      }
+
+      source = source.members
+    }
+
+    const resolved = this.resolveMembers(keyword, source, false, false, true)
+
+    if (resolved.size === 1) {
+      return resolved.first()
+    } else if (resolved.size > 1) {
+      throw new LightbringerError(this.formatMatchesList(resolved, {
+        name: 'members',
+        prop: 'user.tag'
+      }), this.matchesListTimeout)
+    } else if (!suppressNotFoundError) {
+      throw new LightbringerError('Could not find any members matching the keyword!')
+    }
+  }
+
+  // TODO: assertChannel(keyword, source)
+
+  async assertRole (keyword, source) {
+    if (typeof source === 'string') {
+      source = await this.assertGuild(source)
+    }
+
+    if (source instanceof Guild) {
+      source = source.roles
+    }
+
+    const resolved = this.resolveRoles(keyword, source, false, false, true)
+
+    if (resolved.size === 1) {
+      return resolved.first()
+    } else if (resolved.size > 1) {
+      throw new LightbringerError(this.formatMatchesList(resolved, {
+        name: 'roles',
+        prop: 'name',
+        syntax: null
+      }), this.matchesListTimeout)
+    } else {
+      throw new LightbringerError('Could not find any roles matching the keyword!')
+    }
+  }
+
+  async assertGuild (keyword, source = this.client.guilds) {
+    const resolved = this.resolveGuilds(keyword, source, false, false, true)
+
+    if (resolved.size === 1) {
+      return resolved.first()
+    } else if (resolved.size > 1) {
+      throw new LightbringerError(this.formatMatchesList(resolved, {
+        name: 'guilds',
+        prop: 'name',
+        syntax: null
+      }), this.matchesListTimeout)
+    } else {
+      throw new LightbringerError('Could not find any guilds matching the keyword!')
+    }
+  }
+
+  async assertMemberOrUser (keyword, memberSource, refreshStore = false, userSource = undefined) {
     const result = {
       member: undefined,
-      user: undefined,
-      failed: undefined
+      user: undefined
     }
 
-    if (!keyword) {
-      return result
-    }
-
-    // First of all, try to get GuildMembers matching the keyword.
     if (memberSource) {
-      const resolved = this.resolveMembers(keyword, memberSource)
-      if (resolved.size > 1) {
-        // Return the entire Collection when there are more than 1 result.
-        // This is so that it can be then sent to formatMatchesList().
-        result.member = resolved
-      } else if (resolved.size === 1) {
-        // Return the result when there is exactly 1 result.
-        result.member = resolved.first()
-        result.user = result.member.user
+      const assertedGuildMember = await this.assertMember(keyword, memberSource, refreshStore, true, true)
+      if (assertedGuildMember) {
+        result.member = assertedGuildMember
+        result.user = assertedGuildMember.user
       }
     }
 
-    // If no GuildMember could be found, try to get User matching the keyword instead.
-    if (!result.member && userSource) {
-      const resolved = this.resolveUsers(keyword, userSource)
-      if (resolved.size > 1) {
-        // Return the entire Collection. Same reason as the
-        // one for resolving GuildMembers.
-        result.user = resolved
-      } else if (resolved.size === 1) {
-        result.user = resolved.first()
+    if (result.member === undefined) {
+      // When userSource is missing, it will use default, which is this.client.users
+      const assertedUser = await this.assertUser(keyword, userSource, true, true)
+      if (assertedUser) {
+        result.user = assertedUser
       }
     }
 
-    if (result.member === undefined && result.user === undefined) {
-      // An indicator of complete failure.
-      result.failed = true
+    if (result.user === undefined) {
+      throw new LightbringerError('Could not find any members or users matching the keyword!')
     }
 
     return result
   }
 
-  formatMatchesList (matches, options = { name: 'matches' }) {
-    if (typeof options.prop === 'string') {
-      options.prop = [options.prop]
+  formatMatchesList (matches, { name = 'matches', prop, syntax = 'css' }) {
+    if (typeof prop === 'string') {
+      prop = [prop]
     }
 
     const size = matches.size
 
     let list = matches
       .map(match => {
-        if (!options.prop) return match
-        let value
-        for (const prop of options.prop) {
-          if (value !== undefined) break
-          value = this.getProp(match, prop)
+        if (!prop) {
+          return match
         }
-        return value ? escapeMarkdown(value, true) : 'undefined'
+
+        let value
+        for (const p of prop) {
+          value = this.getProp(match, p)
+          if (value !== undefined) {
+            break
+          }
+        }
+
+        if (value) {
+          return escapeMarkdown(value, true)
+        } else {
+          return 'undefined'
+        }
       })
       .sort((a, b) => a.localeCompare(b))
 
-    list.length = Math.min(MAX_MATCHES_LENGTH, size)
+    list.length = Math.min(this.maxMatchesListLength, size)
 
-    if (size > MAX_MATCHES_LENGTH) {
+    if (size > this.maxMatchesListLength) {
       list.push(`and ${size - list.length} more \u2026`)
     }
 
-    return `Multiple ${options.name} found, please be more specific:\n` +
-      this.client.util.formatCode(list.join(', '), 'css')
+    return `Multiple ${name} found, please be more specific:\n` +
+      this.client.util.formatCode(list.join(', '), syntax)
   }
 
   hasPermissions (channel, permissions) {
@@ -310,7 +470,11 @@ class ExtendedClientUtil extends ClientUtil {
     return `${moment(date).format('ddd, MMM Do YYYY @ h:mm:ss a')} (${this.fromNow(date)})`
   }
 
-  formatCode (text, lang = '', inline) {
+  formatCode (text, lang, inline) {
+    if (typeof lang !== 'string') {
+      lang = ''
+    }
+
     if (inline) {
       return '`' + text + '`'
     } else {
@@ -378,27 +542,183 @@ class ExtendedClientUtil extends ClientUtil {
   }
 
   async multiSend (channel, text, options) {
-    let maxLength = options.maxLength || 2000
+    let {
+      firstMessage = null,
+      maxLength = 2000,
+      code = null,
+      char = '\n'
+    } = options
 
-    if (options.code) {
-      // 3 (```); options.code; 1 (\n); 1 (\n); 3 (```)
-      maxLength -= 3 + options.code.length + 1 + 1 + 3
+    if (code) {
+      // 3 (```); code; 1 (\n); 1 (\n); 3 (```)
+      maxLength -= 3 + code.length + 1 + 1 + 3
     }
 
-    let split = splitMessage(text, {
-      maxLength,
-      char: options.char || '\n'
-    })
+    let messages = splitMessage(text, { maxLength, char })
 
-    if (!(split instanceof Array)) {
-      split = [split]
+    if (!(messages instanceof Array)) {
+      messages = [messages]
     }
 
-    if (options.code) {
-      split = split.map(s => this.formatCode(s, options.code))
+    if (code) {
+      messages = messages.map(s => this.formatCode(s, code))
     }
 
-    return Promise.all(split.map(s => channel.send(s)))
+    return Promise.all(messages.map((m, i) => {
+      if (firstMessage instanceof Message && i === 0) {
+        return firstMessage.edit(m)
+      } else {
+        return channel.send(m)
+      }
+    }))
+  }
+
+  async multiSendEmbed (channel, data, options) {
+    // ALERT: This function is extremely experimental.
+    // There can be plenty of holes in its logic.
+    const messages = []
+    const description = data.description || '' // Long-ass description that needs to be properly split.
+
+    let {
+      firstMessage = null,
+      content = null, // Content that will only be used for the first message.
+      prefix = null, // Prefix that will only be prepended to the first embed.
+      suffix = null, // Suffix that will only be appended to the last embed.
+      maxLength = 2000,
+      code = null,
+      char = '\n'
+    } = options
+
+    if (code) {
+      // 3 (```); code; 1 (\n); 1 (\n); 3 (```)
+      maxLength -= 3 + code.length + 1 + 1 + 3
+    }
+
+    let firstExtraLength = 0
+    let lastExtraLength = 0
+
+    // Calculate extra lengths.
+    if (content) {
+      firstExtraLength += content.length
+    }
+
+    if (prefix) {
+      firstExtraLength += prefix.length
+    }
+
+    if (data.title) {
+      firstExtraLength += data.title.length
+    }
+
+    if (typeof data.author === 'string') {
+      firstExtraLength += data.author.length
+    } else if (data.author !== undefined && data.author.name !== undefined) {
+      firstExtraLength += data.author.name.length
+    }
+
+    if (suffix) {
+      lastExtraLength += suffix.length
+    }
+
+    if (typeof data.footer === 'string') {
+      lastExtraLength += data.footer.length
+    } else if (data.footer !== undefined && data.footer.text !== undefined) {
+      lastExtraLength += data.footer.text.length
+    }
+
+    const splitDescs = description.split(char)
+    let tempDesc = ''
+
+    const push = (desc, last) => {
+      // ALERT: This function will ignore embed properties
+      // other than "title", "author", "footer" and "color".
+      const first = messages.length === 0
+
+      const tempData = {
+        color: data.color
+      }
+
+      if (code) {
+        desc = this.formatCode(desc, code)
+      }
+
+      if (first) {
+        desc = (prefix || '') + desc
+        tempData.title = data.title
+        tempData.author = data.author
+      }
+
+      if (last) {
+        desc = desc + (suffix || '')
+        tempData.footer = data.footer
+      }
+
+      tempData.description = desc
+
+      messages.push({
+        content: first ? content : null,
+        embed: this.embed(tempData)
+      })
+
+      /*
+      console.log(`maxLength: ${maxLength}`)
+      console.log(`content.length: ${content.length}`)
+      console.log(`description.length: ${tempData.description.length}`)
+      */
+    }
+
+    for (let i = 0; i < splitDescs.length; i++) {
+      let _maxLength = maxLength
+
+      if (messages.length === 0) {
+        _maxLength -= firstExtraLength
+      } else if (i === splitDescs.length - 1) {
+        _maxLength -= lastExtraLength
+      }
+
+      if ((tempDesc.length + splitDescs[i].length + char.length) > _maxLength) {
+        push(tempDesc, (i === splitDescs.length - 1))
+        tempDesc = ''
+      } else if (i === splitDescs.length - 1) {
+        push(tempDesc + splitDescs[i], true)
+      } else {
+        tempDesc += splitDescs[i] + char
+      }
+    }
+
+    return Promise.all(messages.map((m, i) => {
+      if (firstMessage instanceof Message && i === 0) {
+        return firstMessage.edit(m.content, { embed: m.embed })
+      } else {
+        return channel.send(m.content, { embed: m.embed })
+      }
+    }))
+  }
+
+  hexToRgb (hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+
+    if (result) {
+      return [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)]
+    } else {
+      return null
+    }
+  }
+
+  truncate (string, max, append = '') {
+    if (!string || !max || (1 + append.length) >= max) {
+      return ''
+    }
+
+    if (string.length <= max && !append) {
+      return string
+    }
+
+    string = string.slice(0, max - 1 - append.length)
+    if (/\s/.test(string.charAt(string.length - 1))) {
+      string = string.replace(/\s+?$/, '')
+    }
+    return string + '\u2026' + append
   }
 }
 

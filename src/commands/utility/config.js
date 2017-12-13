@@ -7,6 +7,12 @@ class ConfigCommand extends Command {
       description: 'Modify the configuration file (will have to restart bot in order for changes to take effect).',
       args: [
         {
+          id: 'list',
+          match: 'flag',
+          prefix: ['--list', '-l'],
+          description: 'Lists available configuration keys.'
+        },
+        {
           id: 'key',
           description: 'The key in the configuration file.'
         },
@@ -17,12 +23,32 @@ class ConfigCommand extends Command {
         }
       ],
       options: {
-        usage: 'config <key> [value]'
+        usage: 'config < --list | key [value] >'
       }
     })
   }
 
   async exec (message, args) {
+    if (args.list) {
+      const configKeys = this.client.configManager.getKeys()
+      const objectKeys = Object.keys(configKeys)
+      const padding = ' '.repeat(objectKeys.reduce((a, v) => (a > v.length) ? a : v.length, 0))
+      const formatted = objectKeys
+        .map(key => {
+          const left = this.client.util.pad(padding, key) + ' :: '
+          const right = Object.keys(configKeys[key])
+            .map(_key => {
+              let _value = configKeys[key][_key]
+              if (_value instanceof Array) _value = _value.join(', ')
+              return `${_key}: ${_value}`
+            })
+            .join('; ')
+          return left + (right || '<no settings>')
+        })
+        .join('\n')
+      return message.edit('⚙\u2000Configuration keys:\n' + this.client.util.formatCode(formatted, 'asciidoc'))
+    }
+
     if (!args.key) {
       return message.status.error(`Usage: \`${this.options.usage}\`.`)
     }

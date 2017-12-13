@@ -1,4 +1,4 @@
-const { Collection, Util } = require('discord.js')
+const { Util } = require('discord.js')
 const { Command } = require('discord-akairo')
 const { escapeMarkdown } = Util
 const { stripIndent } = require('common-tags')
@@ -8,76 +8,44 @@ class UserInfoCommand extends Command {
     super('userinfo', {
       aliases: ['userinfo', 'uinfo', 'info'],
       description: 'Shows yours or another user\'s info.',
+      split: 'sticky',
       args: [
         {
+          id: 'guild',
+          match: 'prefix',
+          prefix: ['--guild=', '-g='],
+          description: 'Tries to fetch member information from a specific guild instead.'
+        },
+        {
           id: 'keyword',
-          match: 'content',
+          match: 'rest',
           description: 'The user that you want to display the information of.'
         }
       ],
       options: {
-        usage: 'userinfo [keyword]'
+        usage: 'userinfo [--guild=] [keyword]'
       },
       clientPermissions: ['EMBED_LINKS']
     })
   }
 
   async exec (message, args) {
-    /*
-     * Refresh GuildMemberStore
-     */
+    // Assert GuildMember or User.
+    const memberSource = args.guild || message.guild || null
+    const resolved = await this.client.util.assertMemberOrUser(args.keyword, memberSource, true)
+    const member = resolved.member
+    const user = resolved.user
 
-    if (message.guild) {
-      await message.status.progress('Refreshing guild members information\u2026')
-      await message.guild.members.fetch()
-    }
+    // Fetch UserProfile if the user is not a bot.
+    const profile = !user.bot && await user.fetchProfile().catch(() => {})
 
-    let member, user, profile
-
-    /*
-     * Resolve GuildMember or User
-     */
-
-    if (args.keyword) {
-      const resolved = this.client.util.resolveMemberOrUser(
-        args.keyword,
-        message.guild ? message.guild.members : null
-      )
-
-      if (resolved.failed) {
-        return message.status.error('Could not find matching users!')
-      }
-
-      if ((resolved.member || resolved.user) instanceof Collection) {
-        return message.status.error(
-          this.client.util.formatMatchesList(resolved.member || resolved.user, {
-            name: 'users',
-            prop: ['tag', 'user.tag']
-          }),
-          this.client.util.matchesListTimeout
-        )
-      }
-
-      member = resolved.member
-      user = resolved.user
-    } else {
-      member = message.guild ? message.member : null
-      user = message.author
-    }
-
-    /*
-     * Fetch UserProfile
-     */
-
-    profile = !user.bot && await user.fetchProfile().catch(() => { })
-
+    // Check whether the keyword was a mention or not.
     const mention = this.client.util.isKeywordMentionable(args.keyword)
+
+    // Get user's avatar to be used in the embed.
     const avatarURL = user.displayAvatarURL({ size: 256 })
 
-    /*
-     * Account Information field
-     */
-
+    // Account Information field.
     const embed = {
       fields: [
         {
@@ -92,12 +60,7 @@ class UserInfoCommand extends Command {
       ]
     }
 
-    /*
-     * Account Information field:
-     * Bot for bots;
-     * Nitro and Mutual guilds for normal users
-     */
-
+    // Account Information field: Bot for bots, Nitro and Mutual guilds for regular users.
     if (user.bot) {
       embed.fields[0].value += `\n•  **Bot:** yes`
     } else {
@@ -111,23 +74,18 @@ class UserInfoCommand extends Command {
       ? `[${this.client.util.getHostName(avatarURL)}](${avatarURL})`
       : 'N/A'}`
 
-    /*
-     * Activity message
-     */
-
+    // Activity message (in embed description).
     if (user.presence.activity) {
       embed.description = `${this.client.util.formatActivityType(user.presence.activity.type)} **${user.presence.activity.name}**`
     }
 
-    /*
-     * Guild Membership field
-     */
-
+    // Guild Membership field.
     if (member) {
       embed.fields.push(
         {
           name: 'Guild Membership',
           value: stripIndent`
+              •  **Guild:** ${escapeMarkdown(member.guild.name)} (${member.guild.id})
               •  **Nickname:** ${member.nickname ? escapeMarkdown(member.nickname) : 'N/A'}
               •  **Joined:** ${this.client.util.formatFromNow(member.joinedAt)}
             `
@@ -135,10 +93,10 @@ class UserInfoCommand extends Command {
       )
 
       const roles = member.roles
-        .array()
-        .slice(1)
-        .sort((a, b) => a.position - b.position)
-        .map(role => escapeMarkdown(role.name, true))
+        .array() // Get an array instance of the Collection.
+        .slice(1) // Slice @everyone role.
+        .sort((a, b) => b.position - a.position) // Sort by their positions in the Guild.
+        .map(role => escapeMarkdown(role.name, true)) // Escape markdown from their names.
 
       embed.fields.push(
         {
@@ -147,6 +105,7 @@ class UserInfoCommand extends Command {
         }
       )
     } else if (message.guild) {
+      // If the command is being used in a Guild but the target user is not part of the said Guild.
       embed.fields.push(
         {
           name: 'Guild Membership',
@@ -155,10 +114,7 @@ class UserInfoCommand extends Command {
       )
     }
 
-    /*
-     * Message content
-     */
-
+    // Message content (the thing being displayed above the embed).
     let content = 'My information:'
     if (args.keyword && mention) {
       content = `${(member || user).toString()}'s information:`
@@ -166,10 +122,7 @@ class UserInfoCommand extends Command {
       content = `Information of the user who matched \`${args.keyword}\`:`
     }
 
-    /*
-     * Embed options
-     */
-
+    // Options for the embed.
     embed.thumbnail = avatarURL
     embed.color = member ? member.displayColor : 0
     embed.author = {

@@ -46,42 +46,42 @@ class BanCommand extends Command {
     }
 
     if (!args.keyword) {
-      return message.status.error('You must specify a member to ban!')
+      return message.status.error('You must specify a guild member to ban!')
     }
 
-    /*
-     * Refresh GuildMemberStore
-     */
-
+    // Refresh GuildMemberStore.
     await message.guild.members.fetch()
 
-    /*
-     * Resolve GuildMember then ban
-     */
-
+    // Resolve GuildMember.
     const resolved = this.client.util.resolveMembers(args.keyword, message.guild.members)
 
-    if (resolved.size === 1) {
-      const target = resolved.first()
-      await target.ban({
-        days: args.days,
-        reason: args.reason
-      })
-      if (args.soft) {
-        await message.guild.unban(target.user.id)
-      }
-      return message.status.success(`Successfully ${args.soft ? 'soft-' : ''}banned ${escapeMarkdown(target.user.tag)} (ID: ${target.user.id}).`, -1)
-    } else if (resolved.size > 1) {
+    if (resolved.size === 0) {
+      return message.status.error('Could not find matching guild members!')
+    }
+
+    if (resolved.size > 1) {
       return message.status.error(
         this.client.util.formatMatchesList(resolved, {
-          name: 'members',
+          name: 'guild members',
           prop: 'user.tag'
         }),
         this.client.util.matchesListTimeout
       )
-    } else {
-      return message.status.error('Could not find matching guild members!')
     }
+
+    // Proceed if there was only one result.
+    const target = resolved.first()
+
+    await target.ban({
+      days: args.days,
+      reason: args.reason
+    })
+
+    if (args.soft) {
+      await message.guild.unban(target.user.id)
+    }
+
+    return message.status.success(`Successfully ${args.soft ? 'soft-' : ''}banned ${escapeMarkdown(target.user.tag)} (ID: ${target.user.id}).`, -1)
   }
 }
 
