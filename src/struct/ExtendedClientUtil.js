@@ -121,7 +121,6 @@ class ExtendedClientUtil extends ClientUtil {
   }
 
   resolveRoles (text, roles, caseSensitive = false, wholeWord = false, tryExact = false) {
-    console.log(require('util').inspect(roles, { depth: 0 }))
     const filtered = roles.filter(role => this.checkRole(text, role, caseSensitive, wholeWord))
 
     if (tryExact && !(caseSensitive && wholeWord) && filtered.size > 1) {
