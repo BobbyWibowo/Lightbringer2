@@ -20,7 +20,7 @@ class ConfigManager {
         allowed: OnlineStatuses
       },
       maxUsersListing: {
-        default: 100
+        default: 20
       }
     }
   }

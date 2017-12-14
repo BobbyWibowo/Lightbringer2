@@ -1,9 +1,3 @@
-/**
- * ALERT: This command is using the extremely experimental multiSendEmbed() util function.
- * It has been tested with a role that had ~1000 members and it could send ~9 embeds
- * without errors, but still...
- */
-
 const { Util } = require('discord.js')
 const { Command } = require('discord-akairo')
 const { escapeMarkdown } = Util
@@ -21,18 +15,24 @@ class InRoleCommand extends Command {
           description: 'Tries to use role from a specific guild instead.'
         },
         {
+          id: 'online',
+          match: 'flag',
+          prefix: ['--online', '--on', '-o'],
+          description: 'Lists online members only.'
+        },
+        {
           id: 'keyword',
           match: 'rest',
           description: 'The role that you want to display the members of.'
         }
       ],
       options: {
-        usage: 'inrole [--guild=] <keyword>'
+        usage: 'inrole [--guild=] [--online] <keyword>'
       },
       clientPermissions: ['EMBED_LINKS']
     })
 
-    this.maxUsersListing = 100
+    this.maxUsersListing = 20
   }
 
   async exec (message, args) {
@@ -55,9 +55,16 @@ class InRoleCommand extends Command {
     const mention = this.client.util.isKeywordMentionable(args.keyword, 1)
 
     let displayCapped
-    let members = role.members
-      .array()
-      .sort((a, b) => a.user.tag.localeCompare(b.user.tag))
+    let members = role.members.array()
+    let memberCount = members.length
+
+    if (args.online) {
+      members = members.filter(m => m.presence.status !== 'offline')
+      memberCount = members.length
+    }
+
+    // Sort members alphabetically.
+    members = members.sort((a, b) => a.user.tag.localeCompare(b.user.tag))
 
     if ((this.maxUsersListing > 0) && (this.maxUsersListing < members.length)) {
       displayCapped = true
@@ -65,21 +72,21 @@ class InRoleCommand extends Command {
     }
 
     const embed = {
-      title: `${role.name} [${role.members.size}]`,
+      title: `${role.name} [${memberCount}]`,
       description: members.map(m => escapeMarkdown(m.user.tag, true)).join(', '),
       color: role.hexColor
     }
 
-    let content = `Members of the role which matched \`${args.keyword}\`:`
+    let content = `${args.online ? 'Online members' : 'Members'} of the role which matched \`${args.keyword}\`:`
     if (mention) {
-      content = `${role}'s members:`
+      content = `${role}'s ${args.online ? 'online ' : ''}members:`
     }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
       prefix: `**Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})\n` +
-        (displayCapped ? `Displaying the first ${this.maxUsersListing} users alphabetically\u2026` : ''),
+        (displayCapped ? `Displaying the first ${this.maxUsersListing} members alphabetically\u2026` : ''),
       code: 'css',
       char: ', '
     })
