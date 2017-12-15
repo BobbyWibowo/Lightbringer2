@@ -37,7 +37,7 @@ class StatsCommand extends Command {
         {
           name: 'Others',
           value: stripIndent`
-            •  **Lightbringer:** [${this.client.package.version}](${this.options.git})
+            •  **Lightbringer:** [${this.client.package.version}](${this.git})
             •  **discord.js:** [${require('discord.js').version}](https://github.com/hydrabolt/discord.js)
             •  **discord-akairo:** [${require('discord-akairo').version}](https://github.com/1Computer1/discord-akairo)
             •  **Modules:** ${this.client.commandHandler.modules.size.toLocaleString()}

@@ -71,7 +71,7 @@ class ReadyListener extends Listener {
     console.log('Bot is ready!')
 
     this.client.stats.set('initiated', true)
-    await this.client.util.sendStatus(`👍\u2000Bot is ready!`)
+    await this.client.util.sendStatus(`✅\u2000Bot is ready!`)
   }
 
   triggerCommands () {
