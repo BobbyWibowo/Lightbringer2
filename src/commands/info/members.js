@@ -1,6 +1,5 @@
-const { Util } = require('discord.js')
 const { Command } = require('discord-akairo')
-const { escapeMarkdown } = Util
+const { escapeMarkdown } = require('discord.js').Util
 
 class MembersCommand extends Command {
   constructor () {

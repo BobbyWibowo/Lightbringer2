@@ -1,6 +1,5 @@
-const { Util } = require('discord.js')
 const { Command } = require('discord-akairo')
-const { escapeMarkdown } = Util
+const { escapeMarkdown } = require('discord.js').Util
 const { stripIndent } = require('common-tags')
 
 const PERMISSIONS = {

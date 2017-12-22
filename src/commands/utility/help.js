@@ -23,7 +23,14 @@ class HelpCommand extends Command {
         }
       ],
       options: {
-        usage: 'help < --all | command >'
+        usage: 'help < --all | command >',
+        examples: [
+          'help --all',
+          {
+            content: 'help reload',
+            description: 'Shows help of a command named "reload".'
+          }
+        ]
       }
     })
 
@@ -49,7 +56,7 @@ class HelpCommand extends Command {
           const id = item.category.id
 
           formatted += id + '\n'
-          formatted += '='.repeat(id.length) + '\n'
+          formatted += '~'.repeat(id.length) + '\n'
 
           item.modules.forEach(m => {
             formatted += this.client.util.pad(padding, m.id)
@@ -74,7 +81,7 @@ class HelpCommand extends Command {
       let formatted = ''
 
       formatted += id + '\n'
-      formatted += '='.repeat(id.length) + '\n'
+      formatted += '~'.repeat(id.length) + '\n'
       formatted += `Aliases     :: ${args.command.aliases.join(', ')}` + '\n'
       formatted += `Description :: ${args.command.description}` + '\n'
 
@@ -107,13 +114,13 @@ class HelpCommand extends Command {
 
         if (_args.length) {
           // Use length of the longest argument's "tag" as padding.
-          // !1 chars is the minimum length to match the length of Aliases,
+          // 11 chars is the minimum length to match the length of Aliases,
           // Description, Credits, and so on (look above).
           const padding = ' '.repeat(_args.reduce((a, v) => (a > v.tag.length) ? a : v.tag.length, 11))
 
           formatted += '\n'
           formatted += 'Arguments' + '\n'
-          formatted += '---------' + '\n'
+          formatted += '~~~~~~~~~' + '\n'
 
           _args.forEach(a => {
             formatted += this.client.util.pad(padding, a.tag)
@@ -121,6 +128,29 @@ class HelpCommand extends Command {
             formatted += (a.description || '<no description>') + '\n'
           })
         }
+      }
+
+      if (args.command.options.examples instanceof Array) {
+        const _examples = args.command.options.examples
+          .map(e => {
+            if (typeof e === 'string') return { content: e }
+            return e
+          })
+
+        // Use length of the longest example as padding.
+        // 11 chars is the minimum length to match the length of Aliases,
+        // Description, Credits, and so on (look above).
+        const padding = ' '.repeat(_examples.reduce((a, v) => (a > v.content.length) ? a : v.content.length, 11))
+
+        formatted += '\n'
+        formatted += 'Examples' + '\n'
+        formatted += '~~~~~~~~' + '\n'
+
+        _examples.forEach(e => {
+          formatted += this.client.util.pad(padding, e.content)
+          formatted += ' :: '
+          formatted += (e.description || '<no description>') + '\n'
+        })
       }
 
       return this.client.util.multiSend(message.channel, formatted.trim(), {

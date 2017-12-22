@@ -548,7 +548,7 @@ class ExtendedClientUtil extends ClientUtil {
       char = '\n'
     } = options
 
-    if (code) {
+    if (typeof code === 'string') {
       // 3 (```); code; 1 (\n); 1 (\n); 3 (```)
       maxLength -= 3 + code.length + 1 + 1 + 3
     }
@@ -559,7 +559,7 @@ class ExtendedClientUtil extends ClientUtil {
       messages = [messages]
     }
 
-    if (code) {
+    if (typeof code === 'string') {
       messages = messages.map(s => this.formatCode(s, code))
     }
 
@@ -588,7 +588,7 @@ class ExtendedClientUtil extends ClientUtil {
       char = '\n'
     } = options
 
-    if (code) {
+    if (typeof code === 'string') {
       // 3 (```); code; 1 (\n); 1 (\n); 3 (```)
       maxLength -= 3 + code.length + 1 + 1 + 3
     }
@@ -637,7 +637,7 @@ class ExtendedClientUtil extends ClientUtil {
         color: data.color
       }
 
-      if (code) {
+      if (typeof code === 'string') {
         desc = this.formatCode(desc, code)
       }
 
@@ -667,21 +667,25 @@ class ExtendedClientUtil extends ClientUtil {
     }
 
     for (let i = 0; i < splitDescs.length; i++) {
-      let _maxLength = maxLength
+      const isLast = i === splitDescs.length - 1
 
-      if (messages.length === 0) {
-        _maxLength -= firstExtraLength
-      } else if (i === splitDescs.length - 1) {
-        _maxLength -= lastExtraLength
+      let tempMaxLength = maxLength
+
+      if (!messages.length) {
+        tempMaxLength -= firstExtraLength
+      } else if (isLast) {
+        tempMaxLength -= lastExtraLength
       }
 
-      if ((tempDesc.length + splitDescs[i].length + char.length) > _maxLength) {
-        push(tempDesc, (i === splitDescs.length - 1))
-        tempDesc = ''
-      } else if (i === splitDescs.length - 1) {
-        push(tempDesc + splitDescs[i], true)
+      if ((tempDesc.length + splitDescs[i].length + char.length) > tempMaxLength) {
+        push(tempDesc)
+        tempDesc = splitDescs[i] + char
       } else {
-        tempDesc += splitDescs[i] + char
+        tempDesc = tempDesc + splitDescs[i] + char // not using += for clarity
+      }
+
+      if (isLast) {
+        push(tempDesc, isLast)
       }
     }
 

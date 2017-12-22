@@ -8,7 +8,7 @@ class UserIdCommand extends Command {
       args: [
         {
           id: 'keyword',
-          match: 'content',
+          match: 'rest',
           description: 'The user that you want to display the ID of.'
         }
       ],

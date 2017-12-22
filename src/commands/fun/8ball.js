@@ -8,7 +8,7 @@ class EightBallCommand extends Command {
       args: [
         {
           id: 'question',
-          match: 'content',
+          match: 'rest',
           description: 'The question that you would like to ask to 8-ball.'
         }
       ],
