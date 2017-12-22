@@ -15,13 +15,19 @@ class KickCommand extends Command {
           description: 'Reason for kicking.'
         },
         {
+          id: 'refresh',
+          match: 'flag',
+          prefix: ['--refresh'],
+          description: 'Refresh guild members (should be used in large guilds).'
+        },
+        {
           id: 'keyword',
           match: 'rest',
           description: 'The guild member that you want to kick.'
         }
       ],
       options: {
-        usage: 'ban [--reason=] <keyword>'
+        usage: 'ban [--reason=] [--refresh] <keyword>'
       }
     })
   }
@@ -35,8 +41,11 @@ class KickCommand extends Command {
       return message.status.error('You must specify a guild member to kick!')
     }
 
-    // Refresh GuildMemberStore.
-    await message.guild.members.fetch()
+    if (args.refresh) {
+      // Refresh GuildMemberStore.
+      await message.status.progress('Refreshing guild members\u2026')
+      await message.guild.members.fetch()
+    }
 
     // Resolve GuildMember then kick.
     const resolved = this.client.util.resolveMembers(args.keyword, message.guild.members)

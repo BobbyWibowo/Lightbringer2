@@ -42,6 +42,7 @@ class MembersCommand extends Command {
     }
 
     // Refresh GuildMemberStore.
+    await message.status.progress('Refreshing guild members\u2026')
     await guild.members.fetch()
 
     let displayCapped = false

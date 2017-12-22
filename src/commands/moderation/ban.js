@@ -29,13 +29,19 @@ class BanCommand extends Command {
           description: 'Soft-ban (will immediately unban the user after the ban).'
         },
         {
+          id: 'refresh',
+          match: 'flag',
+          prefix: ['--refresh'],
+          description: 'Refresh guild members (should be used in large guilds).'
+        },
+        {
           id: 'keyword',
           match: 'rest',
           description: 'The guild member that you want to ban.'
         }
       ],
       options: {
-        usage: 'ban [--reason=] [--days=] [--soft] <keyword>'
+        usage: 'ban [--reason=] [--days=] [--soft] [--refresh] <keyword>'
       }
     })
   }
@@ -49,8 +55,11 @@ class BanCommand extends Command {
       return message.status.error('You must specify a guild member to ban!')
     }
 
-    // Refresh GuildMemberStore.
-    await message.guild.members.fetch()
+    if (args.refresh) {
+      // Refresh GuildMemberStore.
+      await message.status.progress('Refreshing guild members\u2026')
+      await message.guild.members.fetch()
+    }
 
     // Resolve GuildMember.
     const resolved = this.client.util.resolveMembers(args.keyword, message.guild.members)

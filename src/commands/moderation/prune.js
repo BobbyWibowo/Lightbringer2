@@ -31,10 +31,10 @@ class PruneCommand extends Command {
       return message.status.error('There are no messages that you can prune!')
     }
 
-    await message.status.progress(`Pruning ${messages.size} message(s)\u2026`)
+    await message.status.progress(`Pruning ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
     await Promise.all(messages.map(m => m.delete()))
 
-    return message.status.success(`Pruned \`${messages.size}\` message(s)!`, 3000)
+    return message.status.success(`Pruned \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, 3000)
   }
 }
 

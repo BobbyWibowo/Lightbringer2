@@ -38,10 +38,10 @@ class FlushCommand extends Command {
 
     messages = messages.filter(m => m.author.bot)
 
-    await message.status.progress(`Flushing ${messages.size} message(s)\u2026`)
+    await message.status.progress(`Flushing ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
     await Promise.all(messages.map(m => m.delete({ reason: args.reason })))
 
-    return message.status.success(`Flushed \`${messages.size}\` message(s)!`, 3000)
+    return message.status.success(`Flushed \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, 3000)
   }
 }
 

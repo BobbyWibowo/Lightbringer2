@@ -17,7 +17,7 @@ class CurrencyCommand extends Command {
         {
           id: 'refresh',
           match: 'flag',
-          prefix: ['--refresh', '-r'],
+          prefix: ['--refresh'],
           description: 'Refreshes the exchange rate.'
         },
         {

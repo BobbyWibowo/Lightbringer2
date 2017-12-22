@@ -28,7 +28,15 @@ if (config.token) {
       maxUsersListing: config.maxUsersListing
     },
     {
-      disableEveryone: true
+      sync: true,
+      disabledEvents: [
+        'CHANNEL_PINS_UPDATE',
+        'MESSAGE_REACTION_ADD',
+        'MESSAGE_REACTION_REMOVE',
+        'MESSAGE_REACTION_REMOVE_ALL',
+        'VOICE_STATE_UPDATE',
+        'TYPING_START'
+      ]
     }
   )
 

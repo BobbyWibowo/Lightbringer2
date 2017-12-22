@@ -11,7 +11,7 @@ class DictionaryCommand extends Command {
           id: 'index',
           type: 'integer',
           match: 'prefix',
-          prefix: '--index=',
+          prefix: ['--index=', '-i='],
           description: 'Sets index of which definition to show.'
         },
         {
@@ -188,7 +188,7 @@ class DictionaryCommand extends Command {
       }
 
       // Underlines all synonyms
-      temp += m.synonyms.map(s => `__${s}__`).join(', ')
+      temp += m.synonyms.map(s => `__${s.trim()}__`).join(', ')
     }
 
     if (m.illustrations) {

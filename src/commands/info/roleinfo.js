@@ -42,6 +42,7 @@ class RoleInfoCommand extends Command {
     const role = await this.client.util.assertRole(args.keyword, roleSource)
 
     // Refresh GuildMemberStore.
+    await message.status.progress('Refreshing guild members\u2026')
     await role.guild.members.fetch()
 
     // Check whether the keyword was a mention or not.

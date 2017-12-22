@@ -31,13 +31,19 @@ class GuildInfoCommand extends Command {
       description: 'Shows information of the currently viewed or a specific guild.',
       args: [
         {
+          id: 'refresh',
+          match: 'flag',
+          prefix: ['--refresh'],
+          description: 'Refresh guild members (should be used in large guilds).'
+        },
+        {
           id: 'keyword',
-          match: 'content',
+          match: 'rest',
           description: 'The guild that you want to display the information of.'
         }
       ],
       options: {
-        usage: 'guildinfo [keyword]'
+        usage: 'guildinfo [--refresh] [keyword]'
       },
       clientPermissions: ['EMBED_LINKS']
     })
@@ -55,8 +61,11 @@ class GuildInfoCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
-    // Refresh GuildMemberStore.
-    await guild.members.fetch()
+    if (args.refresh) {
+      // Refresh GuildMemberStore.
+      await message.status.progress('Refreshing guild members\u2026')
+      await guild.members.fetch()
+    }
 
     const iconURL = guild.iconURL({ size: 256 })
     const splashURL = guild.splashURL({ size: 2048 })

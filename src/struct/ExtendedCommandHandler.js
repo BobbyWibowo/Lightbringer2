@@ -7,7 +7,7 @@ class ExtendedCommandHandler extends CommandHandler {
     super(client)
 
     const {
-      commandStatusLifetime = 120000 // default
+      commandStatusLifetime = 0 // default
     } = client.akairoOptions
 
     this.commandStatusLifetime = commandStatusLifetime

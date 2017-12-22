@@ -40,10 +40,10 @@ class PurgeCommand extends Command {
       return message.status.error('There are no messages that you can purge!')
     }
 
-    await message.status.progress(`Purging ${messages.size} message(s)\u2026`)
+    await message.status.progress(`Purging ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
     await Promise.all(messages.map(m => m.delete({ reason: args.reason })))
 
-    return message.status.success(`Purged \`${messages.size}\` message(s)!`, 3000)
+    return message.status.success(`Purged \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, 3000)
   }
 }
 
