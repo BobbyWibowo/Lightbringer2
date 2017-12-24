@@ -28,8 +28,9 @@ if (config.token) {
       maxUsersListing: config.maxUsersListing
     },
     {
-      sync: true,
-      disabledEvents: [
+      messageCacheMaxSize: 50, // maximum number of messages to cache per channel
+      sync: true, // periodically sync guilds (it should be once every 30 seconds)
+      disabledEvents: [ // these websocket events will not be processed by the bot (potentially improving performance)
         'CHANNEL_PINS_UPDATE',
         'MESSAGE_REACTION_ADD',
         'MESSAGE_REACTION_REMOVE',

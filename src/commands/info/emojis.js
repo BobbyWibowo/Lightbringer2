@@ -12,7 +12,7 @@ class EmojisCommand extends Command {
         {
           id: 'keyword',
           match: 'rest',
-          description: 'The guild that you want to list the emotes of.'
+          description: 'The guild that you want to list the emotes of. This can be an emoji instead, in which case it will display the source of the said emoji.'
         }
       ],
       options: {
@@ -25,6 +25,14 @@ class EmojisCommand extends Command {
   async exec (message, args) {
     if (!message.guild && !args.keyword) {
       return message.status.error('You must specify a guild name when running this command outside of a guild!')
+    }
+
+    const match = /<a?:\w+?:(\d+?)>/.exec(args.keyword)
+    if (match && match[1]) {
+      const emoji = this.client.emojis.get(match[1])
+      if (emoji) {
+        return message.edit(`${this.formatEmoji(emoji)} is from ${emoji.guild.name} (ID: ${emoji.guild.id}).`)
+      }
     }
 
     let guild = message.guild

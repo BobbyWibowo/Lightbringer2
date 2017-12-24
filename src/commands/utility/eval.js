@@ -56,7 +56,7 @@ class EvalCommand extends Command {
       this.client.util.formatCode(escapeMarkdown(args.content, true), 'js') + '\n' +
       `•  ${isError ? '**Evaluation error:**' : '**Result:**'}\n` +
       '%s\n' +
-      `•  ${type ? `Type: ${type} | ` : ''}Execution time: ${this.client.util.formatTimeNs(diff[0] * 1e9 + diff[1])}`
+      `•  ${type ? `Type: ${type} | ` : ''}Time taken: \`${this.client.util.formatTimeNs(diff[0] * 1e9 + diff[1])}\``
 
     // 2 characters for %s and 10 characters for js code block
     const maxResultLength = 2000 - tempString.length - 2 - 10

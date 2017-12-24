@@ -3,7 +3,7 @@ const { Command } = require('discord-akairo')
 class PingCommand extends Command {
   constructor () {
     super('ping', {
-      aliases: ['ping'],
+      aliases: ['ping', 'pong'],
       description: 'Pings the bot!'
     })
   }
@@ -15,7 +15,7 @@ class PingCommand extends Command {
 
     // Elapsed time
     const elapsed = new Date().getTime() - timestamp
-    await message.edit(`${message.content} - Time taken: **${elapsed} ms** (${this.client.ping.toFixed(0)} ms)`)
+    await message.edit(`${message.content} \`${elapsed}ms\` - Heartbeat: \`${this.client.ping.toFixed(0)}ms\``)
   }
 }
 

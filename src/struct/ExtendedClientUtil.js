@@ -482,12 +482,12 @@ class ExtendedClientUtil extends ClientUtil {
     if (timeNs < 1e9) {
       const timeMs = timeNs / 1e6
       if (timeMs >= 100) {
-        return `${timeMs.toFixed(1)} ms`
+        return `${timeMs.toFixed(1)}ms`
       } else {
-        return `${timeMs.toFixed(3)} ms`
+        return `${timeMs.toFixed(3)}ms`
       }
     } else {
-      return `${(timeNs / 1e9).toFixed(3)} s`
+      return `${(timeNs / 1e9).toFixed(3)}s`
     }
   }
 
