@@ -57,7 +57,7 @@ class EmojisCommand extends Command {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      prefix: `**Guild ID:** ${guild.id})\n`,
+      prefix: `**Guild ID:** ${guild.id}\n`,
       char: '\u2000'
     })
   }

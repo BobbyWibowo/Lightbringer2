@@ -1,7 +1,7 @@
 const { Listener } = require('discord-akairo')
 const { OnlineStatuses } = require('./../../util/Constants')
 const readline = require('readline')
-const { stripIndents } = require('common-tags')
+const { stripIndent } = require('common-tags')
 
 class ReadyListener extends Listener {
   constructor () {
@@ -18,7 +18,7 @@ class ReadyListener extends Listener {
     }
 
     console.log('Successfully logged in!')
-    console.log(stripIndents`
+    console.log(stripIndent`
         Stats:
         - User: ${this.client.user.tag} (ID: ${this.client.user.id})
         - Guilds: ${this.client.guilds.size.toLocaleString()}

@@ -1,6 +1,7 @@
 const { ActivityTypes } = require('discord.js').Constants
 const { ClientUtil } = require('discord-akairo')
 const { Collection, Guild, Message, MessageEmbed, TextChannel } = require('discord.js')
+const encodeUrl = require('encodeurl')
 const LightbringerError = require('./../util/LightbringerError')
 const moment = require('moment')
 const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
@@ -722,6 +723,10 @@ class ExtendedClientUtil extends ClientUtil {
       string = string.replace(/\s+?$/, '')
     }
     return string + '\u2026' + append
+  }
+
+  cleanUrl (url) {
+    return encodeUrl(url.replace(/ /g, '+')).replace(/\(/g, '%40').replace(/\)/g, '%41')
   }
 }
 

@@ -127,6 +127,13 @@ bl@^1.0.0:
   dependencies:
     readable-stream "^2.0.5"
 
+booru@BobbyWibowo/booru:
+  version "0.3.3-dev"
+  resolved "https://codeload.github.com/BobbyWibowo/booru/tar.gz/3438bbe71b5009fa110a97ddec6ccf1876457a41"
+  dependencies:
+    snekfetch "^3.6.1"
+    xml2js "^0.4.17"
+
 brace-expansion@^1.1.7:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.8.tgz#c07b211c7c952ec1f8efd51a77ef0d1d3990a292"
@@ -210,9 +217,9 @@ color-name@^1.1.1:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
 
-common-tags@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.5.1.tgz#e2e39931a013cd02253defeed89a1ad615a27f07"
+common-tags@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.6.0.tgz#788e4bcc582f16993e5b2c92f76b1ccb80731537"
   dependencies:
     babel-runtime "^6.26.0"
 
@@ -318,11 +325,11 @@ delegates@^1.0.0:
 
 discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-dev"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/d1b4cb023a745eb1f2d6d1109296508ddb6e314b"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/1ada233a76f6880272ee3c60e093a7dea40ac688"
 
 discord.js@hydrabolt/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/4f8f2087c16ec8b6d9b785edbaba1c073ad15fc3"
+  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/4063a3a16b581f643d5601ffcd735d9140c7c940"
   dependencies:
     pako "^1.0.0"
     prism-media "^0.0.2"
@@ -342,6 +349,10 @@ doctrine@^2.0.0:
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-2.0.2.tgz#68f96ce8efc56cc42651f1faadb4f175273b0075"
   dependencies:
     esutils "^2.0.2"
+
+encodeurl@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.1.tgz#79e3d58655346909fe6f0f45a5de68103b294d20"
 
 end-of-stream@^1.0.0, end-of-stream@^1.1.0:
   version "1.4.0"
@@ -649,9 +660,9 @@ fraction.js@4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.0.4.tgz#04e567110718adf7b52974a10434ab4c67a5183e"
 
-fs-extra@^4.0.2:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-4.0.3.tgz#0d852122e5bc5beb453fb028e9c0c9bf36340c94"
+fs-extra@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-5.0.0.tgz#414d0110cdd06705734d055652c5411260c31abd"
   dependencies:
     graceful-fs "^4.1.2"
     jsonfile "^4.0.0"
@@ -661,7 +672,7 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
 
-function-bind@^1.0.2, function-bind@^1.1.0, function-bind@^1.1.1:
+function-bind@^1.0.2, function-bind@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
 
@@ -735,6 +746,10 @@ has-ansi@^2.0.0:
 has-flag@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-2.0.0.tgz#e8207af1cc7b30d446cc70b734b5e8be18f88d51"
+
+has-symbols@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/has-symbols/-/has-symbols-1.0.0.tgz#ba1a8f1af2a0fc39650f5c850367704122063b44"
 
 has-unicode@^2.0.0:
   version "2.0.1"
@@ -938,7 +953,7 @@ lodash@^4.0.0, lodash@^4.17.4, lodash@^4.3.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
-mathjs@^3.17.0:
+mathjs@^3.18.0:
   version "3.18.0"
   resolved "https://registry.yarnpkg.com/mathjs/-/mathjs-3.18.0.tgz#9d0162f31088459c3093f43e363d6a7ae7acf9d5"
   dependencies:
@@ -970,7 +985,7 @@ mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-moment@^2.19.2:
+moment@^2.20.1:
   version "2.20.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
 
@@ -982,9 +997,9 @@ mute-stream@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.5.tgz#8fbfabb0a98a253d3184331f9e8deb7372fac6c0"
 
-mw-dict@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/mw-dict/-/mw-dict-1.0.6.tgz#2b6c1fa177f7d4fcafd732b8cc3602146e7d2fe9"
+mw-dict@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/mw-dict/-/mw-dict-2.0.0.tgz#981e93e52ab42b415ccdc92e01d5a88cbdf7fa32"
   dependencies:
     axios "^0.16.2"
     lodash "^4.17.4"
@@ -1025,17 +1040,18 @@ object-assign@^4.0.1, object-assign@^4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
 
-object-keys@^1.0.10, object-keys@^1.0.8:
+object-keys@^1.0.11, object-keys@^1.0.8:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.11.tgz#c54601778ad560f1142ce0e01bcca8b56d13426d"
 
 object.assign@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/object.assign/-/object.assign-4.0.4.tgz#b1c9cc044ef1b9fe63606fc141abbb32e14730cc"
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/object.assign/-/object.assign-4.1.0.tgz#968bf1100d7956bb3ca086f006f846b3bc4008da"
   dependencies:
     define-properties "^1.1.2"
-    function-bind "^1.1.0"
-    object-keys "^1.0.10"
+    function-bind "^1.1.1"
+    has-symbols "^1.0.0"
+    object-keys "^1.0.11"
 
 once@^1.3.0, once@^1.3.1, once@^1.4.0:
   version "1.4.0"
@@ -1293,6 +1309,10 @@ safe-buffer@^5.0.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
 
+sax@>=0.6.0:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
+
 seed-random@2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/seed-random/-/seed-random-2.2.0.tgz#2a9b19e250a817099231a5b99a4daf80b7fbed54"
@@ -1333,7 +1353,7 @@ slice-ansi@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
 
-snekfetch@^3.5.0, snekfetch@^3.5.8:
+snekfetch@^3.5.0, snekfetch@^3.6.1:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/snekfetch/-/snekfetch-3.6.1.tgz#9b77fa946cfa15c7041940593a2689dc547427ea"
 
@@ -1539,6 +1559,17 @@ ws@^3.3.1:
     async-limiter "~1.0.0"
     safe-buffer "~5.1.0"
     ultron "~1.1.0"
+
+xml2js@^0.4.17:
+  version "0.4.19"
+  resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.19.tgz#686c20f213209e94abf0d1bcf1efaa291c7827a7"
+  dependencies:
+    sax ">=0.6.0"
+    xmlbuilder "~9.0.1"
+
+xmlbuilder@~9.0.1:
+  version "9.0.4"
+  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.4.tgz#519cb4ca686d005a8420d3496f3f0caeecca580f"
 
 xmldom@^0.1.27:
   version "0.1.27"
