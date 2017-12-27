@@ -416,7 +416,7 @@ class ExtendedClientUtil extends ClientUtil {
         continue
       }
 
-      if (result.length >= maxUnits) {
+      if (maxUnits && (result.length >= maxUnits)) {
         break
       }
 

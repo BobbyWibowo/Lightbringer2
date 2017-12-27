@@ -101,9 +101,9 @@ class GuildInfoCommand extends Command {
         {
           name: 'Miscellaneous',
           value: stripIndent`
-              •  **Notifications:** ${NOTIFICATIONS[guild.messageNotifications]}
-              •  **Mobile push:** ${this.client.util.formatYesNo(guild.mobilePush)}
-              •  **Muted:** ${this.client.util.formatYesNo(guild.muted)}
+              •  **Notifications:** ${guild.messageNotifications != null ? NOTIFICATIONS[guild.messageNotifications] : 'N/A'}
+              •  **Mobile push:** ${guild.mobilePush != null ? this.client.util.formatYesNo(guild.mobilePush) : 'N/A'}
+              •  **Muted:** ${guild.muted != null ? this.client.util.formatYesNo(guild.muted) : 'N/A'}
           `
         }
       ],

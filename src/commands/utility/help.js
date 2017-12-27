@@ -76,9 +76,15 @@ class HelpCommand extends Command {
         ${'='.repeat(20 + id.length)}
         Aliases     :: ${args.command.aliases.join(', ')}
         Description :: ${args.command.description || 'N/A'}
-        Credits     :: ${args.command.options.credits || 'N/A'}
-        Usage       :: ${args.command.options.usage || 'N/A'}
       `
+
+      if (args.command.options.credits) {
+        formatted += '\n' + `Credits     :: ${args.command.options.credits || 'N/A'}`
+      }
+
+      if (args.command.options.usage) {
+        formatted += '\n' + `Usage       :: ${args.command.options.usage || 'N/A'}`
+      }
 
       const MIN_PAD = 11 // length of "Description"
 
