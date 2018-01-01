@@ -27,7 +27,7 @@
         "discord.js": "hydrabolt/discord.js",
         "encodeurl": "^1.0.1",
         "fs-extra": "^5.0.0",
-        "mathjs": "^3.18.0",
+        "mathjs": "^3.18.1",
         "moment": "^2.20.1",
         "mw-dict": "^2.0.0",
         "path": "^0.12.7",

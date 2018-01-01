@@ -3,16 +3,19 @@ const { Command } = require('discord-akairo')
 class UploadCommand extends Command {
   constructor () {
     super('upload', {
-      aliases: ['upload', 'up'],
-      description: 'Uploads an image from a URL as an attachment.',
+      aliases: ['upload', 'attach'],
+      description: 'Uploads a file from a URL as an attachment (works for either regular files or images).',
       args: [
         {
           id: 'name',
           match: 'prefix',
-          prefix: ['--name=', '-n=']
+          prefix: ['--name=', '-n='],
+          description: 'The file name for the attachment.'
         },
         {
-          id: 'url'
+          id: 'url',
+          match: 'rest',
+          description: 'URL of the file to upload.'
         }
       ],
       options: {

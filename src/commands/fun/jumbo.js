@@ -27,13 +27,15 @@ class JumboCommand extends Command {
     let files = args.emojis
       .split(' ')
       .map(s => {
-        const match = /<a?:\w+?:(\d+?)>/.exec(s)
+        const match = /<a?:\w+?:(\d{17,19})>/.exec(s)
         if (match && match[1]) {
           const emoji = this.client.emojis.get(match[1])
           if (emoji) {
+            const attachment = emoji.url
+            const format = /\d{17,19}\.(\w*?)$/.exec(attachment)
             return {
-              attachment: emoji.url,
-              name: `${emoji.name}-${emoji.id}.png`
+              attachment,
+              name: `${emoji.name}.${format ? format[1] : 'png'}`
             }
           }
         }

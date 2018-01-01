@@ -1,5 +1,5 @@
 const { Argument, Command } = require('discord-akairo')
-const { stripIndent } = require('common-tags')
+const { stripIndent, stripIndents } = require('common-tags')
 
 class HelpCommand extends Command {
   constructor () {
@@ -52,13 +52,13 @@ class HelpCommand extends Command {
             return `${this.client.util.pad(padding, m.id)} :: ${m.description || '<no description>'}`
           })
 
-          return stripIndent`
+          return stripIndents`
             ${id}
             ${'='.repeat(id.length)}
             ${lines.join('\n')}
           `
         })
-        .join('\n')
+        .join('\n\n')
 
       if (this.git) {
         await message.edit(this.git)

@@ -3,7 +3,7 @@ const { Command } = require('discord-akairo')
 class UpTimeCommand extends Command {
   constructor () {
     super('uptime', {
-      aliases: ['uptime'],
+      aliases: ['uptime', 'up'],
       description: 'Displays the bot\'s uptime.',
       args: [
         {
