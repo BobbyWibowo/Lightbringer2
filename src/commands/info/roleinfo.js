@@ -57,7 +57,7 @@ class RoleInfoCommand extends Command {
           name: 'Information',
           value: stripIndent`
               •  **ID:** ${role.id}
-              •  **Created at:** ${this.client.util.formatFromNow(role.createdAt)}
+              •  **Created on:** ${this.client.util.formatFromNow(role.createdAt)}
               •  **Position:** ${role.guild.roles.size - role.position} out of ${role.guild.roles.size}
               •  **Members:** ${role.members.size} - ${online.size} online
             `

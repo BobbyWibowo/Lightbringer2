@@ -54,7 +54,7 @@ class UserInfoCommand extends Command {
               •  **ID:** ${user.id}
               •  **Status:** ${user.presence.status}
               •  **Mention:** ${user.toString()}
-              •  **Created at:** ${this.client.util.formatFromNow(user.createdAt)}
+              •  **Created on:** ${this.client.util.formatFromNow(user.createdAt)}
             `
         }
       ]
@@ -89,7 +89,7 @@ class UserInfoCommand extends Command {
           value: stripIndent`
               •  **Guild:** ${escapeMarkdown(member.guild.name)} (${member.guild.id})
               •  **Nickname:** ${member.nickname ? escapeMarkdown(member.nickname) : 'N/A'}
-              •  **Joined at:** ${this.client.util.formatFromNow(member.joinedAt)}
+              •  **Joined on:** ${this.client.util.formatFromNow(member.joinedAt)}
             `
         }
       )
