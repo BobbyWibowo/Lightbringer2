@@ -163,6 +163,8 @@ class LastfmCommand extends Command {
   async getRecentTrack (reset) {
     if (reset) {
       this.clearRecentTrackTimeout()
+      // this.cleareRecentTrackTimeout() will also disable the timeout altogether,
+      // but we do not want that, since we only want it to clear the timeout.
       this._disabled = false
     }
 
@@ -244,7 +246,9 @@ class LastfmCommand extends Command {
 
       if (this._error >= 3) {
         this.clearRecentTrackTimeout()
-        this.client.util.sendStatus(`🎵\u2000Last.fm status updater stopped due to **${MAX_RETRY}** consecutive errors.`)
+        this.client.util.sendStatus(`🎵\u2000Last fm status updater stopped due to **${MAX_RETRY}** consecutive errors.`)
+        this.storage.set('disabled', true);
+        this.storage.save();
         return
       }
     }
