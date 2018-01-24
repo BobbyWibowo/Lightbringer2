@@ -128,8 +128,8 @@ bl@^1.0.0:
     readable-stream "^2.0.5"
 
 booru@BobbyWibowo/booru:
-  version "0.3.3-dev"
-  resolved "https://codeload.github.com/BobbyWibowo/booru/tar.gz/3438bbe71b5009fa110a97ddec6ccf1876457a41"
+  version "0.3.6-dev"
+  resolved "https://codeload.github.com/BobbyWibowo/booru/tar.gz/b94177a360361ed22811c31e982647573956ad41"
   dependencies:
     snekfetch "^3.6.1"
     xml2js "^0.4.17"
@@ -217,9 +217,9 @@ color-name@^1.1.1:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
 
-common-tags@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.6.0.tgz#788e4bcc582f16993e5b2c92f76b1ccb80731537"
+common-tags@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.7.2.tgz#24d9768c63d253a56ecff93845b44b4df1d52771"
   dependencies:
     babel-runtime "^6.26.0"
 
@@ -325,14 +325,14 @@ delegates@^1.0.0:
 
 discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-dev"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/1ada233a76f6880272ee3c60e093a7dea40ac688"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/212fb29bf40cced3037626e5c7b5ca3ebc916591"
 
 discord.js@hydrabolt/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/229eb2be2da11563c3c9978664e050044de720df"
+  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/16b5de5d522b882b2d9485cd8fd6e5b36fa98c7d"
   dependencies:
     pako "^1.0.0"
-    prism-media "^0.0.2"
+    prism-media "github:hydrabolt/prism-media"
     snekfetch "^3.5.0"
     tweetnacl "^1.0.0"
     ws "^3.3.1"
@@ -350,9 +350,9 @@ doctrine@^2.0.0:
   dependencies:
     esutils "^2.0.2"
 
-encodeurl@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.1.tgz#79e3d58655346909fe6f0f45a5de68103b294d20"
+encodeurl@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
 
 end-of-stream@^1.0.0, end-of-stream@^1.1.0:
   version "1.4.0"
@@ -957,9 +957,9 @@ lodash@^4.0.0, lodash@^4.17.4, lodash@^4.3.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
-mathjs@^3.18.1:
-  version "3.18.1"
-  resolved "https://registry.yarnpkg.com/mathjs/-/mathjs-3.18.1.tgz#aea34e3ba74828c295ca06627d1041e7cfb435da"
+mathjs@^3.20.1:
+  version "3.20.1"
+  resolved "https://registry.yarnpkg.com/mathjs/-/mathjs-3.20.1.tgz#cdefb0059ef897fe63fea39828e12041ac242765"
   dependencies:
     complex.js "2.0.4"
     decimal.js "9.0.1"
@@ -1001,9 +1001,9 @@ mute-stream@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.5.tgz#8fbfabb0a98a253d3184331f9e8deb7372fac6c0"
 
-mw-dict@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/mw-dict/-/mw-dict-2.0.0.tgz#981e93e52ab42b415ccdc92e01d5a88cbdf7fa32"
+mw-dict@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/mw-dict/-/mw-dict-2.2.0.tgz#971571530f77e374071679d3a2e03bd8e1a946d4"
   dependencies:
     axios "^0.16.2"
     lodash "^4.17.4"
@@ -1204,9 +1204,9 @@ prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
 
-prism-media@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-0.0.2.tgz#aa917b084576c4df6488e4ea8e7d6d44aed4b411"
+"prism-media@github:hydrabolt/prism-media":
+  version "0.1.0"
+  resolved "https://codeload.github.com/hydrabolt/prism-media/tar.gz/f6737178d10665934669ab2ff3da23a5ecc23e8c"
 
 process-nextick-args@~1.0.6:
   version "1.0.7"

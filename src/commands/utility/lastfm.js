@@ -247,8 +247,8 @@ class LastfmCommand extends Command {
       if (this._error >= 3) {
         this.clearRecentTrackTimeout()
         this.client.util.sendStatus(`🎵\u2000Last fm status updater stopped due to **${MAX_RETRY}** consecutive errors.`)
-        this.storage.set('disabled', true);
-        this.storage.save();
+        this.storage.set('disabled', true)
+        this.storage.save()
         return
       }
     }
