@@ -27,7 +27,7 @@ class FlushCommand extends Command {
   }
 
   async exec (message, args) {
-    if (!message.guild || !this.client.util.hasPermission(message.channel, 'MANAGE_MESSAGES')) {
+    if (!message.guild || !this.client.util.hasPermissions(message.channel, 'MANAGE_MESSAGES')) {
       return message.status.error('You do not have permission to delete messages sent by someone else!')
     }
 

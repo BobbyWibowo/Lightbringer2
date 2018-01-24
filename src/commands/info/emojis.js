@@ -1,6 +1,3 @@
-// NOTICE: Support for animated emotes will be added by this PR:
-// https://github.com/hydrabolt/discord.js/pull/2182
-
 const { Command } = require('discord-akairo')
 
 class EmojisCommand extends Command {
@@ -10,13 +7,19 @@ class EmojisCommand extends Command {
       description: 'Lists emojis of the currently viewed or a specific guild.',
       args: [
         {
+          id: 'newline',
+          match: 'flag',
+          prefix: ['--newline', '--nl', '-n'],
+          description: 'Splits the emojis with new line instead of space when listing them.'
+        },
+        {
           id: 'keyword',
           match: 'rest',
           description: 'The guild that you want to list the emotes of. This can be an emoji instead, in which case it will display the source of the said emoji.'
         }
       ],
       options: {
-        usage: 'emojis [keyword]'
+        usage: 'emojis [--newline] [keyword]'
       },
       clientPermissions: ['EMBED_LINKS']
     })
@@ -35,6 +38,8 @@ class EmojisCommand extends Command {
       }
     }
 
+    const char = args.newline ? '\n' : '\u2000'
+
     let guild = message.guild
 
     // Assert Guild.
@@ -46,7 +51,7 @@ class EmojisCommand extends Command {
 
     const embed = {
       title: `${guild.name} [${emojis.size}]`,
-      description: emojis.map(e => this.formatEmoji(e)).join('\u2000')
+      description: emojis.map(e => this.formatEmoji(e)).join(char)
     }
 
     let content = `Emojis of the currently viewed guild:`
@@ -58,7 +63,7 @@ class EmojisCommand extends Command {
       firstMessage: message,
       content,
       prefix: `**Guild ID:** ${guild.id}\n`,
-      char: '\u2000'
+      char
     })
   }
 
