@@ -1,17 +1,17 @@
 {
-  "name": "lightbringer",
+  "name": "lightbringer2",
   "version": "2.0.0-dev",
-  "description": "Yet another Discord self-bot written with Discord.js",
+  "description": "Yet another Discord self-bot written with Discord.js (and Discord Akairo framework)",
   "author": "Bobby Wibowo",
   "license": "MIT",
-  "repository": "github:BobbyWibowo/Lightbringer",
-  "bugs": "https://github.com/BobbyWibowo/Lightbringer/issues",
+  "repository": "github:BobbyWibowo/Lightbringer2",
+  "bugs": "https://github.com/BobbyWibowo/Lightbringer2/issues",
   "main": "./src/bot.js",
   "scripts": {
     "setup": "node ./src/setup.js",
     "start": "node ./src/bot.js",
-    "background": "screen -dmS lightbringer node ./src/bot.js",
-    "pm2": "pm2 start --name lightbringer ./src/bot.js",
+    "background": "screen -dmS lb2 node ./src/bot.js",
+    "pm2": "pm2 start --name lb2 ./src/bot.js",
     "lint": "standard",
     "update": "git pull && yarn install"
   },
