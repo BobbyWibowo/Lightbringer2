@@ -3,6 +3,7 @@
 # Folders
 /node_modules/
 /storage/
+/data/
 
 # Files
 /config.json
