@@ -3,4 +3,3 @@ node_modules/
 storage/
 config.json
 config.json.bak
-yarn.lock

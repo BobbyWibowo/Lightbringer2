@@ -680,13 +680,15 @@ class ExtendedClientUtil extends ClientUtil {
 
       if ((tempDesc.length + splitDescs[i].length + char.length) > tempMaxLength) {
         push(tempDesc)
-        tempDesc = splitDescs[i] + char
+        tempDesc = splitDescs[i]
       } else {
-        tempDesc = tempDesc + splitDescs[i] + char // not using += for clarity
+        tempDesc += splitDescs[i]
       }
 
       if (isLast) {
         push(tempDesc, isLast)
+      } else {
+        tempDesc += char
       }
     }
 

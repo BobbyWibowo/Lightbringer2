@@ -2,26 +2,26 @@ const { Command } = require('discord-akairo')
 
 const ANIMALS = {
   cat: {
-    regex: /^c(at(s)?)?$/i,
+    regex: /^(c(at(s)?)?|🐱|🐈)$/i,
     api: 'http://thecatapi.com/api/images/get?format=xml&type=jpg,png,gif',
     action: 'regex',
     data: /<url>\s*(.+?)\s*<\/url>/i
   },
   dog: {
-    regex: /^d(og(s)?)?$/i,
+    regex: /^(d(og(s)?)?|🐶|🐕)$/i,
     api: 'https://random.dog/woof',
     action: 'append',
     data: 'https://random.dog/',
     exclude: /\.mp4$/i
   },
   bird: {
-    regex: /^b(ird(s)?)?$/i,
+    regex: /^(b(ird(s)?)?|🐦)$/i,
     api: 'http://random.birb.pw/tweet/',
     action: 'append',
     data: 'http://random.birb.pw/img/'
   },
   lizard: {
-    regex: /^l(i(zard(s)?)?)?$/i,
+    regex: /^(l(i(zard(s)?)?)?|🦎)$/i,
     api: 'https://nekos.life/api/lizard',
     action: 'json',
     data: 'url'
@@ -53,12 +53,14 @@ class AnimalsCommand extends Command {
           match: 'rest',
           type: (word, message, args) => {
             const keys = Object.keys(ANIMALS)
-            for (const key of keys) {
-              if (ANIMALS[key].regex.test(word)) {
-                return key
+            if (word.length) {
+              for (const key of keys) {
+                if (ANIMALS[key].regex.test(word)) {
+                  return key
+                }
               }
-            }
-            if (!word.length) {
+            } else {
+              // If unspecified, get a random type
               return keys[Math.floor(Math.random() * keys.length)]
             }
           },

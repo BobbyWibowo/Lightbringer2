@@ -135,6 +135,10 @@ class LastfmCommand extends Command {
     const username = this.storage.get('username')
 
     if (rich && clientID) {
+      /*
+      const start = new Date().getTime()
+      const end = new Date(start + 3.5 * 60000).getTime() // add 3.5 minutes
+      */
       return this.client.user.setPresence({
         activity: {
           application: clientID,
@@ -148,6 +152,10 @@ class LastfmCommand extends Command {
             largeText: `${this.totalScrobbles.toLocaleString()} scrobbles`,
             smallText: `User: ${username}`
           }
+          /*
+          ,
+          timestamps: { start, end }
+          */
         }
       })
     }
