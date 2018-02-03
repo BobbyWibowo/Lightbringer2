@@ -20,6 +20,7 @@ Lightbringer2 makes full use of ES2017's `async/await` functionality for clear, 
 - [Updating](#updating)
 - [Running](#running)
 - [Getting your user-token](#getting-your-user-token)
+- [Contact](#contact)
 - [Credits](#credits)
 
 ### In Development
@@ -72,6 +73,10 @@ If you simply want to run the bot in background, you can try [screen](https://ww
 7. Copy the value on the right side (omitting the quotes)
 
 ![Getting your user-token](https://s.fiery.me/nqBMpuRzVCh5C3Sv5RPO48ezVvqKBOOO.png)
+
+## Contact
+If you want to ask me anything, you will probably be able to get faster responses by contacting me directly on Discord.  
+My Discord is `Bobby#0001`. My DMs should be open to everyone.
 
 ## Credits
 Icon made by [Freepik](http://www.freepik.com/) from [www.flaticon.com](http://www.flaticon.com/), with slight color modification.
