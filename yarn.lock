@@ -127,7 +127,7 @@ bl@^1.0.0:
   dependencies:
     readable-stream "^2.0.5"
 
-booru@BobbyWibowo/booru:
+booru@BobbyWibowo/booru#0739630c580d672ea402e3fa7b40e6786e66f918:
   version "0.3.6-dev"
   resolved "https://codeload.github.com/BobbyWibowo/booru/tar.gz/0739630c580d672ea402e3fa7b40e6786e66f918"
   dependencies:
@@ -323,11 +323,11 @@ delegates@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
 
-discord-akairo@1Computer1/discord-akairo:
+discord-akairo@1Computer1/discord-akairo#a15fad602c7d0f05683c8d6ff85eb411b65e9b96:
   version "8.0.0-dev"
   resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/a15fad602c7d0f05683c8d6ff85eb411b65e9b96"
 
-discord.js@hydrabolt/discord.js:
+discord.js@hydrabolt/discord.js#66c0512de2a3bda5e3ae5f9443425a242987abd5:
   version "12.0.0-dev"
   resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/66c0512de2a3bda5e3ae5f9443425a242987abd5"
   dependencies:

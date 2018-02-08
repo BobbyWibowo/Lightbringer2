@@ -19,12 +19,12 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "booru": "BobbyWibowo/booru",
+    "booru": "BobbyWibowo/booru#0739630c580d672ea402e3fa7b40e6786e66f918",
     "bufferutil": "^3.0.3",
     "chalk": "^2.3.0",
     "common-tags": "^1.7.2",
-    "discord-akairo": "1Computer1/discord-akairo",
-    "discord.js": "hydrabolt/discord.js",
+    "discord-akairo": "1Computer1/discord-akairo#a15fad602c7d0f05683c8d6ff85eb411b65e9b96",
+    "discord.js": "hydrabolt/discord.js#66c0512de2a3bda5e3ae5f9443425a242987abd5",
     "encodeurl": "^1.0.2",
     "fs-extra": "^5.0.0",
     "mathjs": "^3.20.2",
