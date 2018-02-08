@@ -76,7 +76,7 @@ class BooruCommand extends Command {
 
     if (args.defaultSite) {
       if (!this.getSiteKey(args.defaultSite)) {
-        return message.status.error('The site you specified is not valid!')
+        return message.status.error('The site you specified is unavailable!')
       }
       this.storage.set('defaultSite', args.defaultSite)
       this.storage.save()
@@ -86,7 +86,7 @@ class BooruCommand extends Command {
     const site = args.site || this.defaultSite
     const siteKey = this.getSiteKey(site)
     if (!siteKey) {
-      return message.status.error('The site you specified is not valid!')
+      return message.status.error('The site you specified is unavailable!')
     }
 
     const tags = args.tags ? args.tags.split(' ') : []

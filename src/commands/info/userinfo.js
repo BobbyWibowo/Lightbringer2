@@ -121,7 +121,7 @@ class UserInfoCommand extends Command {
     if (args.keyword && mention) {
       content = `${(member || user).toString()}'s information:`
     } else if (args.keyword) {
-      content = `Informations of the user who matched \`${args.keyword}\`:`
+      content = `Informations of the user who matched keyword \`${args.keyword}\`:`
     }
 
     // Options for the embed.

@@ -20,7 +20,12 @@ class ConfigManager {
         allowed: OnlineStatuses
       },
       maxUsersListing: {
-        default: 20
+        default: 20,
+        cast: 'number'
+      },
+      autoReboot: {
+        default: null,
+        cast: 'number'
       }
     }
   }
@@ -60,6 +65,15 @@ class ConfigManager {
     return backupPath
   }
 
+  _cast (to, value) {
+    switch (to) {
+      case 'number':
+        return Number(value)
+      case 'boolean':
+        return Boolean(value)
+    }
+  }
+
   save () {
     try {
       const backupPath = this._backup()
@@ -73,7 +87,7 @@ class ConfigManager {
 
   get (key) {
     if (this._validKeys[key] === undefined) {
-      throw new Error('The key you specified is not valid!')
+      throw new Error('The key you specified is INVALID!')
     }
 
     if (this._validKeys[key].protected) {
@@ -85,16 +99,21 @@ class ConfigManager {
 
   set (key, value) {
     if (this._validKeys[key] === undefined) {
-      throw new Error('The key you specified is not valid!')
+      throw new Error('The key you specified is INVALID!')
     }
 
     if (this._validKeys[key].protected) {
-      throw new Error('The key you specified is protected!')
+      throw new Error('The key you specified is PROTECTED!')
     }
 
     const allowed = this._validKeys[key].allowed
     if (allowed && !allowed.includes(value)) {
       throw new Error('The key you specified can only be one of the following values: ' + allowed.join(', ') + '.')
+    }
+
+    const cast = this._validKeys[key].cast
+    if (cast) {
+      value = this._cast(cast, value)
     }
 
     this._config[String(key)] = value

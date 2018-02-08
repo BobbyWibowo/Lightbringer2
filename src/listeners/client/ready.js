@@ -52,7 +52,8 @@ class ReadyListener extends Listener {
 
     const {
       statusChannel,
-      onlineStatus
+      onlineStatus,
+      autoReboot
     } = this.client.akairoOptions
 
     if (statusChannel) {
@@ -72,6 +73,18 @@ class ReadyListener extends Listener {
 
     this.client.stats.set('initiated', true)
     await this.client.util.sendStatus(`✅\u2000Bot is ready!`)
+
+    if (autoReboot) {
+      if (autoReboot >= 300) { // if at least 5 minutes
+        this.client.setTimeout(() => {
+          console.log('Shutting down bot due to auto-reboot feature.')
+          process.exit(0)
+        }, autoReboot * 1000)
+        console.log(`Bot will shutdown in ${autoReboot} second(s) due to auto-reboot feature.`)
+      } else {
+        console.log('Not enabling auto-reboot feature since it was set to less than 5 minutes.')
+      }
+    }
   }
 
   triggerCommands () {

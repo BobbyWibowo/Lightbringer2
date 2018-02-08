@@ -56,7 +56,7 @@ class EmojisCommand extends Command {
 
     let content = `Emojis of the currently viewed guild:`
     if (args.keyword) {
-      content = `Emojis of the guild which matched \`${args.keyword}\`:`
+      content = `Emojis of the guild which matched keyword \`${args.keyword}\`:`
     }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {

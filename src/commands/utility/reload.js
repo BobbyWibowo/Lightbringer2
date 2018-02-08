@@ -17,7 +17,7 @@ class ReloadCommand extends Command {
         {
           id: 'type',
           match: 'prefix',
-          prefix: '--type=',
+          prefix: ['--type=', '-t='],
           description: 'Type of the module. This will reload all modules of the type when being used with "all" flag.',
           type: (word, message, args) => {
             args._type = Boolean(word.length)
@@ -63,7 +63,7 @@ class ReloadCommand extends Command {
         return message.status.success(`Reloaded all ${typeString}s.`)
       }
     } else if (args._type && args.type === null) {
-      return message.status.error('That type is not available! Try either `commands`, `inhibitors` or `listeners`!')
+      return message.status.error('That type is unavailable! Try either `commands`, `inhibitors` or `listeners`!')
     } else if (args._module) {
       return message.status.error('Could not find a module with that ID!')
     } else {

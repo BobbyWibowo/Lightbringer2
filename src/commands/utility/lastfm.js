@@ -205,7 +205,7 @@ class LastfmCommand extends Command {
       return this.setRecentTrackTimeout()
     }
 
-    this.totalScrobbles = parseInt(result.body.recenttracks['@attr'].total) || this.totalScrobbles
+    this.totalScrobbles = Number(result.body.recenttracks['@attr'].total) || this.totalScrobbles
 
     const track = tracks[0]
     const isNowPlaying = track['@attr'] && track['@attr'].nowplaying === 'true'

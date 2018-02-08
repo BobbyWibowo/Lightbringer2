@@ -38,7 +38,7 @@ class TimeCommand extends Command {
     const parsedPlace = text
       .match(/<h1>Time in ([^]+?) now<\/h1>/)[1]
 
-    const clockEmoji = Clocks[parseInt(parsedTime.split(':')[0], 10) % 12]
+    const clockEmoji = Clocks[Number(parsedTime.split(':')[0], 10) % 12]
 
     const formattedTime = moment(`${parsedDate} ${parsedTime}`, 'dddd, MMMM D, YYYY HH:mm:ss A')
       .format('dddd, MMMM Do YYYY @ h:mm:ss a')

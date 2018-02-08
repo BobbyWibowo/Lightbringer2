@@ -87,7 +87,7 @@ class DictionaryCommand extends Command {
     const index = args.index !== null ? args.index - 1 : 0
     const selected = result[index]
     if (!selected) {
-      return message.status.error(`Index \`${index + 1}\` of the search result is not available!`)
+      return message.status.error(`Index \`${index + 1}\` of the search result is unavailable!`)
     }
 
     const embed = {

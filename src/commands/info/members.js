@@ -68,7 +68,7 @@ class MembersCommand extends Command {
 
     let content = `${args.online ? 'Online members' : 'Members'} of the currently viewed guild:`
     if (args.keyword) {
-      content = `${args.online ? 'Online members' : 'Members'} of the guild which matched \`${args.keyword}\`:`
+      content = `${args.online ? 'Online members' : 'Members'} of the guild which matched keyword \`${args.keyword}\`:`
     }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {
@@ -87,7 +87,7 @@ class MembersCommand extends Command {
     } = this.client.akairoOptions
 
     if (maxUsersListing !== undefined) {
-      this.maxUsersListing = maxUsersListing
+      this.maxUsersListing = Number(maxUsersListing)
     }
   }
 }

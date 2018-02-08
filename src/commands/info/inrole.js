@@ -77,7 +77,7 @@ class InRoleCommand extends Command {
       color: role.hexColor
     }
 
-    let content = `${args.online ? 'Online members' : 'Members'} of the role which matched \`${args.keyword}\`:`
+    let content = `${args.online ? 'Online members' : 'Members'} of the role which matched keyword \`${args.keyword}\`:`
     if (mention) {
       content = `${role}'s ${args.online ? 'online ' : ''}members:`
     }
@@ -98,7 +98,7 @@ class InRoleCommand extends Command {
     } = this.client.akairoOptions
 
     if (maxUsersListing !== undefined) {
-      this.maxUsersListing = maxUsersListing
+      this.maxUsersListing = Number(maxUsersListing)
     }
   }
 }

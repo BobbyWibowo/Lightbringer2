@@ -75,7 +75,7 @@ class AvatarCommand extends Command {
     if (args.keyword && mention) {
       content = `${(member || user).toString()}'s avatar:`
     } else if (args.keyword) {
-      content = `Avatar of the user who matched \`${args.keyword}\`:`
+      content = `Avatar of the user who matched keyword \`${args.keyword}\`:`
     }
 
     const embed = {

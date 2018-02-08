@@ -81,7 +81,7 @@ class CurrencyCommand extends Command {
 
     for (const curr of [curr1, curr2]) {
       if (rates[curr] === undefined && curr !== base) {
-        return message.status.error(`Currency \`${curr}\` is not available!`)
+        return message.status.error(`Currency \`${curr}\` is unavailable!`)
       }
     }
 

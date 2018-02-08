@@ -23,12 +23,14 @@ if (config.token) {
       storageDirectory: './storage/',
       configManager,
       prefix: config.prefix || 'lb',
+      // I should probably make the bot load these configs below from the ConfigManager eh?
       statusChannel: config.statusChannel,
       onlineStatus: config.onlineStatus,
-      maxUsersListing: config.maxUsersListing
+      maxUsersListing: config.maxUsersListing,
+      autoReboot: config.autoReboot
     },
     {
-      messageCacheMaxSize: 50, // maximum number of messages to cache per channel
+      messageCacheMaxSize: 20, // maximum number of messages to cache per channel
       sync: true, // periodically sync guilds (it should be once every 30 seconds)
       disabledEvents: [ // these websocket events will not be processed by the bot (potentially improving performance)
         'CHANNEL_PINS_UPDATE',

@@ -77,7 +77,7 @@ class RoleInfoCommand extends Command {
     }
 
     // Message content (the thing being displayed above the embed).
-    let content = `Informations of the role which matched \`${args.keyword}\`:`
+    let content = `Informations of the role which matched keyword \`${args.keyword}\`:`
     if (mention) {
       content = `${role}'s informations:`
     }
