@@ -30,7 +30,7 @@ if (config.token) {
       autoReboot: config.autoReboot
     },
     {
-      messageCacheMaxSize: 20, // maximum number of messages to cache per channel
+      messageCacheMaxSize: 20, // maximum number of messages to cache per channel (why? to reduce heap usage)
       sync: true, // periodically sync guilds (it should be once every 30 seconds)
       disabledEvents: [ // these websocket events will not be processed by the bot (potentially improving performance)
         'CHANNEL_PINS_UPDATE',

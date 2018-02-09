@@ -1,3 +1,4 @@
+const AllowedImageSizes = Array.from({ length: 8 }, (e, i) => 2 ** (i + 4))
 const { Command } = require('discord-akairo')
 const { CommandHandlerEvents } = require('discord-akairo').Constants
 const { escapeMarkdown } = require('discord.js').Util
@@ -5,7 +6,7 @@ const { escapeMarkdown } = require('discord.js').Util
 class AvatarCommand extends Command {
   constructor () {
     super('avatar', {
-      aliases: ['avatar', 'ava'],
+      aliases: ['avatar', 'ava', 'av'],
       description: 'Displays full size of yours or someone else\'s avatar.',
       args: [
         {
@@ -19,6 +20,13 @@ class AvatarCommand extends Command {
           match: 'flag',
           prefix: ['--plain', '-p'],
           description: 'Uses plain message (no embed).'
+        },
+        {
+          id: 'size',
+          match: 'prefix',
+          prefix: ['--size=', '-s='],
+          description: 'The size that you want to use to display the avatar with.',
+          type: 'number'
         },
         {
           id: 'keyword',
@@ -47,8 +55,17 @@ class AvatarCommand extends Command {
     // Check whether the keyword was a mention or not.
     const mention = this.client.util.isKeywordMentionable(args.keyword)
 
+    let size = 2048
+    if (args.size) {
+      if (AllowedImageSizes.includes(args.size)) {
+        size = args.size
+      } else {
+        return message.status.error(`The size you specified was unavailable! Try one of the following: ${AllowedImageSizes.map(s => `\`${s}\``).join(', ')}.`)
+      }
+    }
+
     // Get user's avatar.
-    let avatarURL = user.displayAvatarURL({ size: 2048 })
+    let avatarURL = user.displayAvatarURL({ size })
 
     // If could not get avatar.
     if (!avatarURL) {
@@ -82,7 +99,8 @@ class AvatarCommand extends Command {
       title: user.tag,
       description: `[Click here to view in a browser](${avatarURL})`,
       color: member ? member.displayColor : 0,
-      image: avatarURL
+      image: avatarURL,
+      footer: args.size ? `Specified size: ${args.size}` : null
     }
 
     await message.edit(content, {
