@@ -33,7 +33,7 @@ class NekosCommand extends Command {
     const result = await this.client.util.snek(`http://nekos.life/api/${isLewd ? 'lewd/' : ''}neko`)
 
     if (result.status !== 200) {
-      return message.status.error('Failed to fetch image!')
+      return message.status.error('Failed to fetch image.')
     }
 
     if (args.upload) {

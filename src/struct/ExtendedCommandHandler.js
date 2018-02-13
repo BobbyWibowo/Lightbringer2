@@ -68,6 +68,16 @@ class ExtendedCommandHandler extends CommandHandler {
 
     return super.reload(id)
   }
+
+  remove (id) {
+    const mod = this.modules.get(id.toString())
+
+    if (mod && typeof mod.onRemove === 'function') {
+      mod.onRemove()
+    }
+
+    return super.remove(id)
+  }
 }
 
 module.exports = ExtendedCommandHandler

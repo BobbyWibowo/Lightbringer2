@@ -51,11 +51,11 @@ class StatsCommand extends Command {
         icon: 'https://a.safe.moe/F2a1H.png'
       },
       color: '#ff0000',
-      footer: `Ps. Currently caching ${this.client.users.size.toLocaleString()} users\u2026`
+      footer: `Currently caching ${this.client.users.size.toLocaleString()} users.`
     }
 
     if (this.git !== null) {
-      embed.description = `*[Click here](${this.git}) to view this self-bot's public GitHub repository\u2026*`
+      embed.description = `[Click here](${this.git}) to view this self-bot's public GitHub repository.`
       embed.author.url = this.git
     }
 

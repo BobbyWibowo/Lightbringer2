@@ -76,17 +76,17 @@ class BooruCommand extends Command {
 
     if (args.defaultSite) {
       if (!this.getSiteKey(args.defaultSite)) {
-        return message.status.error('The site you specified is unavailable!')
+        return message.status.error('The site you specified is unavailable.')
       }
       this.storage.set('defaultSite', args.defaultSite)
       this.storage.save()
-      return message.status.success(`Successfully changed default site to \`${args.defaultSite}\`!`)
+      return message.status.success(`Successfully changed default site to \`${args.defaultSite}\`.`)
     }
 
     const site = args.site || this.defaultSite
     const siteKey = this.getSiteKey(site)
     if (!siteKey) {
-      return message.status.error('The site you specified is unavailable!')
+      return message.status.error('The site you specified is unavailable.')
     }
 
     const tags = args.tags ? args.tags.split(' ') : []
@@ -142,6 +142,10 @@ class BooruCommand extends Command {
   }
 
   onReload () {
+    this.onRemove()
+  }
+
+  onRemove () {
     this.storage.save()
   }
 }

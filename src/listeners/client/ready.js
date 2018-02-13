@@ -13,11 +13,11 @@ class ReadyListener extends Listener {
 
   async exec () {
     if (this.client.stats.get('initiated')) {
-      console.log('Connection resumed!')
-      return this.client.util.sendStatus(`🔄\u2000Connection resumed!`)
+      console.log('Connection resumed.')
+      return this.client.util.sendStatus(`🔄\u2000Connection resumed.`)
     }
 
-    console.log('Successfully logged in!')
+    console.log('Successfully logged in.')
     console.log(stripIndent`
         Stats:
         - User: ${this.client.user.tag} (ID: ${this.client.user.id})
@@ -69,10 +69,10 @@ class ReadyListener extends Listener {
     await this.client.user.setAFK(true)
 
     this.triggerCommands()
-    console.log('Bot is ready!')
+    console.log('Bot is ready.')
 
     this.client.stats.set('initiated', true)
-    await this.client.util.sendStatus(`✅\u2000Bot is ready!`)
+    await this.client.util.sendStatus(`✅\u2000Bot is ready.`)
 
     if (autoReboot) {
       if (autoReboot >= 300) { // if at least 5 minutes

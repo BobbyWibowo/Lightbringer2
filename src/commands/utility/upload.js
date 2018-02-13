@@ -41,7 +41,7 @@ class UploadCommand extends Command {
       }
       attachment = result.body
     } else {
-      return message.status.error('Could not parse input!')
+      return message.status.error('Could not parse input.')
     }
 
     const file = { attachment }

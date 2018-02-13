@@ -52,7 +52,7 @@ class CurrencyCommand extends Command {
       await this.updateRates()
 
       if (args.refresh) {
-        return message.status.success('Successfully updated exchange rate!')
+        return message.status.success('Successfully updated exchange rate.')
       }
     }
 
@@ -62,7 +62,7 @@ class CurrencyCommand extends Command {
 
     const val = parseFloat(args.input[0])
     if (isNaN(val)) {
-      return message.status.error('Invalid value!')
+      return message.status.error('Invalid value.')
     }
 
     const curr1 = args.input[1]
@@ -81,7 +81,7 @@ class CurrencyCommand extends Command {
 
     for (const curr of [curr1, curr2]) {
       if (rates[curr] === undefined && curr !== base) {
-        return message.status.error(`Currency \`${curr}\` is unavailable!`)
+        return message.status.error(`Currency \`${curr}\` is unavailable.`)
       }
     }
 
@@ -145,6 +145,10 @@ class CurrencyCommand extends Command {
   }
 
   onReload () {
+    this.onRemove()
+  }
+
+  onRemove () {
     this.client.clearTimeout(this._timeout)
   }
 }

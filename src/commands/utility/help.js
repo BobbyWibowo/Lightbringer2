@@ -138,7 +138,7 @@ class HelpCommand extends Command {
       })
     } else if (args._command) {
       // When keyword was specified but no matching commands could be found.
-      return message.status.error('Could not find a module with that ID!')
+      return message.status.error('Could not find a module with that ID.')
     } else {
       // When run without arguments.
       return message.status.error(`Usage: \`${this.options.usage}\`.`)

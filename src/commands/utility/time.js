@@ -24,7 +24,7 @@ class TimeCommand extends Command {
 
     const result = await this.client.util.snek(`https://time.is/en/${args.location}`)
     if (result.status !== 200) {
-      return message.status.error('Failed to fetch time info of the specified location!')
+      return message.status.error('Failed to fetch time info of the specified location.')
     }
 
     const text = result.text || result.body.toString()

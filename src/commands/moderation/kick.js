@@ -34,11 +34,11 @@ class KickCommand extends Command {
 
   async exec (message, args) {
     if (!message.guild) {
-      return message.status.error('You can only use this command in a guild!')
+      return message.status.error('You can only use this command in a guild.')
     }
 
     if (!args.keyword) {
-      return message.status.error('You must specify a guild member to kick!')
+      return message.status.error('You must specify a guild member to kick.')
     }
 
     if (args.refresh) {
@@ -51,7 +51,7 @@ class KickCommand extends Command {
     const resolved = this.client.util.resolveMembers(args.keyword, message.guild.members)
 
     if (resolved.size === 0) {
-      return message.status.error('Could not find matching guild members!')
+      return message.status.error('Could not find matching guild members.')
     }
 
     if (resolved.size > 1) {

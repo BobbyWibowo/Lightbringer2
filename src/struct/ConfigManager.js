@@ -46,7 +46,7 @@ class ConfigManager {
     if (!fse.existsSync(this._path)) {
       fse.outputJsonSync(this._path, this._template(), { spaces: 2 })
       console.log(`Configuration template saved to: ${this._path}`)
-      console.log('Please edit the file then start the bot again!')
+      console.log('Please edit the file then start the bot again.')
       return process.exit(0)
     }
 
@@ -81,13 +81,13 @@ class ConfigManager {
       fse.removeSync(backupPath)
     } catch (error) {
       console.error(error)
-      throw new Error('Failed to save configuration file. Check your console!')
+      throw new Error('Failed to save configuration file. Check your console.')
     }
   }
 
   get (key) {
     if (this._validKeys[key] === undefined) {
-      throw new Error('The key you specified is INVALID!')
+      throw new Error('The key you specified is INVALID.')
     }
 
     if (this._validKeys[key].protected) {
@@ -99,11 +99,11 @@ class ConfigManager {
 
   set (key, value) {
     if (this._validKeys[key] === undefined) {
-      throw new Error('The key you specified is INVALID!')
+      throw new Error('The key you specified is INVALID.')
     }
 
     if (this._validKeys[key].protected) {
-      throw new Error('The key you specified is PROTECTED!')
+      throw new Error('The key you specified is PROTECTED.')
     }
 
     const allowed = this._validKeys[key].allowed

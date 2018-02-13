@@ -69,7 +69,7 @@ class AvatarCommand extends Command {
 
     // If could not get avatar.
     if (!avatarURL) {
-      return message.status.error('Could not get display avatar of the specified user!')
+      return message.status.error('Could not get display avatar of the specified user.')
     }
 
     // "--direct" flag.

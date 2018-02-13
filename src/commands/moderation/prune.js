@@ -28,7 +28,7 @@ class PruneCommand extends Command {
     messages = messages.filter(m => m.author.id === this.client.user.id)
 
     if (!messages.size) {
-      return message.status.error('There are no messages that you can prune!')
+      return message.status.error('There are no messages that you can prune.')
     }
 
     await message.status.progress(`Pruning ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)

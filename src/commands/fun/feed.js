@@ -14,7 +14,7 @@ class FeedCommand extends Command {
 
   async exec (message) {
     if (!message.mentions.users.size) {
-      return message.status.error('@mention some people to feed!')
+      return message.status.error('@mention some people to feed.')
     }
 
     const content = message.mentions.users

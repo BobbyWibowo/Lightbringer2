@@ -45,7 +45,7 @@ class JumboCommand extends Command {
     files.length = Math.min(10, files.length)
 
     if (!files.length) {
-      return message.status.error('Could not parse message into emojis!')
+      return message.status.error('Could not parse message into emojis.')
     }
 
     await message.channel.send({ files })

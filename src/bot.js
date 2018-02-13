@@ -47,6 +47,6 @@ if (config.token) {
   client.login(config.token)
 } else {
   console.info('Token is missing from the configuration file.')
-  console.info('Please edit the configuration file then start the bot again!')
+  console.info('Please edit the configuration file then start the bot again.')
   process.exit(1)
 }

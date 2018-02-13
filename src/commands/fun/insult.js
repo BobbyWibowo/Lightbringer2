@@ -15,7 +15,7 @@ class InsultCommand extends Command {
 
   async exec (message) {
     if (!message.mentions.users.size) {
-      return message.status.error('@mention some people to insult!')
+      return message.status.error('@mention some people to insult.')
     }
 
     const content = message.mentions.users

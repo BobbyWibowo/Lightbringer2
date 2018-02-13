@@ -9,7 +9,7 @@ class ShutDownCommand extends Command {
   }
 
   async exec (message) {
-    await message.edit('👋\u2000Shutting down\u2026 See you next time!')
+    await message.edit('👋\u2000Shutting down\u2026 See you next time.')
     process.exit(0)
   }
 }

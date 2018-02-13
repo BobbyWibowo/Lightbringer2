@@ -51,7 +51,7 @@ class ReloadCommand extends Command {
       if (args.module.reload()) {
         return message.status.success(`Reloaded ${typeString}: \`${args.module.id}\`.`)
       } else {
-        return message.status.error(`Could not reload ${typeString}: \`${args.module.id}\`!`)
+        return message.status.error(`Could not reload ${typeString}: \`${args.module.id}\`.`)
       }
     } else if (args.all) {
       if (args.type === 0 || args.type === null) this.handler.reloadAll()
@@ -63,11 +63,11 @@ class ReloadCommand extends Command {
         return message.status.success(`Reloaded all ${typeString}s.`)
       }
     } else if (args._type && args.type === null) {
-      return message.status.error('That type is unavailable! Try either `commands`, `inhibitors` or `listeners`!')
+      return message.status.error('That type is unavailable! Try either `commands`, `inhibitors` or `listeners`.')
     } else if (args._module) {
-      return message.status.error('Could not find a module with that ID!')
+      return message.status.error('Could not find a module with that ID.')
     } else {
-      return message.status.error('You must specify the ID of the module that you want to reload!')
+      return message.status.error('You must specify the ID of the module that you want to reload.')
     }
   }
 }

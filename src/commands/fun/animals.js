@@ -75,7 +75,7 @@ class AnimalsCommand extends Command {
 
   async exec (message, args) {
     if (!args.animal) {
-      return message.status.error('That type is unavailable! Use `--list` flag to list all available types!')
+      return message.status.error('That type is unavailable! Use `--list` flag to list all available types.')
     }
 
     if (args.list) {
@@ -124,7 +124,7 @@ class AnimalsCommand extends Command {
     }
 
     if (!image) {
-      return message.status.error(`Failed to fetch image after ${MAX_RETRY} retries!`)
+      return message.status.error(`Failed to fetch image after ${MAX_RETRY} retries.`)
     }
 
     if (args.upload) {

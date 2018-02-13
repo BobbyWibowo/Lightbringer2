@@ -11,7 +11,7 @@ class Logger {
   }
 
   warn (message, error) {
-    this._log && this._log(chalk.yellow('!'), message)
+    this._log && this._log(chalk.yellow('.'), message)
     error && console.error(error)
   }
 
@@ -26,7 +26,7 @@ class Logger {
 
   inject () {
     if (console._original) {
-      throw new Error('Logger was already injected!')
+      throw new Error('Logger was already injected.')
     }
 
     const original = {

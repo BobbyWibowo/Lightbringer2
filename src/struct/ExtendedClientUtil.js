@@ -187,7 +187,7 @@ class ExtendedClientUtil extends ClientUtil {
     } else if (items.size > 1) {
       throw new LightbringerError(this.formatMatchesList(items, { name, prop, syntax }), this.matchesListTimeout)
     } else if (!disableNotFound) {
-      throw new LightbringerError(`Could not find any ${name} matching the keyword!`)
+      throw new LightbringerError(`Could not find any ${name} matching the keyword.`)
     }
   }
 
@@ -292,7 +292,7 @@ class ExtendedClientUtil extends ClientUtil {
     if (result.user === undefined) {
       // This shall not ever be triggered as "this.assertUser" will
       // throw an Error when it can not find any matches.
-      throw new LightbringerError('Could not find any members or users matching the keyword!')
+      throw new LightbringerError('Could not find any members or users matching the keyword.')
     }
 
     return result
@@ -729,6 +729,14 @@ class ExtendedClientUtil extends ClientUtil {
 
   cleanUrl (url) {
     return encodeUrl(url.replace(/ /g, '+')).replace(/\(/g, '%40').replace(/\)/g, '%41')
+  }
+
+  rand (min, max) {
+    return Math.floor(Math.random() * (max - min)) + min
+  }
+
+  sleep (timeout) {
+    return new Promise(resolve => this.client.setTimeout(() => resolve(), timeout))
   }
 }
 

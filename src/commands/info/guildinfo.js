@@ -50,7 +50,7 @@ class GuildInfoCommand extends Command {
 
   async exec (message, args) {
     if (!message.guild && !args.keyword) {
-      return message.status.error('You must specify a guild name when running this command outside of a guild!')
+      return message.status.error('You must specify a guild name when running this command outside of a guild.')
     }
 
     let guild = message.guild

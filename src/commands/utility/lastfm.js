@@ -75,30 +75,33 @@ class LastfmCommand extends Command {
     // Timeout instance
     this._timeout = null
 
-    // Is Last.fm status updater disabled
-    this._disabled = true
-
     // Total consecutive errors
     this._error = 0
   }
 
   async exec (message, args) {
     if (args.toggle) {
-      this.storage.set('disabled', !this.storage.get('disabled'))
+      const disabled = Boolean(this.storage.get('disabled'))
+      this.storage.set('disabled', !disabled)
       this.storage.save()
-      if (this.storage.get('disabled')) {
-        this.clearRecentTrackTimeout()
-        this.client.user.setPresence({ activity: null }) // no need to wait the Promise
+
+      this.clearRecentTrackTimeout()
+      await message.status.progress(`${disabled ? 'Enabling' : 'Disabling'} Last fm status updater\u2026`)
+
+      if (disabled) {
+        await this.getRecentTrack(true)
       } else {
-        this.getRecentTrack(true)
+        await this.client.user.setPresence({ activity: null })
       }
-      return message.status.success(`${this.storage.get('disabled') ? 'Disabled' : 'Enabled'} Last fm status updater.`)
+
+      return message.status.success(`${disabled ? 'Enabled' : 'Disabled'} Last fm status updater.`)
     }
 
     if (args.toggleRich) {
       this.storage.set('rich', !this.storage.get('rich'))
       this.storage.save()
-      this.getRecentTrack(true)
+      this.clearRecentTrackTimeout()
+      this.getRecentTrack()
       return message.status.success(`${this.storage.get('rich') ? 'Enabled' : 'Disabled'} Rich Presence mode.`)
     }
 
@@ -112,7 +115,7 @@ class LastfmCommand extends Command {
 
     if (storageHit) {
       this.storage.save()
-      return message.status.success('Successfully saved new value(s) to storage file!')
+      return message.status.success('Successfully saved new value(s) to storage file.')
     }
 
     await message.edit('🎵\u2000Last fm configuration preview:\n' + this.client.util.formatCode(stripIndent`
@@ -120,7 +123,7 @@ class LastfmCommand extends Command {
       Track name      :: ${this.trackName}
       Username        :: ${this.storage.get('username')}
       Total scrobbles :: ${this.totalScrobbles}
-      Disabled        :: ${String(this._disabled)}
+      Disabled        :: ${String(this.storage.get('disabled'))}
       Rich Presence   :: ${String(this.storage.get('rich'))}
     `, 'asciidoc'))
   }
@@ -169,18 +172,7 @@ class LastfmCommand extends Command {
   }
 
   async getRecentTrack (reset) {
-    if (reset) {
-      this.clearRecentTrackTimeout()
-      // this.cleareRecentTrackTimeout() will also disable the timeout altogether,
-      // but we do not want that, since we only want it to clear the timeout.
-      this._disabled = false
-    }
-
-    if (this._disabled || !this.storage.get('username') || !this.storage.get('apiKey')) {
-      if (!this.storage.get('disabled')) {
-        this.storage.set('disabled', true)
-        this.storage.save()
-      }
+    if (this.storage.get('disabled') || !this.storage.get('username') || !this.storage.get('apiKey')) {
       return
     }
 
@@ -226,7 +218,7 @@ class LastfmCommand extends Command {
       if (!artist || !trackName) {
         this.artist = this.trackName = ''
         await this.client.user.setPresence({ activity: null })
-        await this.client.util.sendStatus('🎵\u2000Cleared Last fm status message!')
+        await this.client.util.sendStatus('🎵\u2000Cleared Last fm status message.')
       } else {
         this.artist = artist
         this.trackName = trackName
@@ -241,7 +233,7 @@ class LastfmCommand extends Command {
   }
 
   setRecentTrackTimeout (isError) {
-    if (this._disabled) {
+    if (this.storage.get('disabled')) {
       return
     }
 
@@ -266,22 +258,23 @@ class LastfmCommand extends Command {
 
   clearRecentTrackTimeout () {
     this.trackNow = this.artistNow = ''
-    this._disabled = true
     this.client.clearTimeout(this._timeout)
-    this._timeout = null
   }
 
   onReady () {
     this.storage = this.client.storage('lastfm')
 
     if (!this.storage.get('disabled')) {
-      this._disabled = false
       this._statusChannel = this.client.channels.get(this.storage.get('statusChannel')) || null
       this.getRecentTrack()
     }
   }
 
   onReload () {
+    this.onRemove()
+  }
+
+  onRemove () {
     this.clearRecentTrackTimeout()
     this.storage.save()
   }

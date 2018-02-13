@@ -11,7 +11,7 @@ class PingCommand extends Command {
   async exec (message) {
     // Start time
     const timestamp = new Date().getTime()
-    message = await message.edit('🏓\u2000Pong!')
+    message = await message.edit('🏓\u2000Pong.')
 
     // Elapsed time
     const elapsed = new Date().getTime() - timestamp

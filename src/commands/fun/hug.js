@@ -14,7 +14,7 @@ class HugCommand extends Command {
 
   async exec (message) {
     if (!message.mentions.users.size) {
-      return message.status.error('@mention someone to hug!')
+      return message.status.error('@mention someone to hug.')
     }
 
     const result = await this.client.util.snek('https://nekos.life/api/hug', {

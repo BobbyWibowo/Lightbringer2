@@ -46,7 +46,7 @@ class DictionaryCommand extends Command {
     if (args.apiKey) {
       this.storage.set('apiKey', args.apiKey)
       this.storage.save()
-      return message.status.success('Successfully saved API key to the storage file!')
+      return message.status.success('Successfully saved API key to the storage file.')
     }
 
     if (!this.storage.get('apiKey')) {
@@ -58,7 +58,7 @@ class DictionaryCommand extends Command {
     }
 
     if (!args.keyword) {
-      return message.status.error('You must specify something to search!')
+      return message.status.error('You must specify something to search.')
     }
 
     await message.status.progress(`Searching for \`${args.keyword}\` on Merriam-Webster\u2026`)
@@ -87,9 +87,14 @@ class DictionaryCommand extends Command {
     const index = args.index !== null ? args.index - 1 : 0
     const selected = result[index]
     if (!selected) {
-      return message.status.error(`Index \`${index + 1}\` of the search result is unavailable!`)
+      return message.status.error(`Index \`${index + 1}\` of the search result is unavailable.`)
     }
 
+    return this.displayDefinition(message, index, result, args.keyword, args.more)
+  }
+
+  async displayDefinition (message, index, result, keyword, more) {
+    const selected = result[index]
     const embed = {
       title: selected.word + (selected.functional_label ? ` (${selected.functional_label})` : ''),
       description: selected.definition.map(d => {
@@ -109,7 +114,7 @@ class DictionaryCommand extends Command {
       color: '#2d5f7c'
     }
 
-    if (result.length > 1 && args.more) {
+    if (result.length > 1 && more) {
       embed.fields.push({
         name: 'More',
         value: result
@@ -121,7 +126,7 @@ class DictionaryCommand extends Command {
     }
 
     return message.edit(
-      `Search result of \`${args.keyword}\` at \`${index + 1}/${result.length}\` on Merriam-Webster:`, {
+      `Search result of \`${keyword}\` at \`${index + 1}/${result.length}\` on Merriam-Webster:`, {
         embed: this.client.util.embed(embed)
       }
     )

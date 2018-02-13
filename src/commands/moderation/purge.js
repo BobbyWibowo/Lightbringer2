@@ -37,7 +37,7 @@ class PurgeCommand extends Command {
     }
 
     if (!messages.size) {
-      return message.status.error('There are no messages that you can purge!')
+      return message.status.error('There are no messages that you can purge.')
     }
 
     await message.status.progress(`Purging ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
