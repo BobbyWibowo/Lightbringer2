@@ -4,10 +4,10 @@ const { stripIndent } = require('common-tags')
 
 const VERIFICATION_LEVELS = [
   'None',
-  'Low - Must have verified email',
-  'Medium - Registered on Discord for longer than 5 minutes',
-  'High - A member of the server for longer than 10 minutes',
-  'Insane - Must have verified phone'
+  'Low – Must have verified email',
+  'Medium – Registered on Discord for longer than 5 minutes',
+  'High – A member of the server for longer than 10 minutes',
+  'Insane – Must have verified phone'
 ]
 
 const EXPLICIT_CONTENT_FILTERS = [
@@ -33,7 +33,7 @@ class GuildInfoCommand extends Command {
           id: 'refresh',
           match: 'flag',
           prefix: ['--refresh'],
-          description: 'Refresh guild members (should be used in large guilds).'
+          description: 'Refresh guild members (should be used in large guilds). This works the same as "membersfetch" command, so you should have no need to use this flag IF you had already used "membersfetch" not too long ago.'
         },
         {
           id: 'keyword',
@@ -94,8 +94,8 @@ class GuildInfoCommand extends Command {
           name: 'Statistics',
           value: stripIndent`
               •  **Channels:** ${guild.channels.size} – ${categories.size} categor${categories.size === 1 ? 'y' : 'ies'}, ${text.size} text and ${voice.size} voice
-              •  **Members:** ${guild.memberCount} - ${online.size} online
-              •  **Roles:** ${guild.roles.size} - ${guild.me.roles.size} taken
+              •  **Members:** ${guild.memberCount} – ${online.size} online
+              •  **Roles:** ${guild.roles.size} – ${guild.me.roles.size} taken
           `
         },
         {
@@ -107,7 +107,8 @@ class GuildInfoCommand extends Command {
           `
         }
       ],
-      thumbnail: iconURL
+      thumbnail: iconURL,
+      footer: 'Consider running "membersfetch" command if members count seem incorrect.'
     }
 
     if (splashURL) {

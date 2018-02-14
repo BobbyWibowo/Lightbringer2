@@ -20,11 +20,11 @@ class ReadyListener extends Listener {
     console.log('Successfully logged in.')
     console.log(stripIndent`
         Stats:
-        - User: ${this.client.user.tag} (ID: ${this.client.user.id})
-        - Guilds: ${this.client.guilds.size.toLocaleString()}
-        - Channels: ${this.client.channels.size.toLocaleString()}
-        - Modules : ${this.client.commandHandler.modules.size.toLocaleString()}
-        - Prefix: ${this.client.akairoOptions.prefix}
+        – User: ${this.client.user.tag} (ID: ${this.client.user.id})
+        – Guilds: ${this.client.guilds.size.toLocaleString()}
+        – Channels: ${this.client.channels.size.toLocaleString()}
+        – Modules : ${this.client.commandHandler.modules.size.toLocaleString()}
+        – Prefix: ${this.client.akairoOptions.prefix}
       `)
 
     this.client.stats.set('messages-received', 0)

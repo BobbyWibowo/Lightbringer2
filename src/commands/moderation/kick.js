@@ -18,7 +18,7 @@ class KickCommand extends Command {
           id: 'refresh',
           match: 'flag',
           prefix: ['--refresh'],
-          description: 'Refresh guild members (should be used in large guilds).'
+          description: 'Refresh guild members (should be used in large guilds). This works the same as "membersfetch" command, so you should have no need to use this flag IF you had already used "membersfetch" not too long ago.'
         },
         {
           id: 'keyword',

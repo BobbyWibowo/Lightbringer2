@@ -40,10 +40,6 @@ class MembersCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
-    // Refresh GuildMemberStore.
-    await message.status.progress('Refreshing guild members\u2026')
-    await guild.members.fetch()
-
     let displayCapped = false
     let members = guild.members.array()
     let memberCount = members.length
@@ -63,7 +59,8 @@ class MembersCommand extends Command {
 
     const embed = {
       title: `${guild.name} [${memberCount}]`,
-      description: members.map(m => escapeMarkdown(m.user.tag, true)).join(', ')
+      description: members.map(m => escapeMarkdown(m.user.tag, true)).join(', '),
+      footer: 'Consider running "membersfetch" command if members list seem incomplete.'
     }
 
     let content = `${args.online ? 'Online members' : 'Members'} of the currently viewed guild:`

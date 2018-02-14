@@ -40,10 +40,6 @@ class RoleInfoCommand extends Command {
     // Assert Role.
     const role = await this.client.util.assertRole(args.keyword, roleSource)
 
-    // Refresh GuildMemberStore.
-    await message.status.progress('Refreshing guild members\u2026')
-    await role.guild.members.fetch()
-
     // Check whether the keyword was a mention or not.
     const mention = this.client.util.isKeywordMentionable(args.keyword, 1)
 
@@ -59,7 +55,7 @@ class RoleInfoCommand extends Command {
               •  **ID:** ${role.id}
               •  **Created on:** ${this.client.util.formatFromNow(role.createdAt)}
               •  **Position:** ${role.guild.roles.size - role.position} out of ${role.guild.roles.size}
-              •  **Members:** ${role.members.size} - ${online.size} online
+              •  **Members:** ${role.members.size} – ${online.size} online
             `
         },
         {
@@ -73,7 +69,8 @@ class RoleInfoCommand extends Command {
           `
         }
       ],
-      color: role.hexColor
+      color: role.color !== 0 ? role.hexColor : null,
+      footer: 'Consider running "membersfetch" command if members count seem incorrect.'
     }
 
     // Message content (the thing being displayed above the embed).

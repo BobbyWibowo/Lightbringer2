@@ -8,7 +8,7 @@ class InsultCommand extends Command {
       description: 'Insults some users.',
       options: {
         credits: 'Twentysix#5252',
-        usage: 'insult <@mention-1> [@mention-2] [...] [@mention-n]'
+        usage: 'insult @mention-1 [@mention-2] [...] [@mention-n]'
       }
     })
   }

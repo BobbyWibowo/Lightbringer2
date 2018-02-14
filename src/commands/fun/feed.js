@@ -7,7 +7,7 @@ class FeedCommand extends Command {
       aliases: ['feeds', 'feed'],
       description: 'Forces an item down someone\'s throat.',
       options: {
-        usage: 'feed <@mention-1> [@mention-2] [...] [@mention-n]'
+        usage: 'feed @mention-1 [@mention-2] [...] [@mention-n]'
       }
     })
   }

@@ -18,7 +18,7 @@ class ReloadCommand extends Command {
           id: 'type',
           match: 'prefix',
           prefix: ['--type=', '-t='],
-          description: 'Type of the module. This will reload all modules of the type when being used with "all" flag.',
+          description: 'Type of the modules. This will reload all modules of the type when being used with "all" flag.',
           type: (word, message, args) => {
             args._type = Boolean(word.length)
             if (/^c(ommand(s)?)?$/i.test(word)) return 0
@@ -27,32 +27,74 @@ class ReloadCommand extends Command {
           }
         },
         {
-          id: 'module',
-          match: 'text',
+          id: 'modules',
+          match: 'rest',
           allow: (message, args) => !args.all,
           type: (word, message, args) => {
-            args._module = Boolean(word.length)
-            if (args.type === 1) return this.client.inhibitorHandler.modules.get(word)
-            if (args.type === 2) return this.client.listenerHandler.modules.get(word)
-            return this.handler.findCommand(word)
+            args._modules = Boolean(word.length)
+            args._nomatches = []
+            const matches = []
+            const keywords = word.split(' ')
+            let handler = this.handler
+            if (args.type === 1) {
+              handler = this.client.inhibitorHandler
+            } else if (args.type === 2) {
+              handler = this.client.listenerHandler
+            }
+            for (const keyword of keywords) {
+              let match
+              if (handler === this.handler) {
+                match = handler.findCommand(keyword)
+              } else {
+                handler.get(keyword)
+              }
+              if (match) {
+                matches.push(match)
+              } else {
+                args._nomatches.push(`\`${keyword}\``)
+              }
+            }
+            return matches
           },
-          description: 'ID of the module (aliases can be used for command modules).'
+          description: 'IDs of the modules (aliases can be used for command modules).'
         }
       ],
       options: {
-        usage: 'reload < --all [--type=] | [--type=] module >'
+        usage: 'reload < --all [--type=] | [--type=] module-1 [module-2] [...] [module-n] >'
       }
     })
   }
 
   async exec (message, args) {
     const typeString = TYPE_STRINGS[args.type || 0].toLowerCase()
-    if (args.module) {
-      if (args.module.reload()) {
-        return message.status.success(`Reloaded ${typeString}: \`${args.module.id}\`.`)
-      } else {
-        return message.status.error(`Could not reload ${typeString}: \`${args.module.id}\`.`)
+    if (args.modules && args.modules.length) {
+      const s = []
+      const f = []
+      const x = args._nomatches || []
+      for (const m of args.modules) {
+        if (m.reload()) {
+          s.push(`\`${m.id}\``)
+        } else {
+          f.push(`\`${m.id}\``)
+        }
       }
+      let string = []
+      if (s.length) {
+        string.push(`✅\u2000Reloaded ${typeString}${s.length === 1 ? '' : 's'}: ${s.join(', ')}.`)
+      }
+      if (f.length) {
+        string.push(`⛔\u2000Could not reload ${typeString}${f.length === 1 ? '' : 's'}: ${f.join(', ')}.`)
+      }
+      if (x.length) {
+        string.push(`❓\u2000Could not find matching ${typeString}${x.length === 1 ? '' : 's'}: ${x.join(', ')}.`)
+      }
+      return message
+        .edit(string.join('\n\n'))
+        .then(m => {
+          m.delete({
+            timeout: message.status.commandStatusDeleteTimeout
+          })
+        })
     } else if (args.all) {
       if (args.type === 0 || args.type === null) this.handler.reloadAll()
       if (args.type === 1 || args.type === null) this.client.inhibitorHandler.reloadAll()
@@ -64,10 +106,10 @@ class ReloadCommand extends Command {
       }
     } else if (args._type && args.type === null) {
       return message.status.error('That type is unavailable! Try either `commands`, `inhibitors` or `listeners`.')
-    } else if (args._module) {
-      return message.status.error('Could not find a module with that ID.')
+    } else if (args._modules) {
+      return message.status.error('Could not find any module with those IDs.')
     } else {
-      return message.status.error('You must specify the ID of the module that you want to reload.')
+      return message.status.error('You must specify IDs of the modules that you want to reload.')
     }
   }
 }

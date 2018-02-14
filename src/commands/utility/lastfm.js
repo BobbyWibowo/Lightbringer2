@@ -165,7 +165,7 @@ class LastfmCommand extends Command {
 
     return this.client.user.setPresence({
       activity: {
-        name: `${this.artist} - ${this.trackName} | ♪ Last.fm`,
+        name: `${this.artist} – ${this.trackName} | ♪ Last.fm`,
         type: 'LISTENING'
       }
     })
@@ -223,7 +223,7 @@ class LastfmCommand extends Command {
         this.artist = artist
         this.trackName = trackName
         await this.setPresenceToTrack()
-        await this.client.util.sendStatus(`🎵\u2000Last fm: ${artist} - ${trackName}`)
+        await this.client.util.sendStatus(`🎵\u2000Last fm: ${artist} – ${trackName}`)
       }
       return this.setRecentTrackTimeout()
     } catch (error) {

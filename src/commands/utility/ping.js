@@ -15,7 +15,7 @@ class PingCommand extends Command {
 
     // Elapsed time
     const elapsed = new Date().getTime() - timestamp
-    await message.edit(`${message.content} \`${elapsed}ms\` - Heartbeat: \`${this.client.ping.toFixed(0)}ms\``)
+    await message.edit(`${message.content} \`${elapsed}ms\` – Heartbeat: \`${this.client.ping.toFixed(0)}ms\``)
   }
 }
 

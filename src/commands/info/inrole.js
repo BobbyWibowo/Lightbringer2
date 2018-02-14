@@ -47,9 +47,9 @@ class InRoleCommand extends Command {
     // Assert Role.
     const role = await this.client.util.assertRole(args.keyword, roleSource)
 
-    // Refresh GuildMemberStore.
-    await message.status.progress('Refreshing guild members\u2026')
-    await role.guild.members.fetch()
+    if (role.members.size < 1) {
+      return message.status.error('The specified role has no members.')
+    }
 
     // Check whether the keyword was a mention or not.
     const mention = this.client.util.isKeywordMentionable(args.keyword, 1)
@@ -74,7 +74,8 @@ class InRoleCommand extends Command {
     const embed = {
       title: `${role.name} [${memberCount}]`,
       description: members.map(m => escapeMarkdown(m.user.tag, true)).join(', '),
-      color: role.hexColor
+      color: role.color !== 0 ? role.hexColor : null,
+      footer: 'Consider running "membersfetch" command if members list seem incomplete.'
     }
 
     let content = `${args.online ? 'Online members' : 'Members'} of the role which matched keyword \`${args.keyword}\`:`

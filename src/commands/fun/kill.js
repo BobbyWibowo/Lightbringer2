@@ -8,7 +8,7 @@ class KillCommand extends Command {
       description: 'Kills some users.',
       options: {
         credits: 'Santa illu™#8235 <286011141619187712>',
-        usage: 'kill <@mention-1> [@mention-2] [...] [@mention-n]'
+        usage: 'kill @mention-1 [@mention-2] [...] [@mention-n]'
       }
     })
   }
