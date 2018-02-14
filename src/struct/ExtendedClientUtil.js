@@ -732,11 +732,28 @@ class ExtendedClientUtil extends ClientUtil {
   }
 
   rand (min, max) {
-    return Math.floor(Math.random() * (max - min)) + min
+    return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
   sleep (timeout) {
     return new Promise(resolve => this.client.setTimeout(() => resolve(), timeout))
+  }
+
+  shuffle (array, iteration = 1) {
+    const newArray = array
+    // Simple array shuffling function.
+    for (let i = 0; i < iteration; i++) {
+      for (let j = 0; j < newArray.length; j++) {
+        // Get new position.
+        const newIndex = this.client.util.rand(0, newArray.length - 1)
+        // Swap values.
+        const t = newArray[newIndex]
+        newArray[newIndex] = newArray[j]
+        newArray[j] = t
+      }
+    }
+    // Return shuffled array.
+    return newArray
   }
 }
 
