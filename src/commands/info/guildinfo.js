@@ -60,6 +60,8 @@ class GuildInfoCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
+    const color = await this.client.util.getGuildColors(guild)
+
     if (args.refresh) {
       // Refresh GuildMemberStore.
       await message.status.progress('Refreshing guild members\u2026')
@@ -108,7 +110,8 @@ class GuildInfoCommand extends Command {
         }
       ],
       thumbnail: iconURL,
-      footer: 'Consider running "membersfetch" command if members count seem incorrect.'
+      footer: 'Consider running "membersfetch" command if members count seem incorrect.',
+      color
     }
 
     if (splashURL) {

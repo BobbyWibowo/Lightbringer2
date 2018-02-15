@@ -47,11 +47,14 @@ class EmojisCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
+    const color = await this.client.util.getGuildColors(guild)
+
     let emojis = guild.emojis
 
     const embed = {
       title: `${guild.name} [${emojis.size}]`,
-      description: emojis.map(e => this.formatEmoji(e)).join(char)
+      description: emojis.map(e => this.formatEmoji(e)).join(char),
+      color
     }
 
     let content = `Emojis of the currently viewed guild:`

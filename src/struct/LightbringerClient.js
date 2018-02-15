@@ -20,6 +20,9 @@ class LightbringerClient extends AkairoClient {
     this.storage = new Storage(this)
 
     this.package = require('./../../package.json')
+
+    // Init Guild Pixel Averages utils (this needs this.storage to be ready).
+    this.util.initGuildColors()
   }
 
   build () {

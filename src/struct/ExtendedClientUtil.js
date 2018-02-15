@@ -4,6 +4,7 @@ const { Collection, Guild, Message, MessageEmbed, TextChannel } = require('disco
 const encodeUrl = require('encodeurl')
 const LightbringerError = require('./../util/LightbringerError')
 const moment = require('moment')
+const pixelAverage = require('pixel-average')
 const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
 const snekfetch = require('snekfetch')
 
@@ -19,6 +20,8 @@ class ExtendedClientUtil extends ClientUtil {
     this.matchesListTimeout = matchesListTimeout
 
     this.maxMatchesListLength = maxMatchesListLength
+
+    this.guildColors = null
   }
 
   // Override parent functions.
@@ -773,6 +776,51 @@ class ExtendedClientUtil extends ClientUtil {
     }
     // Return shuffled array.
     return newArray
+  }
+
+  // Guild Colors utils.
+
+  initGuildColors () {
+    this.guildColors = this.client.storage('guild-colors')
+  }
+
+  async getGuildColors (guild) {
+    if (!this.guildColors) {
+      throw new Error('Storage system of Guild colors is not yet ready.')
+    }
+
+    if (!guild.icon) {
+      return null
+    }
+
+    const saved = this.guildColors.get(guild.id)
+    if (saved && saved.icon === guild.icon) {
+      return saved.color
+    }
+
+    const iconSnek = await this.snek(guild.iconURL({
+      size: 16,
+      format: 'jpg'
+    }))
+
+    if (iconSnek.status !== 200) {
+      throw new Error(iconSnek.text)
+    }
+
+    return new Promise((resolve, reject) => {
+      pixelAverage(iconSnek.body, (err, averages) => {
+        if (err) {
+          reject(err)
+        }
+        const color = [Math.round(averages.red), Math.round(averages.green), Math.round(averages.blue)]
+        this.guildColors.set(guild.id, {
+          icon: guild.icon,
+          color
+        })
+        this.guildColors.save()
+        resolve(color)
+      })
+    })
   }
 }
 

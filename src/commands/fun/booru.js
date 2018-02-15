@@ -78,9 +78,10 @@ class BooruCommand extends Command {
       if (!this.getSiteKey(args.defaultSite)) {
         return message.status.error('The site you specified is unavailable.')
       }
-      this.storage.set('defaultSite', args.defaultSite)
+      this.defaultSite = args.defaultSite
+      this.storage.set('defaultSite', this.defaultSite)
       this.storage.save()
-      return message.status.success(`Successfully changed default site to \`${args.defaultSite}\`.`)
+      return message.status.success(`Successfully changed default site to \`${this.defaultSite}\`.`)
     }
 
     const site = args.site || this.defaultSite
