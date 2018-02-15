@@ -2,7 +2,7 @@ const { Collection } = require('discord.js')
 const { CommandHandler } = require('discord-akairo')
 const CommandStatus = require('./CommandStatus')
 
-class ExtendedCommandHandler extends CommandHandler {
+class LCommandHandler extends CommandHandler {
   constructor (client) {
     super(client)
 
@@ -80,4 +80,4 @@ class ExtendedCommandHandler extends CommandHandler {
   }
 }
 
-module.exports = ExtendedCommandHandler
+module.exports = LCommandHandler

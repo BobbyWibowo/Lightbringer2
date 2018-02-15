@@ -1,6 +1,6 @@
 const { AkairoClient } = require('discord-akairo')
-const ExtendedClientUtil = require('./ExtendedClientUtil')
-const ExtendedCommandHandler = require('./ExtendedCommandHandler')
+const LClientUtil = require('./LClientUtil')
+const LCommandHandler = require('./LCommandHandler')
 const Stats = require('./Stats')
 const Storage = require('./Storage')
 
@@ -13,7 +13,7 @@ class LightbringerClient extends AkairoClient {
   constructor (options = {}, clientOptions) {
     super(options, clientOptions)
 
-    this.util = new ExtendedClientUtil(this)
+    this.util = new LClientUtil(this)
 
     this.stats = new Stats(this)
 
@@ -32,7 +32,7 @@ class LightbringerClient extends AkairoClient {
     }
 
     if (this.akairoOptions.commandDirectory) {
-      this.commandHandler = new ExtendedCommandHandler(this)
+      this.commandHandler = new LCommandHandler(this)
     }
 
     return super.build()

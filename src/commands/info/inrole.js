@@ -47,7 +47,7 @@ class InRoleCommand extends Command {
     // Assert Role.
     const role = await this.client.util.assertRole(args.keyword, roleSource)
 
-    if (role.members.size < 1) {
+    if (!role.members.size) {
       return message.status.error('The specified role has no members.')
     }
 

@@ -8,7 +8,7 @@ const pixelAverage = require('pixel-average')
 const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
 const snekfetch = require('snekfetch')
 
-class ExtendedClientUtil extends ClientUtil {
+class LClientUtil extends ClientUtil {
   constructor (client) {
     super(client)
 
@@ -824,4 +824,4 @@ class ExtendedClientUtil extends ClientUtil {
   }
 }
 
-module.exports = ExtendedClientUtil
+module.exports = LClientUtil

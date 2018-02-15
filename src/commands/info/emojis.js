@@ -51,6 +51,10 @@ class EmojisCommand extends Command {
 
     let emojis = guild.emojis
 
+    if (!emojis.size) {
+      return message.status.error('The specified guild has no emojis.')
+    }
+
     const embed = {
       title: `${guild.name} [${emojis.size}]`,
       description: emojis.map(e => this.formatEmoji(e)).join(char),
