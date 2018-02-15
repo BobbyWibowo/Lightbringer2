@@ -36,7 +36,11 @@ class UserInfoCommand extends Command {
     const user = resolved.user
 
     // Fetch UserProfile if the user is not a bot.
-    const profile = !user.bot && await user.fetchProfile().catch(() => {})
+    let profile
+    if (!user.bot) {
+      await message.status.progress('Fetching user\'s profile\u2026')
+      profile = await user.fetchProfile()
+    }
 
     // Check whether the keyword was a mention or not.
     const mention = this.client.util.isKeywordMentionable(args.keyword)

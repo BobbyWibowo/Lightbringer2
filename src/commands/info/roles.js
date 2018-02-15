@@ -37,7 +37,7 @@ class RolesCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
-    // Sort roles from highest to lowest position.
+    // Sort roles by their position descendingly.
     let roles = guild.roles.sort((a, b) => b.position - a.position)
 
     const embed = {
@@ -68,7 +68,7 @@ class RolesCommand extends Command {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      prefix: `**Guild ID:** ${guild.id}\n`,
+      prefix: `**Guild ID:** ${guild.id}\n${args.brief ? '' : '\n'}`,
       code: args.brief ? '' : null,
       char
     })
