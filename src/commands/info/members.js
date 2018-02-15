@@ -51,8 +51,12 @@ class MembersCommand extends Command {
       memberCount = members.length
     }
 
-    // Sort members alphabetically.
-    members = members.sort((a, b) => a.user.tag.localeCompare(b.user.tag))
+    // Sort members by their activity (their last message's timestamp).
+    members = members.sort((a, b) => {
+      const aTime = a.lastMessage ? (a.lastMessage.editedTimestamp || a.lastMessage.createdTimestamp) : 0
+      const bTime = b.lastMessage ? (b.lastMessage.editedTimestamp || b.lastMessage.createdTimestamp) : 0
+      return bTime - aTime || a.user.tag.localeCompare(b.user.tag)
+    })
 
     if ((this.maxUsersListing > 0) && (this.maxUsersListing < members.length)) {
       displayCapped = true
@@ -75,7 +79,7 @@ class MembersCommand extends Command {
       firstMessage: message,
       content,
       prefix: `**Guild ID:** ${guild.id})\n` +
-        (displayCapped ? `Displaying the first ${this.maxUsersListing} members alphabetically\u2026` : ''),
+        (displayCapped ? `Displaying the first ${this.maxUsersListing} active members\u2026` : ''),
       code: 'css',
       char: ', '
     })
