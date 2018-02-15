@@ -82,9 +82,7 @@ class MembersCommand extends Command {
   }
 
   onReady () {
-    const {
-      maxUsersListing
-    } = this.client.akairoOptions
+    const maxUsersListing = this.client.configManager.get('maxUsersListing')
 
     if (maxUsersListing !== undefined) {
       this.maxUsersListing = Number(maxUsersListing)

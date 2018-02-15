@@ -50,11 +50,9 @@ class ReadyListener extends Listener {
     console.log('Created readline interface.')
     console.log('You can now evaluate arbritary JavaScript codes straight from your terminal.')
 
-    const {
-      statusChannel,
-      onlineStatus,
-      autoReboot
-    } = this.client.akairoOptions
+    const statusChannel = this.client.configManager.get('statusChannel')
+    const onlineStatus = this.client.configManager.get('onlineStatus')
+    const autoReboot = this.client.configManager.get('autoReboot')
 
     if (statusChannel) {
       this.client._statusChannel = this.client.channels.get(statusChannel)

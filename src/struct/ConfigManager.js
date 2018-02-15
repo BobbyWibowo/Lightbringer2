@@ -68,6 +68,7 @@ class ConfigManager {
   _cast (to, value) {
     switch (to) {
       case 'number':
+        if (value === 'null') return null
         return Number(value)
       case 'boolean':
         return Boolean(value)

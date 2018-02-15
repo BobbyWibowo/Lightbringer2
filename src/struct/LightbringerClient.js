@@ -26,13 +26,13 @@ class LightbringerClient extends AkairoClient {
   }
 
   build () {
-    if (this.akairoOptions.commandDirectory) {
-      this.commandHandler = new ExtendedCommandHandler(this)
-    }
-
     if (this.akairoOptions.configManager) {
       this.configManager = this.akairoOptions.configManager
       delete this.akairoOptions.configManager
+    }
+
+    if (this.akairoOptions.commandDirectory) {
+      this.commandHandler = new ExtendedCommandHandler(this)
     }
 
     return super.build()

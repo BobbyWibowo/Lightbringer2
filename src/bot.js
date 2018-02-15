@@ -22,12 +22,7 @@ if (config.token) {
       listenerDirectory: './src/listeners/',
       storageDirectory: './storage/',
       configManager,
-      prefix: config.prefix || 'lb',
-      // I should probably make the bot load these configs below from the ConfigManager eh?
-      statusChannel: config.statusChannel,
-      onlineStatus: config.onlineStatus,
-      maxUsersListing: config.maxUsersListing,
-      autoReboot: config.autoReboot
+      prefix: config.prefix || 'lb'
     },
     {
       messageCacheMaxSize: 20, // maximum number of messages to cache per channel (why? to reduce heap usage)
