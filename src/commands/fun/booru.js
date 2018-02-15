@@ -104,7 +104,7 @@ class BooruCommand extends Command {
       })
       .then(images => booru.commonfy(images))
       .catch(error => {
-        if (error.name === 'BooruError') {
+        if (error.name === 'booruError') {
           return message.status.error(error.message)
         } else {
           throw new Error(error) // Let commandError.js catch this

@@ -46,7 +46,7 @@ class ReloadCommand extends Command {
               if (handler === this.handler) {
                 match = handler.findCommand(keyword)
               } else {
-                handler.get(keyword)
+                match = handler.get(keyword)
               }
               if (match) {
                 matches.push(match)

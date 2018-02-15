@@ -14,7 +14,7 @@ class CommandErrorListener extends Listener {
     if (error instanceof DiscordAPIError || error instanceof AkairoError) {
       await message.status.error(error.toString())
     } else if (error instanceof LightbringerError) {
-      await message.status.error(error.toString(), error.timeout)
+      await message.status.error(error.message, error.timeout)
     } else {
       console.error(error.stack || error)
       await message.status.error(

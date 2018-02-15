@@ -298,6 +298,25 @@ class ExtendedClientUtil extends ClientUtil {
     return result
   }
 
+  async fetchMutualGuilds (userId, fetch = false) {
+    const mutualGuilds = new Collection()
+
+    for (const guild of this.client.guilds.array()) {
+      if (guild.members.has(userId)) {
+        mutualGuilds.set(guild.id, guild)
+        continue
+      }
+      if (fetch) {
+        const fetchResult = await guild.members.fetch(userId).catch(() => false)
+        if (fetchResult) {
+          mutualGuilds.set(guild.id, guild)
+        }
+      }
+    }
+
+    return mutualGuilds
+  }
+
   formatMatchesList (matches, { name = 'matches', prop, syntax = 'css' }) {
     if (typeof prop === 'string') {
       prop = [prop]
@@ -338,8 +357,8 @@ class ExtendedClientUtil extends ClientUtil {
   }
 
   hasPermissions (channel, permissions) {
-    // NOTICE: Not to be used when checking certain permissions
-    // like MANAGE_MESSAGES. This function was made to be primarily
+    // NOTICE: Not to be used when checking certain permissions,
+    // such as MANAGE_MESSAGES. This function was made to be primarily
     // used to check EMBED_LINKS permission since it's bound
     // to be always available in DMChannel and GroupDMChannel.
     if (!(channel instanceof TextChannel)) {
