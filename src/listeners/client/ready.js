@@ -48,7 +48,8 @@ class ReadyListener extends Listener {
     })
 
     console.log('Created readline interface.')
-    console.log('You can now evaluate arbritary JavaScript codes straight from your terminal.')
+    console.log('You can now evaluate arbritrary JavaScript codes straight from your terminal.')
+    console.log('For PM2 users, you can use: pm2 send lb2 "ARBRITRARY JAVASCRIPT CODES".')
 
     const statusChannel = this.client.configManager.get('statusChannel')
     const onlineStatus = this.client.configManager.get('onlineStatus')

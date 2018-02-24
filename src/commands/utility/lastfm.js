@@ -26,6 +26,12 @@ class LastfmCommand extends Command {
           description: 'Toggle Rich Presence. State will be saved to the configuration file.'
         },
         {
+          id: 'monitorMode',
+          match: 'flag',
+          prefix: ['--monitorMode', '-m'],
+          description: 'When Monitor Mode is enabled, it will keep on polling Last.fm and posting status update to status channel, but it will not update the user\'s status message. This may be useful when you want to use Spotify client on Desktop.'
+        },
+        {
           id: 'apiKey',
           match: 'prefix',
           prefix: ['--apikey=', '--api=', '--key='],
@@ -69,8 +75,8 @@ class LastfmCommand extends Command {
     this.totalScrobbles = 0
 
     // Currently playing song
-    this.trackName = ''
-    this.artist = ''
+    this.artist = null
+    this.trackName = null
 
     // Timeout instance
     this._timeout = null
@@ -80,29 +86,32 @@ class LastfmCommand extends Command {
   }
 
   async exec (message, args) {
-    if (args.toggle) {
-      const disabled = Boolean(this.storage.get('disabled'))
-      this.storage.set('disabled', !disabled)
-      this.storage.save()
+    const toggles = [
+      { arg: 'toggle', key: 'enabled', string: 'Last fm status updater' },
+      { arg: 'toggleRich', key: 'rich', string: 'Rich Presence', alwaysPoll: true },
+      { arg: 'monitorMode', key: 'monitorMode', string: 'Monitor Mode' }
+    ]
 
-      this.clearRecentTrackTimeout()
-      await message.status.progress(`${disabled ? 'Enabling' : 'Disabling'} Last fm status updater\u2026`)
+    for (const toggle of toggles) {
+      if (args[toggle.arg]) {
+        const val = Boolean(this.storage.get(toggle.key))
+        this.storage.set(toggle.key, !val)
+        this.storage.save()
 
-      if (disabled) {
-        await this.getRecentTrack(true)
-      } else {
-        await this.client.user.setPresence({ activity: null })
+        this.clearRecentTrackTimeout()
+        await message.status.progress(`${!val ? 'Enabling' : 'Disabling'} ${toggle.string}\u2026`)
+
+        if (val && !toggle.alwaysPoll) {
+          // Clear activity if the mode was previously enabled
+          await this.client.user.setPresence({ activity: null })
+        } else {
+          // Poll Last.fm if the mode was previously disabled
+          // ... or if alwaysPoll is set to true
+          await this.getRecentTrack()
+        }
+
+        return message.status.success(`${!val ? 'Enabled' : 'Disabled'} ${toggle.string}.`)
       }
-
-      return message.status.success(`${disabled ? 'Enabled' : 'Disabled'} Last fm status updater.`)
-    }
-
-    if (args.toggleRich) {
-      this.storage.set('rich', !this.storage.get('rich'))
-      this.storage.save()
-      this.clearRecentTrackTimeout()
-      this.getRecentTrack()
-      return message.status.success(`${this.storage.get('rich') ? 'Enabled' : 'Disabled'} Rich Presence mode.`)
     }
 
     let storageHit
@@ -123,8 +132,9 @@ class LastfmCommand extends Command {
       Track name      :: ${this.trackName}
       Username        :: ${this.storage.get('username')}
       Total scrobbles :: ${this.totalScrobbles}
-      Disabled        :: ${String(this.storage.get('disabled'))}
+      Enabled         :: ${String(this.storage.get('enabled'))}
       Rich Presence   :: ${String(this.storage.get('rich'))}
+      Monitor Mode    :: ${String(this.storage.get('monitorMode'))}
     `, 'asciidoc'))
   }
 
@@ -138,10 +148,6 @@ class LastfmCommand extends Command {
     const username = this.storage.get('username')
 
     if (rich && clientID) {
-      /*
-      const start = new Date().getTime()
-      const end = new Date(start + 3.5 * 60000).getTime() // add 3.5 minutes
-      */
       return this.client.user.setPresence({
         activity: {
           application: clientID,
@@ -155,10 +161,6 @@ class LastfmCommand extends Command {
             largeText: `${this.totalScrobbles.toLocaleString()} scrobbles`,
             smallText: `User: ${username}`
           }
-          /*
-          ,
-          timestamps: { start, end }
-          */
         }
       })
     }
@@ -171,8 +173,8 @@ class LastfmCommand extends Command {
     })
   }
 
-  async getRecentTrack (reset) {
-    if (this.storage.get('disabled') || !this.storage.get('username') || !this.storage.get('apiKey')) {
+  async getRecentTrack () {
+    if (!this.storage.get('enabled') || !this.storage.get('username') || !this.storage.get('apiKey')) {
       return
     }
 
@@ -202,8 +204,8 @@ class LastfmCommand extends Command {
     const track = tracks[0]
     const isNowPlaying = track['@attr'] && track['@attr'].nowplaying === 'true'
 
-    let artist = ''
-    let trackName = ''
+    let artist = null
+    let trackName = null
 
     if (isNowPlaying) {
       artist = typeof track.artist === 'object' ? track.artist['#text'] : track.artist
@@ -216,14 +218,16 @@ class LastfmCommand extends Command {
 
     try {
       if (!artist || !trackName) {
-        this.artist = this.trackName = ''
+        this.artist = null
+        this.trackName = null
         await this.client.user.setPresence({ activity: null })
         await this.client.util.sendStatus('🎵\u2000Cleared Last fm status message.')
       } else {
+        const monitorMode = this.storage.get('monitorMode')
         this.artist = artist
         this.trackName = trackName
-        await this.setPresenceToTrack()
-        await this.client.util.sendStatus(`🎵\u2000Last fm: ${artist} – ${trackName}`)
+        if (!monitorMode) await this.setPresenceToTrack()
+        await this.client.util.sendStatus(`🎵\u2000Last fm${monitorMode ? ' [M] ' : ''}: ${artist} – ${trackName}`)
       }
       return this.setRecentTrackTimeout()
     } catch (error) {
@@ -233,7 +237,7 @@ class LastfmCommand extends Command {
   }
 
   setRecentTrackTimeout (isError) {
-    if (this.storage.get('disabled')) {
+    if (!this.storage.get('enabled')) {
       return
     }
 
@@ -247,7 +251,7 @@ class LastfmCommand extends Command {
       if (this._error >= 3) {
         this.clearRecentTrackTimeout()
         this.client.util.sendStatus(`🎵\u2000Last fm status updater stopped due to **${MAX_RETRY}** consecutive errors.`)
-        this.storage.set('disabled', true)
+        this.storage.set('enabled', false)
         this.storage.save()
         return
       }
@@ -257,14 +261,20 @@ class LastfmCommand extends Command {
   }
 
   clearRecentTrackTimeout () {
-    this.trackNow = this.artistNow = ''
+    this.artist = null
+    this.trackName = null
     this.client.clearTimeout(this._timeout)
   }
 
   onReady () {
     this.storage = this.client.storage('lastfm')
 
-    if (!this.storage.get('disabled')) {
+    if (this.storage.get('enabled') === undefined) {
+      this.storage.set('enabled', true)
+      this.storage.save()
+    }
+
+    if (this.storage.get('enabled')) {
       this._statusChannel = this.client.channels.get(this.storage.get('statusChannel')) || null
       this.getRecentTrack()
     }

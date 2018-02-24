@@ -53,7 +53,7 @@ class AvatarCommand extends Command {
     const user = resolved.user
 
     // Check whether the keyword was a mention or not.
-    const mention = this.client.util.isKeywordMentionable(args.keyword)
+    const mention = args.keyword && this.client.util.isKeywordMentionable(args.keyword)
 
     let size = 2048
     if (args.size) {
@@ -89,7 +89,7 @@ class AvatarCommand extends Command {
 
     // Otherwise, build embed then send it.
     let content = 'My avatar:'
-    if (args.keyword && mention) {
+    if (mention) {
       content = `${(member || user).toString()}'s avatar:`
     } else if (args.keyword) {
       content = `Avatar of the user who matched keyword \`${args.keyword}\`:`
@@ -98,7 +98,7 @@ class AvatarCommand extends Command {
     const embed = {
       title: user.tag,
       description: `[Click here to view in a browser](${avatarURL})`,
-      color: member ? member.displayColor : 0,
+      color: (member && member.displayColor !== 0) ? member.displayColor : null,
       image: avatarURL,
       footer: args.size ? `Specified size: ${args.size}` : null
     }

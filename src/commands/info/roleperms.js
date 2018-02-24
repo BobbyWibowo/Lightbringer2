@@ -78,7 +78,7 @@ class RolePermsCommand extends Command {
     const role = await this.client.util.assertRole(args.keyword, roleSource)
 
     // Check whether the keyword was a mention or not.
-    const mention = this.client.util.isKeywordMentionable(args.keyword, 1)
+    const mention = args.keyword && this.client.util.isKeywordMentionable(args.keyword, 1)
 
     const embed = {
       title: role.name,

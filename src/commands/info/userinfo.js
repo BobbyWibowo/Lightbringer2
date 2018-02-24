@@ -43,7 +43,7 @@ class UserInfoCommand extends Command {
     }
 
     // Check whether the keyword was a mention or not.
-    const mention = this.client.util.isKeywordMentionable(args.keyword)
+    const mention = args.keyword && this.client.util.isKeywordMentionable(args.keyword)
 
     // Get user's avatar to be used in the embed.
     const thumbnail = user.displayAvatarURL({ size: 256 })
@@ -122,7 +122,7 @@ class UserInfoCommand extends Command {
 
     // Message content (the thing being displayed above the embed).
     let content = 'My informations:'
-    if (args.keyword && mention) {
+    if (mention) {
       content = `${(member || user).toString()}'s information:`
     } else if (args.keyword) {
       content = `Informations of the user who matched keyword \`${args.keyword}\`:`
@@ -130,7 +130,7 @@ class UserInfoCommand extends Command {
 
     // Options for the embed.
     embed.thumbnail = thumbnail
-    embed.color = member ? member.displayColor : 0
+    embed.color = (member && member.displayColor !== 0) ? member.displayColor : null
     embed.author = {
       name: user.tag,
       icon: thumbnail

@@ -762,7 +762,7 @@ class LClientUtil extends ClientUtil {
   }
 
   shuffle (array, iteration = 1) {
-    const newArray = array
+    const newArray = array.slice(0)
     // Simple array shuffling function.
     for (let i = 0; i < iteration; i++) {
       for (let j = 0; j < newArray.length; j++) {

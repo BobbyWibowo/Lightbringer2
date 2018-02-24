@@ -17,7 +17,7 @@ class EvalCommand extends Command {
         {
           id: 'content',
           match: 'rest',
-          description: 'The JavaScript codes that you want to be evaluated.'
+          description: 'Arbritrary JavaScript codes that you want to be evaluated.'
         }
       ],
       options: {

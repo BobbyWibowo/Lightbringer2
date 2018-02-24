@@ -64,6 +64,9 @@ class GuildsCommand extends Command {
       }
     }
 
+    // Check whether the keyword was a mention or not.
+    const mention = args.keyword && this.client.util.isKeywordMentionable(args.keyword)
+
     if (args.positionsort) {
       // Sort guilds by their position descendingly.
       guilds = guilds.sort((a, b) => a.position - b.position)
@@ -97,7 +100,9 @@ class GuildsCommand extends Command {
     }
 
     let content = `My guilds:`
-    if (args.keyword) {
+    if (mention) {
+      content = `Mutual guilds with ${user.toString()}:`
+    } else if (args.keyword) {
       content = `Mutual guilds with user matching keyword \`${args.keyword}\`:`
     }
 
