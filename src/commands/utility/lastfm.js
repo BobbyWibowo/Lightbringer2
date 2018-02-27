@@ -2,7 +2,7 @@ const { Command } = require('discord-akairo')
 const { stripIndent } = require('common-tags')
 
 // Timeout between each polls to Last.fm
-const POLL_TIMEOUT = 7500
+const POLL_TIMEOUT = 5000
 
 // Maximum amount of consecutive errors
 const MAX_RETRY = 3
@@ -77,6 +77,7 @@ class LastfmCommand extends Command {
     // Currently playing song
     this.artist = null
     this.trackName = null
+    this.timestamp = null
 
     // Timeout instance
     this._timeout = null
@@ -145,7 +146,7 @@ class LastfmCommand extends Command {
 
     const rich = this.storage.get('rich')
     const clientID = this.storage.get('clientID')
-    const username = this.storage.get('username')
+    // const username = this.storage.get('username')
 
     if (rich && clientID) {
       return this.client.user.setPresence({
@@ -159,7 +160,11 @@ class LastfmCommand extends Command {
             largeImage: this.storage.get('largeImageID') || null,
             smallImage: this.storage.get('smallImageID') || null,
             largeText: `${this.totalScrobbles.toLocaleString()} scrobbles`,
-            smallText: `User: ${username}`
+            // smallText: `User: ${username}`
+            smallText: 'Powered by Lightbringer'
+          },
+          timestamps: {
+            start: this.timestamp
           }
         }
       })
@@ -206,10 +211,12 @@ class LastfmCommand extends Command {
 
     let artist = null
     let trackName = null
+    let timestamp = null
 
     if (isNowPlaying) {
       artist = typeof track.artist === 'object' ? track.artist['#text'] : track.artist
       trackName = track.name
+      timestamp = new Date().getTime() - Math.ceil(POLL_TIMEOUT / 1000 / 2)
     }
 
     if (this.trackName === trackName && this.artist === artist) {
@@ -220,12 +227,14 @@ class LastfmCommand extends Command {
       if (!artist || !trackName) {
         this.artist = null
         this.trackName = null
+        this.timestamp = null
         await this.client.user.setPresence({ activity: null })
         await this.client.util.sendStatus('🎵\u2000Cleared Last fm status message.')
       } else {
         const monitorMode = this.storage.get('monitorMode')
         this.artist = artist
         this.trackName = trackName
+        this.timestamp = timestamp
         if (!monitorMode) await this.setPresenceToTrack()
         await this.client.util.sendStatus(`🎵\u2000Last fm${monitorMode ? ' [M] ' : ''}: ${artist} – ${trackName}`)
       }
