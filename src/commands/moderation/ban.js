@@ -42,7 +42,8 @@ class BanCommand extends Command {
       ],
       options: {
         usage: 'ban [--reason=] [--days=] [--soft] [--refresh] <keyword>'
-      }
+      },
+      clientPermissions: ['BAN_MEMBERS']
     })
   }
 
@@ -80,6 +81,14 @@ class BanCommand extends Command {
 
     // Proceed if there was only one result.
     const target = resolved.first()
+
+    if (target.user.id === this.client.user.id) {
+      return message.status.error('You can not ban yourself.')
+    }
+
+    if (target.user.id === message.guild.ownerID) {
+      return message.status.error('You can not ban the server owner.')
+    }
 
     await target.ban({
       days: args.days,

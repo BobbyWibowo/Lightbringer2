@@ -28,7 +28,8 @@ class KickCommand extends Command {
       ],
       options: {
         usage: 'ban [--reason=] [--refresh] <keyword>'
-      }
+      },
+      clientPermissions: ['BAN_MEMBERS']
     })
   }
 
@@ -66,6 +67,14 @@ class KickCommand extends Command {
 
     // Proceed if there was only one result.
     const target = resolved.first()
+
+    if (target.user.id === this.client.user.id) {
+      return message.status.error('You can not kick yourself.')
+    }
+
+    if (target.user.id === message.guild.ownerID) {
+      return message.status.error('You can not kick the server owner.')
+    }
 
     await target.kick(args.reason)
     return message.status.success(`Successfully kicked ${escapeMarkdown(target.user.tag)} (ID: ${target.user.id}).`, -1)
