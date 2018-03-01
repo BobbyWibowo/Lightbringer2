@@ -100,7 +100,7 @@ class ColorCommand extends Command {
   }
 
   parseInput (value) {
-    // hsv, hwb, ansi, ansi16, and CSS keywords
+    // TODO: hsv, hwb, ansi and ansi16
     const hexColorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/
     if (hexColorRegex.test(value)) {
       return {
