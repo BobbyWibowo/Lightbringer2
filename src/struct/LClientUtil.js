@@ -586,13 +586,14 @@ class LClientUtil extends ClientUtil {
       messages = messages.map(s => this.formatCode(s, code))
     }
 
-    return Promise.all(messages.map((m, i) => {
+    for (let i = 0; i < messages.length; i++) {
       if (firstMessage instanceof Message && i === 0) {
-        return firstMessage.edit(m)
+        await firstMessage.edit(messages[i])
       } else {
-        return channel.send(m)
+        await channel.send(messages[i])
       }
-    }))
+    }
+    return true
   }
 
   async multiSendEmbed (channel, data, options) {
@@ -714,13 +715,15 @@ class LClientUtil extends ClientUtil {
       }
     }
 
-    return Promise.all(messages.map((m, i) => {
+    for (let i = 0; i < messages.length; i++) {
+      let t = [messages[i].content, { embed: messages[i].embed }]
       if (firstMessage instanceof Message && i === 0) {
-        return firstMessage.edit(m.content, { embed: m.embed })
+        await firstMessage.edit(...t)
       } else {
-        return channel.send(m.content, { embed: m.embed })
+        await channel.send(...t)
       }
-    }))
+    }
+    return true
   }
 
   hexToRgb (hex) {
