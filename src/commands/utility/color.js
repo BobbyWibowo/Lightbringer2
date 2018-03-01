@@ -96,7 +96,7 @@ class ColorCommand extends Command {
         }
       ]
     })
-    await message.delete()
+    return message.delete()
   }
 
   parseInput (value) {
