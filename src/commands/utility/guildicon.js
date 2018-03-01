@@ -3,11 +3,11 @@ const { Command } = require('discord-akairo')
 const { CommandHandlerEvents } = require('discord-akairo').Constants
 const { escapeMarkdown } = require('discord.js').Util
 
-class AvatarCommand extends Command {
+class GuildIconCommand extends Command {
   constructor () {
-    super('avatar', {
-      aliases: ['avatar', 'ava', 'av'],
-      description: 'Displays full size of yours or someone else\'s avatar.',
+    super('guildicon', {
+      aliases: ['guildicon', 'gicon', 'icon'],
+      description: 'Displays full size icon of the currently viewed or a specific guild.',
       args: [
         {
           id: 'direct',
@@ -25,17 +25,17 @@ class AvatarCommand extends Command {
           id: 'size',
           match: 'prefix',
           prefix: ['--size=', '-s='],
-          description: 'The size that you want to use to display the avatar with.',
+          description: 'The size that you want to use to display the icon with.',
           type: 'number'
         },
         {
           id: 'keyword',
           match: 'rest',
-          description: 'The user that you want to display the avatar of.'
+          description: 'The guild that you want to display the icon of.'
         }
       ],
       options: {
-        usage: 'avatar [--direct] [--plain] [keyword]'
+        usage: 'guildicon [--direct] [--plain] [keyword]'
       }
     })
   }
@@ -46,14 +46,14 @@ class AvatarCommand extends Command {
       return this.handler.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, this, 'client', ['EMBED_LINKS'])
     }
 
-    // Assert GuildMember or User.
-    const memberSource = message.guild || null
-    const resolved = await this.client.util.assertMemberOrUser(args.keyword, memberSource, true)
-    const member = resolved.member
-    const user = resolved.user
+    let guild = message.guild
 
-    // Check whether the keyword was a mention or not.
-    const mention = args.keyword && this.client.util.isKeywordMentionable(args.keyword)
+    // Assert Guild.
+    if (args.keyword) {
+      guild = await this.client.util.assertGuild(args.keyword)
+    }
+
+    const color = await this.client.util.getGuildColors(guild)
 
     let size = 2048
     if (args.size) {
@@ -64,42 +64,35 @@ class AvatarCommand extends Command {
       }
     }
 
-    // Get user's avatar.
-    let avatarURL = user.displayAvatarURL({ size })
+    // Get guild's icon.
+    let iconURL = guild.iconURL({ size })
 
     // If could not get avatar.
-    if (!avatarURL) {
-      return message.status.error('Could not get display avatar of the specified user.')
+    if (!iconURL) {
+      return message.status.error('Could not get icon of the specified guild.')
     }
 
     // "--direct" flag.
     if (args.direct) {
-      avatarURL = avatarURL.replace('cdn.discordapp.com', 'images.discordapp.net')
-    }
-
-    // When the avatar is a GIF, append "&f=.gif" so that the Discord client will properly play it.
-    if (/\.gif\?size=\d*?$/.test(avatarURL)) {
-      avatarURL += '&f=.gif'
+      iconURL = iconURL.replace('cdn.discordapp.com', 'images.discordapp.net')
     }
 
     // Send a plain message when "--plain" flag is used.
     if (args.plain) {
-      return message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s avatar:\n${avatarURL}`)
+      return message.edit(`${escapeMarkdown(guild.name)}\n${iconURL}`)
     }
 
     // Otherwise, build embed then send it.
-    let content = 'My avatar:'
-    if (mention) {
-      content = `${(member || user).toString()}'s avatar:`
-    } else if (args.keyword) {
-      content = `Avatar of the user matching keyword \`${args.keyword}\`:`
+    let content = 'Icon of the currently viewed guild:'
+    if (args.keyword) {
+      content = `Icon of the guild matching keyword \`${args.keyword}\`:`
     }
 
     const embed = {
-      title: user.tag,
-      description: `[Click here to view in a browser](${avatarURL})`,
-      color: (member && member.displayColor !== 0) ? member.displayColor : null,
-      image: avatarURL,
+      title: guild.name,
+      description: `ID: ${guild.id}\n[Click here to view in a browser](${iconURL})`,
+      color,
+      image: iconURL,
       footer: args.size ? `Specified size: ${args.size}` : null
     }
 
@@ -109,4 +102,4 @@ class AvatarCommand extends Command {
   }
 }
 
-module.exports = AvatarCommand
+module.exports = GuildIconCommand

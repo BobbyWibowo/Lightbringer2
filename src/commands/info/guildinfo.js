@@ -121,7 +121,7 @@ class GuildInfoCommand extends Command {
     // Message content (the thing being displayed above the embed).
     let content = 'Informations of the currently viewed guild:'
     if (args.keyword) {
-      content = `Informations of the guild which matched keyword \`${args.keyword}\`:`
+      content = `Informations of the guild matching keyword \`${args.keyword}\`:`
     }
 
     await message.edit(content, {

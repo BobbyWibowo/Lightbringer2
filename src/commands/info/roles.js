@@ -65,7 +65,7 @@ class RolesCommand extends Command {
 
     let content = `Roles of the currently viewed guild:`
     if (args.keyword) {
-      content = `Roles of the guild which matched keyword \`${args.keyword}\`:`
+      content = `Roles of the guild matching keyword \`${args.keyword}\`:`
     }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {

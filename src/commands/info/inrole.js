@@ -78,7 +78,7 @@ class InRoleCommand extends Command {
       footer: 'Consider running "membersfetch" command if members list seem incomplete.'
     }
 
-    let content = `${args.online ? 'Online members' : 'Members'} of the role which matched keyword \`${args.keyword}\`:`
+    let content = `${args.online ? 'Online members' : 'Members'} of the role matching keyword \`${args.keyword}\`:`
     if (mention) {
       content = `${role}'s ${args.online ? 'online ' : ''}members:`
     }

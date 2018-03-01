@@ -72,7 +72,7 @@ class MembersCommand extends Command {
 
     let content = `${args.online ? 'Online members' : 'Members'} of the currently viewed guild:`
     if (args.keyword) {
-      content = `${args.online ? 'Online members' : 'Members'} of the guild which matched keyword \`${args.keyword}\`:`
+      content = `${args.online ? 'Online members' : 'Members'} of the guild matching keyword \`${args.keyword}\`:`
     }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {
