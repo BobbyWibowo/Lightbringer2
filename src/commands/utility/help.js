@@ -46,7 +46,11 @@ class HelpCommand extends Command {
       const formatted = this.handler.categories
         .map(category => {
           const id = category.id
-          const modules = this.handler.modules.filter(m => m.category.id === id)
+          const modules = this.handler.modules.filter(m => m.category.id === id && (m.options && !m.options.hidden))
+
+          if (!modules.size) {
+            return false
+          }
 
           const lines = modules.map(m => {
             return `${this.client.util.pad(padding, m.id)} :: ${m.description || '<no description>'}`
@@ -58,6 +62,7 @@ class HelpCommand extends Command {
             ${lines.join('\n')}
           `
         })
+        .filter(f => f)
         .join('\n\n')
 
       if (this.git) {
