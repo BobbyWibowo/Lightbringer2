@@ -100,7 +100,7 @@ class ColorCommand extends Command {
   }
 
   parseInput (value) {
-    // TODO: hsv, hwb, ansi and ansi16
+    // TODO: hsv, ansi and ansi16
     const hexColorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/
     if (hexColorRegex.test(value)) {
       return {
@@ -122,15 +122,15 @@ class ColorCommand extends Command {
       }
     }
 
-    const hslColorRegex = /^hsl\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/
-    const hslColorMatch = hslColorRegex.exec(value)
-    if (hslColorMatch) {
+    const hslHwbColorRegex = /^(hsl|hwb)\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/
+    const hslHwbColorMatch = hslHwbColorRegex.exec(value)
+    if (hslHwbColorMatch) {
       return {
-        type: 'hsl',
+        type: hslHwbColorMatch[1],
         value: [
-          Number(hslColorMatch[1]),
-          Number(hslColorMatch[2]),
-          Number(hslColorMatch[3])
+          Number(hslHwbColorMatch[2]),
+          Number(hslHwbColorMatch[3]),
+          Number(hslHwbColorMatch[4])
         ]
       }
     }
