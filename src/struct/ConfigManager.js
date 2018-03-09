@@ -26,6 +26,9 @@ class ConfigManager {
       autoReboot: {
         default: null,
         cast: 'number'
+      },
+      homeGuild: {
+        default: null
       }
     }
   }

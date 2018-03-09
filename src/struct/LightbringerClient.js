@@ -1,6 +1,8 @@
 const { AkairoClient } = require('discord-akairo')
 const LClientUtil = require('./LClientUtil')
 const LCommandHandler = require('./LCommandHandler')
+const LInhibitorHandler = require('./LInhibitorHandler')
+const LListenerHandler = require('./LListenerHandler')
 const Stats = require('./Stats')
 const Storage = require('./Storage')
 
@@ -33,6 +35,14 @@ class LightbringerClient extends AkairoClient {
 
     if (this.akairoOptions.commandDirectory) {
       this.commandHandler = new LCommandHandler(this)
+    }
+
+    if (this.akairoOptions.inhibitorDirectory) {
+      this.inhibitorHandler = new LInhibitorHandler(this)
+    }
+
+    if (this.akairoOptions.listenerDirectory) {
+      this.listenerHandler = new LListenerHandler(this)
     }
 
     return super.build()

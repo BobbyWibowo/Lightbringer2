@@ -13,6 +13,12 @@ class StatsCommand extends Command {
   }
 
   async exec (message, args) {
+    let modules = 0
+
+    modules += this.client.commandHandler.modules.size
+    modules += this.client.inhibitorHandler.modules.size
+    modules += this.client.listenerHandler.modules.size
+
     const embed = {
       fields: [
         {
@@ -40,7 +46,7 @@ class StatsCommand extends Command {
             •  **Lightbringer:** [${this.client.package.version}](${this.git})
             •  **discord.js:** [${require('discord.js').version}](https://github.com/hydrabolt/discord.js)
             •  **discord-akairo:** [${require('discord-akairo').version}](https://github.com/1Computer1/discord-akairo)
-            •  **Modules:** ${this.client.commandHandler.modules.size.toLocaleString()}
+            •  **Modules:** ${modules.toLocaleString()}
             •  **Prefix:** \`${this.client.akairoOptions.prefix}\`
           `
         }

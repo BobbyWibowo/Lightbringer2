@@ -21,6 +21,12 @@ class DictionaryCommand extends Command {
           description: 'Lists the rest of the search result if available.'
         },
         {
+          id: 'next',
+          match: 'flag',
+          prefix: ['--next', '-n'],
+          description: 'Shows the next definition of the last used keyword.'
+        },
+        {
           id: 'keyword',
           match: 'rest'
         },
@@ -40,6 +46,10 @@ class DictionaryCommand extends Command {
     this.storage = null
 
     this.dictClient = null
+
+    this.lastKeyword = null
+
+    this.lastIndex = null
   }
 
   async exec (message, args) {
@@ -57,18 +67,30 @@ class DictionaryCommand extends Command {
       await this.initDictClient()
     }
 
-    if (!args.keyword) {
+    let keyword = args.keyword
+    let index = args.index !== null ? (args.index - 1) : 0
+
+    if (!args.keyword && !args.next) {
       return message.status.error('You must specify something to search.')
     }
 
-    await message.status.progress(`Searching for \`${args.keyword}\` on Merriam-Webster\u2026`)
+    if (args.next) {
+      if (this.lastKeyword) {
+        keyword = this.lastKeyword
+        index = (this.lastIndex || 0) + 1
+      } else {
+        return message.status.error('You have not previously used the command to look up a definition.')
+      }
+    }
+
+    await message.status.progress(`Searching for \`${keyword}\` on Merriam-Webster\u2026`)
 
     let result
     try {
-      result = await this.dictClient.lookup(args.keyword)
+      result = await this.dictClient.lookup(keyword)
     } catch (error) {
       if (error instanceof WordNotFoundError) {
-        return message.edit(`⛔\u2000\`${args.keyword}\` was not found!`, {
+        return message.edit(`⛔\u2000\`${keyword}\` was not found!`, {
           embed: this.client.util.embed({
             title: 'Suggestions',
             description: error.suggestions.join('; '),
@@ -80,17 +102,19 @@ class DictionaryCommand extends Command {
           })
         })
       } else {
-        throw new Error(error) // Rethrow to let commandError handler to handle it
+        throw new Error(error) // Re-throw to let commandError listener to handle it
       }
     }
 
-    const index = args.index !== null ? args.index - 1 : 0
     const selected = result[index]
     if (!selected) {
       return message.status.error(`Index \`${index + 1}\` of the search result is unavailable.`)
     }
 
-    return this.displayDefinition(message, index, result, args.keyword, args.more)
+    await this.displayDefinition(message, index, result, keyword, args.more)
+
+    this.lastKeyword = keyword
+    this.lastIndex = index
   }
 
   async displayDefinition (message, index, result, keyword, more) {

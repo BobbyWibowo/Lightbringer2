@@ -67,10 +67,10 @@ class ReadyListener extends Listener {
 
     await this.client.user.setAFK(true)
 
-    this.triggerCommands()
-    console.log('Bot is ready.')
+    this.triggerOnReadyFunctions()
 
     this.client.stats.set('initiated', true)
+    console.log('Bot is ready.')
     await this.client.util.sendStatus(`✅\u2000Bot is ready.`)
 
     if (autoReboot) {
@@ -86,16 +86,20 @@ class ReadyListener extends Listener {
     }
   }
 
-  triggerCommands () {
-    // onReady() functions aren't async.
-    // Commands are expected to wait for their own onReady()
-    // when being executed before they were ready.
-    const commands = this.client.commandHandler.modules
+  triggerOnReadyFunctions () {
+    // NOTE: This is an odd structure. This in itself is a module,
+    // but it is required to trigger all the other modules' onReady function.
 
-    commands.forEach(command => {
-      if (typeof command.onReady === 'function') {
-        command.onReady()
-      }
+    this.client.commandHandler.modules.forEach(m => {
+      if (typeof m.onReady === 'function') m.onReady()
+    })
+
+    this.client.inhibitorHandler.modules.forEach(m => {
+      if (typeof m.onReady === 'function') m.onReady()
+    })
+
+    this.client.listenerHandler.modules.forEach(m => {
+      if (typeof m.onReady === 'function') m.onReady()
     })
   }
 }
