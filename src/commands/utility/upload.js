@@ -48,6 +48,11 @@ class UploadCommand extends Command {
 
     if (args.name) {
       file.name = args.name
+    } else {
+      const _exec = /(?:.+\/)([^#?]+)/.exec(args.url)
+      if (_exec) {
+        file.name = _exec[1]
+      }
     }
 
     await message.channel.send({

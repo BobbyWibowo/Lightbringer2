@@ -163,19 +163,19 @@ class LClientUtil extends ClientUtil {
   }
 
   async snek (url, options) {
-    // Since this will return the finished Promise, any snek's
+    // Since this will return the Promise, any snek's
     // functions which could have been used to alter the options,
-    // such as.set(), etc. will not be usable on the returned value.
+    // such as .set(), etc. will not be usable on the returned value.
     // Thus make sure to get used to using SnekfetchOptions when
-    // using snekfetch with this function.
+    // using Snekfetch with this function.
     return snekfetch
       .get(url, options)
       .catch(error => {
-        // On some failures such as 403 Forbidden, snekfetch will throw an Error
-        // instead of returning things with 403 on its 'status' property, so
-        // instead catch it and format it like below to less complicate things
-        // when using snekfetch anywhere else (meaning there's no need for
-        // .catch() but instead simply make sure the 'status' property is 200).
+        // On some failures such as 403 Forbidden, Snekfetch will throw an Error
+        // instead of returning an Object with 403 on its "status" property, so
+        // this will catch it and return an Object to less complicate things
+        // when using Snekfetch anywhere else (meaning there will be no need for
+        // .catch() but instead simply make sure the "status" property is 200).
         console.error(error)
         return {
           status: -1,
