@@ -2,7 +2,10 @@ const { Inhibitor } = require('discord-akairo')
 
 class GuildBlacklistInhibitor extends Inhibitor {
   constructor () {
-    super('guildBlacklist', {})
+    super('guildBlacklist', {
+      reason: 'GUILD_BLACKLISTED',
+      type: 'all'
+    })
 
     this.storage = null
 
@@ -12,7 +15,7 @@ class GuildBlacklistInhibitor extends Inhibitor {
   }
 
   exec (message) {
-    if (this.guilds.includes(message.guild.id) && this.homeGuild !== message.guild.id) {
+    if (message.guild && this.guilds.includes(message.guild.id) && this.homeGuild !== message.guild.id) {
       // Returns true to block messages from the said guild
       return true
     } else {
