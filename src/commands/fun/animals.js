@@ -22,7 +22,7 @@ const ANIMALS = {
   },
   lizard: {
     regex: /^(l(i(zard(s)?)?)?|🦎)$/i,
-    api: 'https://nekos.life/api/lizard',
+    api: 'https://nekos.life/api/v2/img/lizard',
     action: 'json',
     data: 'url'
   }

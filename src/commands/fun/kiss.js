@@ -17,11 +17,7 @@ class KissCommand extends Command {
       return message.status.error('@mention someone to kiss.')
     }
 
-    const result = await this.client.util.snek('https://nekos.life/api/kiss', {
-      headers: {
-        Key: 'dnZ4fFJbjtch56pNbfrZeSRfgWqdPDgf'
-      }
-    })
+    const result = await this.client.util.snek('https://nekos.life/api/v2/img/kiss')
 
     await message.edit(`*kisses ${message.mentions.users.first()}*`, {
       embed: this.client.util.embed({

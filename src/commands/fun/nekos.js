@@ -30,17 +30,17 @@ class NekosCommand extends Command {
 
     await message.status.progress(`Fetching a random ${isLewd ? 'lewd ' : ''}nekos image\u2026`)
 
-    const result = await this.client.util.snek(`http://nekos.life/api/${isLewd ? 'lewd/' : ''}neko`)
+    const result = await this.client.util.snek(`https://nekos.life/api/v2/img/${isLewd ? 'lewd' : 'neko'}`)
 
     if (result.status !== 200) {
       return message.status.error('Failed to fetch image.')
     }
 
     if (args.upload) {
-      await message.channel.send({ files: [result.body.neko] })
+      await message.channel.send({ files: [result.body.url] })
       await message.delete()
     } else {
-      await message.edit(result.body.neko)
+      await message.edit(result.body.url)
     }
   }
 }

@@ -17,11 +17,7 @@ class HugCommand extends Command {
       return message.status.error('@mention someone to hug.')
     }
 
-    const result = await this.client.util.snek('https://nekos.life/api/hug', {
-      headers: {
-        Key: 'dnZ4fFJbjtch56pNbfrZeSRfgWqdPDgf'
-      }
-    })
+    const result = await this.client.util.snek('https://nekos.life/api/v2/img/hug')
 
     await message.edit(`*hugs ${message.mentions.users.first()}*`, {
       embed: this.client.util.embed({
