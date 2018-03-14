@@ -22,24 +22,26 @@
     "booru": "BobbyWibowo/booru#0739630c580d672ea402e3fa7b40e6786e66f918",
     "bufferutil": "^3.0.3",
     "canvas": "^1.6.9",
-    "chalk": "^2.3.1",
+    "chalk": "^2.3.2",
     "color-convert": "^1.9.1",
     "color-name": "^1.1.3",
     "common-tags": "^1.7.2",
     "discord-akairo": "1Computer1/discord-akairo#a15fad602c7d0f05683c8d6ff85eb411b65e9b96",
-    "discord.js": "hydrabolt/discord.js#2a9fdef9e541e47196982055595e1987bc1de74e",
+    "discord.js": "hydrabolt/discord.js#ef8366d189b8c53f4acdc279caaae9fe682d63f2",
     "encodeurl": "^1.0.2",
     "fs-extra": "^5.0.0",
-    "mathjs": "^3.20.2",
-    "moment": "^2.20.1",
+    "mathjs": "^4.0.0",
+    "moment": "^2.21.0",
     "mw-dict": "^2.2.0",
     "path": "^0.12.7",
     "pixel-average": "^1.0.1",
     "readline": "^1.3.0",
-    "snekfetch": "^3.6.4"
+    "snekfetch": "^3.6.4",
+    "txtgen": "^2.0.1",
+    "urban-dictionary-es6": "^1.0.1"
   },
   "devDependencies": {
-    "standard": "^10.0.3"
+    "standard": "^11.0.0"
   },
   "resolutions": {
     "discord.js/snekfetch": "^3.6.4"

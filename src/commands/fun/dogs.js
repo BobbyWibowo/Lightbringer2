@@ -1,10 +1,10 @@
 const { Command } = require('discord-akairo')
 
-class LewdNekosCommand extends Command {
+class DogsCommand extends Command {
   constructor () {
-    super('lewdnekos', {
-      aliases: ['lewdnekos', 'lewdneko', 'lewd', 'nekol'],
-      description: 'An alias for "neko --lewd".',
+    super('dogs', {
+      aliases: ['dogs', 'dog'],
+      description: 'An alias for "animals dog".',
       args: [
         {
           id: 'upload',
@@ -14,21 +14,21 @@ class LewdNekosCommand extends Command {
         }
       ],
       options: {
-        usage: 'lewdnekos [--upload]',
+        usage: 'dogs [--upload]',
         hidden: true
       }
     })
   }
 
   async exec (message, args) {
-    const nekoCommand = this.handler.modules.get('nekos')
+    const nekoCommand = this.handler.modules.get('animals')
     if (nekoCommand) {
-      args.lewd = true
+      args.animal = 'dog'
       return nekoCommand.exec(message, args)
     } else {
-      return message.status.error('Could not execute nekos command.')
+      return message.status.error('Could not execute animals command.')
     }
   }
 }
 
-module.exports = LewdNekosCommand
+module.exports = DogsCommand
