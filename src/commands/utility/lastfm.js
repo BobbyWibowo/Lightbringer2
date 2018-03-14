@@ -191,7 +191,7 @@ class LastfmCommand extends Command {
         api_key: this.storage.get('apiKey'),
         limit: 1
       }
-    })
+    }, false)
 
     if (result.status !== 200) {
       console.error(`[lastfm-s] ${result.text}`)

@@ -160,7 +160,7 @@ class LClientUtil extends ClientUtil {
     }
   }
 
-  async snek (url, options) {
+  async snek (url, options, logError = true) {
     /**
      * Since this will return the Promise, any snek's
      * functions which could have been used to alter the options,
@@ -176,7 +176,9 @@ class LClientUtil extends ClientUtil {
     return snekfetch
       .get(url, options)
       .catch(error => {
-        console.error(error)
+        if (logError) {
+          console.error(error)
+        }
         return {
           status: -1,
           text: error.toString()
