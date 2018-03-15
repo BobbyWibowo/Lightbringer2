@@ -82,7 +82,7 @@ class UserInfoCommand extends Command {
 
     // Activity message (in embed description).
     if (user.presence.activity) {
-      embed.description = `${this.client.util.formatActivityType(user.presence.activity.type)} **${user.presence.activity.name}**`
+      embed.description = this.formatActivityMessage(user.presence.activity)
     }
 
     // Guild Membership field.
@@ -139,6 +139,14 @@ class UserInfoCommand extends Command {
     await message.edit(content, {
       embed: this.client.util.embed(embed)
     })
+  }
+
+  formatActivityMessage (activity) {
+    if (activity.type === 'LISTENING' && activity.name === 'Spotify') {
+      return `Listening to **${activity.details}** on Spotify`
+    } else {
+      return `${this.client.util.formatActivityType(activity.type)} **${activity.name}**`
+    }
   }
 }
 
