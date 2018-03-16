@@ -19,7 +19,7 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "booru": "BobbyWibowo/booru#0739630c580d672ea402e3fa7b40e6786e66f918",
+    "booru": "^0.4.0",
     "bufferutil": "^3.0.3",
     "canvas": "^1.6.9",
     "chalk": "^2.3.2",

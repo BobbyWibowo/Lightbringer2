@@ -179,9 +179,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-booru@BobbyWibowo/booru#0739630c580d672ea402e3fa7b40e6786e66f918:
-  version "0.3.6-dev"
-  resolved "https://codeload.github.com/BobbyWibowo/booru/tar.gz/0739630c580d672ea402e3fa7b40e6786e66f918"
+booru@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/booru/-/booru-0.4.0.tgz#eda0514398815280b196d2f24a5a3f0db7f0b183"
   dependencies:
     snekfetch "^3.6.4"
     xml2js "^0.4.17"
@@ -1573,9 +1573,9 @@ prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
 
-prism-media@^0.2.0:
+"prism-media@github:hydrabolt/prism-media":
   version "0.2.0"
-  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-0.2.0.tgz#82c183da430c41c3025df3610a92a61b107b1918"
+  resolved "https://codeload.github.com/hydrabolt/prism-media/tar.gz/b367fca09ecea193b17f3611cb41a05154c9d682"
 
 process-nextick-args@~2.0.0:
   version "2.0.0"
@@ -1803,7 +1803,7 @@ slice-ansi@1.0.0:
   dependencies:
     is-fullwidth-code-point "^2.0.0"
 
-snekfetch@^3.6.0, snekfetch@^3.6.4:
+snekfetch@^3.5.0, snekfetch@^3.6.4:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/snekfetch/-/snekfetch-3.6.4.tgz#d13e80a616d892f3d38daae4289f4d258a645120"
 
@@ -2038,6 +2038,10 @@ ua-parser-js@^0.7.9:
   version "0.7.17"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.17.tgz#e9ec5f9498b9ec910e7ae3ac626a805c4d09ecac"
 
+ultron@~1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.1.1.tgz#9fe1536a10a664a65266a1e3ccf85fd36302bc9c"
+
 uniq@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/uniq/-/uniq-1.0.1.tgz#b31c5ae8254844a3a8281541ce2b04b865a734ff"
@@ -2119,12 +2123,13 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
-ws@^4.0.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-4.1.0.tgz#a979b5d7d4da68bf54efe0408967c324869a7289"
+ws@^3.3.1:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-3.3.3.tgz#f1cf84fe2d5e901ebce94efaece785f187a228f2"
   dependencies:
     async-limiter "~1.0.0"
     safe-buffer "~5.1.0"
+    ultron "~1.1.0"
 
 xhr@^2.0.1:
   version "2.4.1"
