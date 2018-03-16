@@ -4,8 +4,8 @@ const { stripIndents } = require('common-tags')
 
 const DEFAULT_SITES = [
   'gelbooru.com',
-  'danbooru.donmai.us',
   'konachan.com',
+  'konachan.net',
   'yande.re'
 ]
 
@@ -13,7 +13,7 @@ class BooruCommand extends Command {
   constructor () {
     super('boorubomb', {
       aliases: ['boorubomb', 'bb', 'hentaibomb'],
-      description: 'Shows you a total of 4 random images from different booru sites (using gelbooru, danbooru, konachan and yandere by default).',
+      description: 'Shows you a total of 4 random images from different booru sites (using gelbooru.com, konachan.com, konachan.net and yande.re by default).',
       args: [
         {
           id: 'list',
@@ -87,7 +87,7 @@ class BooruCommand extends Command {
       }
     }
 
-    const sites = args.sites || this.storage.get('defaultSites') || DEFAULT_SITES
+    const sites = (args.sites ? args.sites.split(',') : null) || this.storage.get('defaultSites') || DEFAULT_SITES
     const siteKeys = sites.map(this.getSiteKey).filter(k => k)
     if (!siteKeys.length) {
       return message.status.error('The sites you specified are unavailable.')
