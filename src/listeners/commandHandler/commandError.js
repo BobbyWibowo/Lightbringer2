@@ -1,5 +1,5 @@
-const { DiscordAPIError } = require('discord.js')
 const { AkairoError, Listener } = require('discord-akairo')
+const { DiscordAPIError } = require('discord.js')
 const LightbringerError = require('./../../util/LightbringerError')
 
 class CommandErrorListener extends Listener {
