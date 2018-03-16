@@ -9,6 +9,8 @@ const RATINGS = {
   'u': 'N/A'
 }
 
+const DEFAULT_SITE = 'gelbooru.com'
+
 class BooruCommand extends Command {
   constructor () {
     super('booru', {
@@ -25,34 +27,38 @@ class BooruCommand extends Command {
           id: 'upload',
           match: 'flag',
           prefix: ['--upload', '-u'],
-          description: 'Uploads the image as an attachment instead.'
+          description: 'Uploads the image as an attachment.'
         },
         {
           id: 'site',
           match: 'prefix',
           prefix: ['--site=', '-s='],
-          description: 'Uses a specific booru site instead of the default.'
+          description: 'Uses a specific booru site.'
         },
         {
           id: 'tags',
           match: 'rest',
-          description: 'Tags to be used as search keywords, separated by space.'
+          description: 'Tags to be used as search keywords, separated by spaces.'
         },
         {
           id: 'defaultSite',
           match: 'prefix',
-          prefix: ['--defaultSite=', '--default='],
-          description: 'Changes the default site used when not using "--site" flag. New value will be saved to storage.'
+          prefix: ['--defaultSite=', '--default=', '-d='],
+          description: 'Changes the default booru site used when not using "--site" option. This will be saved to the storage.'
+        },
+        {
+          id: 'liteMode',
+          match: 'flag',
+          prefix: ['--liteMode', '--lite'],
+          description: 'Toggle lite mode. When lite mode is turned on, the command will not print extra information such as scores, ratings and sources.'
         }
       ],
       options: {
-        usage: 'booru [ --list | [--site] tags | --defaultSite= ]'
+        usage: 'booru [ --list | [--upload] [--site=] tags | --defaultSite= | --lite ]'
       }
     })
 
     this.storage = null
-
-    this.defaultSite = 'gelbooru.com'
   }
 
   async exec (message, args) {
@@ -66,25 +72,36 @@ class BooruCommand extends Command {
       })
 
       const formatted = stripIndents`
-        ${this.client.util.pad(padding, 'Sites')} :: Aliases
+        ${this.client.util.pad(padding, 'Site')} :: Aliases
         ${'='.repeat(lines.reduce((a, v) => (a > v.length) ? a : v.length, padding.length + 11))}
         ${lines.join('\n')}
       `
 
-      return message.edit('🖼\u2000Available booru sites:\n' + this.client.util.formatCode(formatted, 'asciidoc'))
+      return message.edit('⚙\u2000Available booru sites:\n' + this.client.util.formatCode(formatted, 'asciidoc'))
     }
 
     if (args.defaultSite) {
-      if (!this.getSiteKey(args.defaultSite)) {
+      if (args.defaultSite === 'null') {
+        this.storage.set('defaultSite')
+        this.storage.save()
+        return message.status.success(`Successfully restored default site to the hard-coded value: ${DEFAULT_SITE}.`)
+      } else if (!this.getSiteKey(args.defaultSite)) {
         return message.status.error('The site you specified is unavailable.')
+      } else {
+        this.storage.set('defaultSite', args.defaultSite)
+        this.storage.save()
+        return message.status.success(`Successfully changed default site to \`${args.defaultSite}\`.`)
       }
-      this.defaultSite = args.defaultSite
-      this.storage.set('defaultSite', this.defaultSite)
-      this.storage.save()
-      return message.status.success(`Successfully changed default site to \`${this.defaultSite}\`.`)
     }
 
-    const site = args.site || this.defaultSite
+    const liteMode = this.storage.get('liteMode')
+    if (args.liteMode) {
+      this.storage.set('liteMode', !liteMode)
+      this.storage.save()
+      return message.status.success(`Lite mode was successfully ${liteMode ? 'disabled' : 'enabled'}.`)
+    }
+
+    const site = args.site || this.storage.get('defaultSite') || DEFAULT_SITE
     const siteKey = this.getSiteKey(site)
     if (!siteKey) {
       return message.status.error('The site you specified is unavailable.')
@@ -114,18 +131,21 @@ class BooruCommand extends Command {
 
     const image = images[0]
     const imageUrl = this.client.util.cleanUrl(image.common.file_url)
-    const title = mappedTags
-      ? `Random image matching tags ${mappedTags} from \`${siteKey}\`:`
-      : `Random image from \`${siteKey}\`:`
 
-    await message.edit(stripIndent`
-      🖼\u2000${title}
-      •  **Score:** ${image.common.score}
-      •  **Rating:** ${RATINGS[image.common.rating]}
-      •  **Source:** ${image.common.source ? `<${image.common.source}>` : 'N/A'}
-
-      ${imageUrl}
-    `)
+    if (liteMode) {
+      return message.edit(imageUrl)
+    } else {
+      const title = mappedTags
+        ? `Random image matching tags ${mappedTags} from \`${siteKey}\`:`
+        : `Random image from \`${siteKey}\`:`
+      return message.edit(stripIndent`
+        ${title}
+        •  **Score:** ${image.common.score}
+        •  **Rating:** ${RATINGS[image.common.rating]}
+        •  **Source:** ${image.common.source ? `<${image.common.source}>` : 'N/A'}
+        •  **Image:** ${imageUrl}
+      `)
+    }
   }
 
   getSiteKey (site) {
@@ -135,11 +155,6 @@ class BooruCommand extends Command {
 
   onReady () {
     this.storage = this.client.storage('booru')
-
-    const defaultSite = this.storage.get('defaultSite')
-    if (defaultSite) {
-      this.defaultSite = defaultSite
-    }
   }
 
   onReload () {

@@ -6,6 +6,7 @@ class InRoleCommand extends Command {
     super('inrole', {
       aliases: ['inrole'],
       description: 'Lists members of a specific role.',
+      split: 'sticky',
       args: [
         {
           id: 'guild',

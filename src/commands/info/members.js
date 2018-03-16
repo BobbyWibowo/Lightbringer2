@@ -40,7 +40,7 @@ class MembersCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
-    const color = await this.client.util.getGuildColors(guild)
+    const color = await this.client.util.getGuildColor(guild)
 
     let displayCapped = false
     let members = guild.members.array()

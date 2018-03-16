@@ -728,16 +728,6 @@ class LClientUtil extends ClientUtil {
     return true
   }
 
-  hexToRgb (hex) {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-
-    if (result) {
-      return [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)]
-    } else {
-      return null
-    }
-  }
-
   truncate (string, max, append = '') {
     if (!string || !max || (1 + append.length) >= max) {
       return ''
@@ -783,15 +773,26 @@ class LClientUtil extends ClientUtil {
     return newArray
   }
 
+  async getAverageColor (source) {
+    return new Promise((resolve, reject) => {
+      pixelAverage(source, (err, averages) => {
+        if (err) {
+          return reject(new Error('shit happened'))
+        }
+        return resolve([Math.round(averages.red), Math.round(averages.green), Math.round(averages.blue)])
+      })
+    })
+  }
+
   // Guild Colors utils.
 
   initGuildColors () {
     this.guildColors = this.client.storage('guild-colors')
   }
 
-  async getGuildColors (guild) {
+  async getGuildColor (guild) {
     if (!this.guildColors) {
-      throw new Error('Storage system of Guild colors is not yet ready.')
+      throw new Error('Storage system of guild colors is not yet ready.')
     }
 
     if (!guild.icon) {
@@ -804,28 +805,21 @@ class LClientUtil extends ClientUtil {
     }
 
     const iconSnek = await this.snek(guild.iconURL({
-      size: 16,
-      format: 'jpg'
+      size: 128,
+      format: 'png'
     }))
 
     if (iconSnek.status !== 200) {
       throw new Error(iconSnek.text)
     }
 
-    return new Promise((resolve, reject) => {
-      pixelAverage(iconSnek.body, (err, averages) => {
-        if (err) {
-          reject(err)
-        }
-        const color = [Math.round(averages.red), Math.round(averages.green), Math.round(averages.blue)]
-        this.guildColors.set(guild.id, {
-          icon: guild.icon,
-          color
-        })
-        this.guildColors.save()
-        resolve(color)
-      })
+    const color = await this.getAverageColor(iconSnek.body)
+    this.guildColors.set(guild.id, {
+      icon: guild.icon,
+      color
     })
+    this.guildColors.save()
+    return color
   }
 }
 

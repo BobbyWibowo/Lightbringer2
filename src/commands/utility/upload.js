@@ -10,12 +10,12 @@ class UploadCommand extends Command {
           id: 'name',
           match: 'prefix',
           prefix: ['--name=', '-n='],
-          description: 'The file name for the attachment.'
+          description: 'File name for the attachment.'
         },
         {
           id: 'url',
           match: 'rest',
-          description: 'URL of the file to upload.'
+          description: 'URL of the file.'
         }
       ],
       options: {
@@ -31,20 +31,19 @@ class UploadCommand extends Command {
     }
 
     const exec = /^<?(.+?)>?$/.exec(args.url)
-    let attachment
-
-    if (exec) {
-      await message.status.progress(message.content)
-      const result = await this.client.util.snek(exec[1])
-      if (result.status !== 200) {
-        return message.status.error(result.text)
-      }
-      attachment = result.body
-    } else {
+    if (!exec) {
       return message.status.error('Could not parse input.')
     }
 
-    const file = { attachment }
+    // This will only prepend a progress icon to the message.
+    await message.status.progress(message.content)
+
+    const result = await this.client.util.snek(exec[1])
+    if (result.status !== 200) {
+      return message.status.error(result.text)
+    }
+
+    const file = { attachment: result.body }
 
     if (args.name) {
       file.name = args.name

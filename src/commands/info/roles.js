@@ -37,7 +37,7 @@ class RolesCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
-    const color = await this.client.util.getGuildColors(guild)
+    const color = await this.client.util.getGuildColor(guild)
 
     // Sort roles by their position descendingly.
     let roles = guild.roles.sort((a, b) => b.position - a.position)

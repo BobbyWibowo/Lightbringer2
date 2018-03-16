@@ -8,6 +8,7 @@ class GuildBlacklistCommand extends Command {
     super('guildblacklist', {
       aliases: ['guildblacklist', 'gblacklist', 'gexclude'],
       description: 'Manage guild blacklist. The bot will not monitor any commands in blacklisted guilds. You can not add and remove at the same time.',
+      split: 'sticky',
       args: [
         {
           id: 'list',

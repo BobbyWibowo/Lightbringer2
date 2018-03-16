@@ -47,7 +47,7 @@ class EmojisCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
-    const color = await this.client.util.getGuildColors(guild)
+    const color = await this.client.util.getGuildColor(guild)
 
     let emojis = guild.emojis
 

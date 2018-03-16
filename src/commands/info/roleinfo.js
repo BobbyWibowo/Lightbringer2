@@ -1,4 +1,5 @@
 const { Command } = require('discord-akairo')
+const convert = require('color-convert')
 const { escapeMarkdown } = require('discord.js').Util
 const { stripIndent } = require('common-tags')
 
@@ -7,6 +8,7 @@ class RoleInfoCommand extends Command {
     super('roleinfo', {
       aliases: ['roleinfo', 'rinfo', 'role'],
       description: 'Shows information of a specific role.',
+      split: 'sticky',
       args: [
         {
           id: 'guild',
@@ -62,7 +64,7 @@ class RoleInfoCommand extends Command {
           name: 'Miscellaneous',
           value: stripIndent`
               •  **Hex color:** ${role.hexColor}
-              •  **RGB color:** (${this.client.util.hexToRgb(role.hexColor).join(', ')})
+              •  **RGB color:** (${convert.hex.rgb(role.hexColor).join(', ')})
               •  **Hoist:** ${this.client.util.formatYesNo(role.hoist)}
               •  **Managed:** ${this.client.util.formatYesNo(role.managed)}
               •  **Mentionable:** ${this.client.util.formatYesNo(role.mentionable)}

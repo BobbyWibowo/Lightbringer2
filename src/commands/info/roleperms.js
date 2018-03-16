@@ -44,6 +44,7 @@ class RolePermsCommand extends Command {
     super('roleperms', {
       aliases: ['rolepermissions', 'rolepermission', 'roleperms', 'roleperm', 'rperms', 'rperm'],
       description: 'Shows permissions of a specific role.',
+      split: 'sticky',
       args: [
         {
           id: 'guild',
