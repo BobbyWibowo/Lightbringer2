@@ -28,24 +28,30 @@ class LightbringerClient extends AkairoClient {
   }
 
   build () {
+    if (this._built) {
+      throw new Error('Client handlers can only be built once.')
+    }
+
+    this._built = true
+
     if (this.akairoOptions.configManager) {
       this.configManager = this.akairoOptions.configManager
       delete this.akairoOptions.configManager
     }
 
-    if (this.akairoOptions.commandDirectory) {
+    if (this.akairoOptions.commandDirectory && !this.commandHandler) {
       this.commandHandler = new LCommandHandler(this)
     }
 
-    if (this.akairoOptions.inhibitorDirectory) {
+    if (this.akairoOptions.inhibitorDirectory && !this.inhibitorHandler) {
       this.inhibitorHandler = new LInhibitorHandler(this)
     }
 
-    if (this.akairoOptions.listenerDirectory) {
+    if (this.akairoOptions.listenerDirectory && !this.listenerHandler) {
       this.listenerHandler = new LListenerHandler(this)
     }
 
-    return super.build()
+    return this
   }
 }
 
