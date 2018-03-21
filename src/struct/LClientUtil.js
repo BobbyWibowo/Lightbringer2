@@ -22,6 +22,8 @@ class LClientUtil extends ClientUtil {
     this.maxMatchesListLength = maxMatchesListLength
 
     this.guildColors = null
+
+    this.snekfetch = snekfetch
   }
 
   // Override parent functions.
@@ -173,7 +175,7 @@ class LClientUtil extends ClientUtil {
      * when using Snekfetch anywhere else (meaning there will be no need for
      * .catch() but instead simply make sure the "status" property is 200).
      */
-    return snekfetch
+    return this.snekfetch
       .get(url, options)
       .catch(error => {
         if (logError) {
