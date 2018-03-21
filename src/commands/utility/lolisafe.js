@@ -14,6 +14,12 @@ class LoliSafeCommand extends Command {
           description: 'URL of the file.'
         },
         {
+          id: 'ext',
+          match: 'prefix',
+          prefix: ['--extension=', '--ext=', '-e='],
+          description: 'The command will try to parse an extension from the URL, and in case of failure it will use \'.unknown\'. Use this option to override the extension.'
+        },
+        {
           id: 'site',
           match: 'prefix',
           prefix: ['--site=', '-s='],
@@ -74,20 +80,31 @@ class LoliSafeCommand extends Command {
       return message.status.error('Could not parse input.')
     }
 
+    const url = exec[1]
+
     // This will only prepend a progress icon to the message.
     await message.status.progress(message.content)
 
-    const download = await this.client.util.snek(exec[1])
+    const download = await this.client.util.snek(url)
     if (download.status !== 200) {
       return message.status.error(download.text)
     }
 
-    const _exec = /(?:.+\/)([^#?]+)/.exec(args.url)
+    let ext = 'unknown'
+    if (args.ext) {
+      ext = args.ext
+    } else {
+      const _exec = /.([\w]+)(\?|$)/.exec(url)
+      if (_exec) {
+        ext = _exec[1]
+      }
+    }
+
     const result = await this.client.util.snekfetch
       .post(this.url)
       .set('Content-Type', 'multipart/form-data')
       .set({ token: this.token })
-      .attach('files[]', download.body, _exec[1] || 'tmp.unknown')
+      .attach('files[]', download.body, `tmp.${ext}`)
 
     if (result.status !== 200) {
       return message.status.error(result.text)
