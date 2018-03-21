@@ -40,18 +40,31 @@ class LoliSafeCommand extends Command {
 
   async exec (message, args) {
     if (args.site) {
-      if (!/^https?:\/\//.test(args.site)) {
+      if (args.site === 'null') {
+        this.storage.set('site')
+        this.storage.save()
+        this.url = DEFAULT_URL
+        return message.status.success(`Successfully restored site to <${this.url}>.`)
+      } else if (!/^https?:\/\//.test(args.site)) {
         return message.status.error('Site did not start with a valid protocol (HTTP/HTTPS).')
+      } else {
+        this.storage.set('site', args.site)
+        this.storage.save()
+        this.url = args.site
+        return message.status.success(`Successfully updated site to <${this.url}>.`)
       }
-      this.storage.set('site', args.site)
-      this.storage.save()
-      this.url = args.site
-      return message.status.success(`Successfully updated site to <${this.url}>.`)
     } else if (args.token) {
-      this.storage.set('token', args.token)
-      this.storage.save()
-      this.token = args.token
-      return message.status.success('Successfully saved token to the storage file.')
+      if (args.token === 'null') {
+        this.storage.set('token')
+        this.storage.save()
+        this.token = null
+        return message.status.success('Successfully removed token from the storage file.')
+      } else {
+        this.storage.set('token', args.token)
+        this.storage.save()
+        this.token = args.token
+        return message.status.success('Successfully saved token to the storage file.')
+      }
     } else if (!args.url) {
       return message.status.error(`Usage: \`${this.options.usage}\`.`)
     }
