@@ -4,7 +4,6 @@ const { stripIndents } = require('common-tags')
 
 const DEFAULT_SITES = [
   'gelbooru.com',
-  'konachan.com',
   'konachan.net',
   'yande.re'
 ]
@@ -108,9 +107,9 @@ class BooruCommand extends Command {
           limit: 1,
           random: true
         })
-        .then(images => booru.commonfy(images))
+        .then(booru.commonfy)
         .catch(() => {})
-      if (images) {
+      if (images && images.length) {
         const image = images[0]
         const imageUrl = this.client.util.cleanUrl(image.common.file_url)
         imageUrls.push(imageUrl)

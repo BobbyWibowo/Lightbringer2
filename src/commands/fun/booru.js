@@ -120,7 +120,7 @@ class BooruCommand extends Command {
         limit: 1,
         random: true
       })
-      .then(images => booru.commonfy(images))
+      .then(booru.commonfy)
       .catch(error => {
         if (error.name === 'BooruError') {
           return message.status.error(error.message)
@@ -128,6 +128,10 @@ class BooruCommand extends Command {
           throw error
         }
       })
+
+    if (!images || !images.length) {
+      return message.status.error('Unexpected behavior occurred (empty images array).')
+    }
 
     const image = images[0]
     const imageUrl = this.client.util.cleanUrl(image.common.file_url)
