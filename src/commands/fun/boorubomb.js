@@ -76,15 +76,16 @@ class BooruCommand extends Command {
       if (args.defaultSites === 'null') {
         this.storage.set('defaultSites')
         this.storage.save()
-        return message.status.success(`Successfully restored default sites to the hard-coded value: ${DEFAULT_SITES.join(', ')}.`)
-      } else if (!this.getSiteKey(args.defaultSite)) {
-        return message.status.error('The site you specified is unavailable.')
-      } else {
-        const defaultSites = args.defaultSites.split(',')
-        this.storage.set('defaultSites', defaultSites)
-        this.storage.save()
-        return message.status.success(`Successfully changed default sites to \`${defaultSites.join(', ')}\`.`)
+        return message.status.success(`Successfully restored default sites to the hard-coded value: ${this.inline(DEFAULT_SITES)}.`)
       }
+      const defaultSites = args.defaultSites.split(',')
+      const invalids = defaultSites.map(s => [s, this.getSiteKey(s)]).filter(s => !s[1]).map(s => s[0])
+      if (invalids.length) {
+        return message.status.error(`Unavailable sites: ${this.inline(invalids)}.`)
+      }
+      this.storage.set('defaultSites', defaultSites)
+      this.storage.save()
+      return message.status.success(`Successfully changed default sites to: ${this.inline(defaultSites)}.`)
     }
 
     const sites = (args.sites ? args.sites.split(',') : null) || this.storage.get('defaultSites') || DEFAULT_SITES
@@ -94,10 +95,9 @@ class BooruCommand extends Command {
     }
 
     const tags = args.tags ? args.tags.split(' ') : []
-    const mappedTags = tags.length ? tags.map(t => `\`${t}\``).join(', ') : null
 
-    const searchMessage = mappedTags
-      ? `Searching for random images matching tags ${mappedTags} from various booru sites\u2026`
+    const searchMessage = tags.length
+      ? `Searching for random images matching tags ${this.inline(tags)} from various booru sites\u2026`
       : `Searching for random images from various booru sites\u2026`
     await message.status.progress(searchMessage)
 
@@ -122,6 +122,10 @@ class BooruCommand extends Command {
     }
 
     return message.edit(imageUrls.join('\n\n'))
+  }
+
+  inline (array) {
+    return array.map(v => `\`${v}\``).join(', ')
   }
 
   getSiteKey (site) {
