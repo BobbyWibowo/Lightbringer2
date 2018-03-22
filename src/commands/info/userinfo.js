@@ -121,7 +121,7 @@ class UserInfoCommand extends Command {
     }
 
     // Message content (the thing being displayed above the embed).
-    let content = 'My informations:'
+    let content = 'My information:'
     if (mention) {
       content = `${(member || user).toString()}'s information:`
     } else if (args.keyword) {

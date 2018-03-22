@@ -111,6 +111,8 @@ class BooruCommand extends Command {
         .catch(() => {})
       if (images && images.length) {
         const image = images[0]
+        // Skip site that did not return file_url (mostly danbooru)
+        if (image.common.file_url === image.common.source) continue
         const imageUrl = this.client.util.cleanUrl(image.common.file_url)
         imageUrls.push(imageUrl)
       }

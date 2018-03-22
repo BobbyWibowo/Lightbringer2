@@ -130,10 +130,14 @@ class BooruCommand extends Command {
       })
 
     if (!images || !images.length) {
-      return message.status.error('Unexpected behavior occurred (empty images array).')
+      return message.status.error('Unexpected behavior occurred: empty "images" array.')
     }
 
     const image = images[0]
+    // Skip site that did not return file_url (mostly danbooru)
+    if (image.common.file_url === image.common.source) {
+      return message.status.error('Could not find any images from the booru site.')
+    }
     const imageUrl = this.client.util.cleanUrl(image.common.file_url)
 
     if (liteMode) {
