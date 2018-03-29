@@ -11,7 +11,7 @@ class DiscriminatorCommand extends Command {
           id: 'discriminator',
           match: 'rest',
           type: (word, message, args) => {
-            if (/^\d{4}$/.test(word)) return word
+            if (/^\d{4}$/.test(word)) { return word }
           }
         }
       ],

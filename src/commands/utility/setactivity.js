@@ -32,10 +32,10 @@ class SetActivityCommand extends Command {
           description: 'The type of the activity (can either be Playing, Streaming, Listening to, or Watching).',
           type: (word, message, args) => {
             const keys = Object.keys(ACTIVITY_TYPES)
+            if (!word.length) { return keys[0] }
             for (const key of keys) {
-              if (ACTIVITY_TYPES[key].test(word)) return key
+              if (ACTIVITY_TYPES[key].test(word)) { return key }
             }
-            if (!word.length) return keys[0]
           }
         },
         {

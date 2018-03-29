@@ -27,13 +27,9 @@ class FortuneCommand extends Command {
           id: 'type',
           match: 'rest',
           type: (word, message, args) => {
+            if (!word.length) { return '' }
             for (const key of Object.keys(CATEGORIES)) {
-              if (CATEGORIES[key].test(word)) {
-                return key
-              }
-            }
-            if (!word.length) {
-              return ''
+              if (CATEGORIES[key].test(word)) { return key }
             }
           },
           description: 'The type of fortune cookie (randomized when not specified).'

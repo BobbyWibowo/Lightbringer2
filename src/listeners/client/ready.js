@@ -38,8 +38,10 @@ class ReadyListener extends Listener {
       prompt: ''
     }).on('line', line => {
       try {
-        const restart = () => process.exit(0) // eslint-disable-line no-unused-vars
-        console.log(eval(line) || 'undefined') // eslint-disable-line no-eval
+        // eslint-disable-next-line no-unused-vars
+        const restart = () => process.exit(0)
+        // eslint-disable-next-line no-eval
+        console.log(eval(line) || 'undefined')
       } catch (err) {
         console.error(err)
       }
@@ -91,15 +93,15 @@ class ReadyListener extends Listener {
     // but it is required to trigger all the other modules' onReady function.
 
     this.client.commandHandler.modules.forEach(m => {
-      if (typeof m.onReady === 'function') m.onReady()
+      if (typeof m.onReady === 'function') { m.onReady() }
     })
 
     this.client.inhibitorHandler.modules.forEach(m => {
-      if (typeof m.onReady === 'function') m.onReady()
+      if (typeof m.onReady === 'function') { m.onReady() }
     })
 
     this.client.listenerHandler.modules.forEach(m => {
-      if (typeof m.onReady === 'function') m.onReady()
+      if (typeof m.onReady === 'function') { m.onReady() }
     })
   }
 }

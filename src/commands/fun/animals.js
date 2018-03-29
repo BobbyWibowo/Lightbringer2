@@ -53,15 +53,14 @@ class AnimalsCommand extends Command {
           match: 'rest',
           type: (word, message, args) => {
             const keys = Object.keys(ANIMALS)
-            if (word.length) {
-              for (const key of keys) {
-                if (ANIMALS[key].regex.test(word)) {
-                  return key
-                }
-              }
-            } else {
+            if (!word.length) {
               // If unspecified, get a random type
               return keys[Math.floor(Math.random() * keys.length)]
+            }
+            for (const key of keys) {
+              if (ANIMALS[key].regex.test(word)) {
+                return key
+              }
             }
           },
           description: 'The type of animal (randomized when not specified).'

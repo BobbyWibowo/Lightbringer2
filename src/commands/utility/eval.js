@@ -34,7 +34,8 @@ class EvalCommand extends Command {
     const time = process.hrtime()
     let result, isError, type
     try {
-      result = await eval(args.content) // eslint-disable-line no-eval
+      // eslint-disable-next-line no-eval
+      result = await eval(args.content)
     } catch (error) {
       result = error
       isError = true
@@ -67,7 +68,7 @@ class EvalCommand extends Command {
       tempString = tempString.replace('%s', this.client.util.formatCode(result, 'js'))
     }
 
-    await message.edit(tempString)
+    return message.edit(tempString)
   }
 }
 

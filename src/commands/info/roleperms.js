@@ -96,7 +96,7 @@ class RolePermsCommand extends Command {
         .map(key => {
           const name = PERMISSIONS[category][key]
           const serialized = role.permissions.serialize()
-          if (serialized[key]) return `•  ${name}`
+          if (serialized[key]) { return `•  ${name}` }
         })
         .filter(v => v)
         .join('\n')

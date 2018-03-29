@@ -1,12 +1,18 @@
 const { ActivityTypes } = require('discord.js').Constants
 const { ClientUtil } = require('discord-akairo')
-const { Collection, Guild, Message, MessageEmbed, TextChannel } = require('discord.js')
+const { Collection, Guild, Message, MessageEmbed, MessageMentions, TextChannel } = require('discord.js')
 const encodeUrl = require('encodeurl')
 const LightbringerError = require('./../util/LightbringerError')
 const moment = require('moment')
 const pixelAverage = require('pixel-average')
 const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
 const snekfetch = require('snekfetch')
+
+const PATTERNS = {
+  USERS: new RegExp(`^${MessageMentions.USERS_PATTERN.source}$`),
+  ROLES: new RegExp(`^${MessageMentions.ROLES_PATTERN.source}$`),
+  CHANNELS: new RegExp(`^${MessageMentions.CHANNELS_PATTERN.source}$`)
+}
 
 class LClientUtil extends ClientUtil {
   constructor (client) {
@@ -86,13 +92,13 @@ class LClientUtil extends ClientUtil {
   resolveUsers (text, users, caseSensitive = false, wholeWord = false, tryExact = false, tryGlobalId = false) {
     if (tryGlobalId) {
       const get = this.client.users.get(text)
-      if (get) return new Collection([[ get.id, get ]])
+      if (get) { return new Collection([[ get.id, get ]]) }
     }
 
     const loose = users.filter(user => this.checkUser(text, user, caseSensitive, wholeWord))
     if (tryExact && !(caseSensitive && wholeWord) && loose.size > 1) {
       const strict = loose.filter(user => this.checkUser(text, user, true, true))
-      if (strict.size) return strict
+      if (strict.size) { return strict }
     }
 
     return loose
@@ -113,7 +119,7 @@ class LClientUtil extends ClientUtil {
   resolveChannels (text, channels, caseSensitive = false, wholeWord = false, tryExact = false, tryGlobalId = false) {
     if (tryGlobalId) {
       const get = this.client.channels.get(text)
-      if (get) return new Collection([[ get.id, get ]])
+      if (get) { return new Collection([[ get.id, get ]]) }
     }
 
     const loose = channels.filter(channel => this.checkChannel(text, channel, caseSensitive, wholeWord))
@@ -142,7 +148,7 @@ class LClientUtil extends ClientUtil {
   resolveGuilds (text, guilds, caseSensitive = false, wholeWord = false, tryExact = false, tryGlobalId = false) {
     if (tryGlobalId) {
       const get = this.client.guilds.get(text)
-      if (get) return new Collection([[ get.id, get ]])
+      if (get) { return new Collection([[ get.id, get ]]) }
     }
 
     const loose = guilds.filter(guild => this.checkGuild(text, guild, caseSensitive, wholeWord))
@@ -158,7 +164,7 @@ class LClientUtil extends ClientUtil {
 
   async sendStatus (message, options) {
     if (this.client._statusChannel && this.client._statusChannel instanceof TextChannel) {
-      await this.client._statusChannel.send(message, options || {})
+      return this.client._statusChannel.send(message, options || {})
     }
   }
 
@@ -293,7 +299,7 @@ class LClientUtil extends ClientUtil {
     if (result.member === undefined) {
       // When userSource is missing, it will use default, which is this.client.users
       const asserted = await this.assertUser(keyword, userSource, true, true)
-      if (asserted) result.user = asserted
+      if (asserted) { result.user = asserted }
     }
 
     if (result.user === undefined) {
@@ -376,7 +382,7 @@ class LClientUtil extends ClientUtil {
   }
 
   getProp (object, props) {
-    if (!object || !props) return
+    if (!object || !props) { return }
 
     if (typeof props === 'string') {
       if (props.includes('.')) {
@@ -458,7 +464,7 @@ class LClientUtil extends ClientUtil {
         substring += parsed[i].name.charAt(0)
       } else {
         substring += parsed[i].name
-        if (parseFloat(int) !== 1) substring += 's'
+        if (parseFloat(int) !== 1) { substring += 's' }
       }
 
       result.push(substring)
@@ -477,7 +483,7 @@ class LClientUtil extends ClientUtil {
   }
 
   fromNow (date) {
-    if (!date) return false
+    if (!date) { return false }
 
     const ms = new Date().getTime() - date.getTime()
 
@@ -525,11 +531,11 @@ class LClientUtil extends ClientUtil {
 
   isKeywordMentionable (keyword, type) {
     // Role mention.
-    if (type === 1) return /^<@&(\d{17,19})>$/.test(keyword)
+    if (type === 1) { return PATTERNS.ROLES.test(keyword) }
     // Channel mention.
-    if (type === 2) return /^<#(\d{17,19})>$/.test(keyword)
+    if (type === 2) { return PATTERNS.CHANNELS.test(keyword) }
     // User/Member mention.
-    return /^<@!?(\d{17,19})>$/.test(keyword)
+    return PATTERNS.USERS.test(keyword)
   }
 
   formatYesNo (isYes) {

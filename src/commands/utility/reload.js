@@ -21,9 +21,9 @@ class ReloadCommand extends Command {
           description: 'Type of the modules. This will reload all modules of the type when being used with "all" flag.',
           type: (word, message, args) => {
             args._type = Boolean(word.length)
-            if (/^c(ommand(s)?)?$/i.test(word)) return 0
-            if (/^i(nhibitor(s)?)?$/i.test(word)) return 1
-            if (/^l(istener(s)?)?$/i.test(word)) return 2
+            if (/^c(ommand(s)?)?$/i.test(word)) { return 0 }
+            if (/^i(nhibitor(s)?)?$/i.test(word)) { return 1 }
+            if (/^l(istener(s)?)?$/i.test(word)) { return 2 }
           }
         },
         {
@@ -96,9 +96,9 @@ class ReloadCommand extends Command {
           })
         })
     } else if (args.all) {
-      if (args.type === 0 || args.type === null) this.handler.reloadAll()
-      if (args.type === 1 || args.type === null) this.client.inhibitorHandler.reloadAll()
-      if (args.type === 2 || args.type === null) this.client.listenerHandler.reloadAll()
+      if (args.type === 0 || args.type === null) { this.handler.reloadAll() }
+      if (args.type === 1 || args.type === null) { this.client.inhibitorHandler.reloadAll() }
+      if (args.type === 2 || args.type === null) { this.client.listenerHandler.reloadAll() }
       if (args.type === null) {
         return message.status.success('Reloaded all commands, inhibitors and listeners.')
       } else {

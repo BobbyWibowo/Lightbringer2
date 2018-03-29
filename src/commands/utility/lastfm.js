@@ -235,7 +235,7 @@ class LastfmCommand extends Command {
         this.artist = artist
         this.trackName = trackName
         this.timestamp = timestamp
-        if (!monitorMode) await this.setPresenceToTrack()
+        if (!monitorMode) { await this.setPresenceToTrack() }
         await this.client.util.sendStatus(`🎵\u2000Last fm${monitorMode ? ' [M] ' : ''}: ${artist} – ${trackName}`)
       }
       return this.setRecentTrackTimeout()
