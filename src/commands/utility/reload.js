@@ -78,7 +78,7 @@ class ReloadCommand extends Command {
           f.push(`\`${m.id}\``)
         }
       }
-      let string = []
+      const string = []
       if (s.length) {
         string.push(`✅\u2000Reloaded ${typeString}${s.length === 1 ? '' : 's'}: ${s.join(', ')}.`)
       }
@@ -90,11 +90,7 @@ class ReloadCommand extends Command {
       }
       return message
         .edit(string.join('\n\n'))
-        .then(m => {
-          m.delete({
-            timeout: message.status.commandStatusDeleteTimeout
-          })
-        })
+        .then(m => m.delete({ timeout: this.handler.statusTimeout }))
     } else if (args.all) {
       if (args.type === 0 || args.type === null) { this.handler.reloadAll() }
       if (args.type === 1 || args.type === null) { this.client.inhibitorHandler.reloadAll() }

@@ -9,13 +9,8 @@ class GenerateCommand extends Command {
   }
 
   async exec (message) {
-    // Start time
-    const timestamp = new Date().getTime()
-    message = await message.edit('🏓\u2000Pong.')
-
-    // Elapsed time
-    const elapsed = new Date().getTime() - timestamp
-    await message.edit(`${message.content} \`${elapsed}ms\` – Heartbeat: \`${this.client.ping.toFixed(0)}ms\``)
+    // TODO: ...
+    return message.status('error', 'Work in progress.')
   }
 }
 
