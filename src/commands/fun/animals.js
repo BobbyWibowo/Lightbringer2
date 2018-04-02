@@ -74,14 +74,14 @@ class AnimalsCommand extends Command {
 
   async exec (message, args) {
     if (!args.animal) {
-      return message.status.error('That type is unavailable! Use `--list` flag to list all available types.')
+      return message.status('error', 'That type is unavailable! Use `--list` flag to list all available types.')
     }
 
     if (args.list) {
       return message.edit(`🐱\u2000|\u2000**Available types:** ${Object.keys(ANIMALS).join(', ')}.`)
     }
 
-    await message.status.progress(`Fetching a random ${args.animal} image\u2026`)
+    await message.status('progress', `Fetching a random ${args.animal} image\u2026`)
 
     const animal = ANIMALS[args.animal]
 
@@ -123,7 +123,7 @@ class AnimalsCommand extends Command {
     }
 
     if (!image) {
-      return message.status.error(`Failed to fetch image after ${MAX_RETRY} retries.`)
+      return message.status('error', `Failed to fetch image after ${MAX_RETRY} retries.`)
     }
 
     if (args.upload) {

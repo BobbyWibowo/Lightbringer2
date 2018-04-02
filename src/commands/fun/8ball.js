@@ -20,18 +20,18 @@ class EightBallCommand extends Command {
 
   async exec (message, args) {
     if (!args.question) {
-      return message.status.error('You must provide a question to ask.')
+      return message.status('error', 'You must provide a question to ask.')
     }
 
-    await message.status.progress('Asking the question to 8-ball\u2026')
+    await message.status('progress', 'Asking the question to 8-ball\u2026')
     const result = await this.client.util.snek(`https://8ball.delegator.com/magic/JSON/${args.question}`)
 
     if (result.status !== 200) {
-      return message.status.error('Could not retrieve answer from 8-ball.')
+      return message.status('error', 'Could not retrieve answer from 8-ball.')
     }
 
     const magic = result.body.magic
-    await message.edit(
+    return message.edit(
       `🎱\u2000|\u2000**Question:** ${this.client.util.capitalizeFirstLetter(magic.question)}?\n\n` +
       `${magic.answer}.`
     )

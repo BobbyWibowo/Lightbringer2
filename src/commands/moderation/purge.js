@@ -30,6 +30,8 @@ class PurgeCommand extends Command {
         usage: 'purge [--reason=] [amount]'
       }
     })
+
+    this.timeout = undefined
   }
 
   async exec (message, args) {
@@ -43,13 +45,23 @@ class PurgeCommand extends Command {
     }
 
     if (!messages.size) {
-      return message.status.error('There are no messages that you can purge.')
+      return message.status('error', 'There are no messages that you can purge.')
     }
 
-    await message.status.progress(`Purging ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
+    await message.status('progress', `Purging ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
     await Promise.all(messages.map(m => m.delete({ reason: args.reason })))
 
-    return message.status.success(`Purged \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, 3000)
+    return message.status('success', `Purged \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, 2500)
+  }
+
+  onReady () {
+    const {
+      purgeCommandsTimeout
+    } = this.client.akairoOptions
+
+    if (purgeCommandsTimeout !== undefined) {
+      this.timeout = purgeCommandsTimeout
+    }
   }
 }
 

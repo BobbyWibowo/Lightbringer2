@@ -1,52 +1,67 @@
-const { Collection } = require('discord.js')
 const { CommandHandler } = require('discord-akairo')
-const CommandStatus = require('./CommandStatus')
 
 class LCommandHandler extends CommandHandler {
-  constructor (client) {
-    super(client)
+  constructor (client, options = {}) {
+    super(client, options)
 
     const {
-      commandStatusLifetime = 0 // default
+      statusTimeout = -1
     } = client.akairoOptions
 
-    this.commandStatusLifetime = commandStatusLifetime
+    this.statusTimeout = statusTimeout
 
-    this.commandStatuses = new Collection()
+    this.statusTemplates = {
+      success: {
+        icon: '✅',
+        timeout: this.statusTimeout
+      },
+      error: {
+        icon: '⛔',
+        timeout: this.statusTimeout
+      },
+      question: {
+        icon: '❓',
+        timeout: this.statusTimeout
+      },
+      progress: {
+        icon: '🔄',
+        timeout: -1
+      }
+    }
+  }
+
+  async _status (status, message, timeout) {
+    if (!status) { return false }
+
+    const statusTemplates = this.client.commandHandler.statusTemplates
+    const template = statusTemplates[status] || statusTemplates[Object.keys(statusTemplates)[status]]
+    if (!template) {
+      throw new Error(`Template with id: ${status} is not available.`)
+    }
+
+    await this.edit(`${template.icon}${message ? `\u2000${message}` : ''}`)
+
+    if (timeout === undefined || timeout === null) {
+      timeout = template.timeout >= 0 ? template.timeout : -1
+    }
+
+    if (timeout >= 0) {
+      return this.delete({ timeout })
+    }
   }
 
   async handle (message) {
     if (message.author.id === this.client.user.id) {
       this.client.stats.increment('messages-sent')
 
-      if (this.commandStatuses.has(message.id)) {
-        message.status = this.commandStatuses.get(message.id)
-      } else {
-        message.status = new CommandStatus(this.client, message)
-        this.commandStatuses.set(message.id, message.status)
-
-        if (this.commandStatusLifetime) {
-          message.statusTimeout = this.client.setTimeout(() => this.clearStatus(message), this.commandStatusLifetime)
-        }
+      if (!message.status) {
+        message.status = this._status
       }
     } else {
       this.client.stats.increment('messages-received')
     }
 
     return super.handle(message)
-  }
-
-  clearStatus (message) {
-    this.commandStatuses.delete(message.id)
-
-    if (message.statusTimeout !== undefined) {
-      this.client.clearTimeout(message.statusTimeout)
-      delete message.statusTimeout
-    }
-
-    if (message.status !== undefined) {
-      delete message.status
-    }
   }
 
   load (thing, isReload) {

@@ -27,7 +27,7 @@ class RolesCommand extends Command {
 
   async exec (message, args) {
     if (!message.guild && !args.keyword) {
-      return message.status.error('You must specify a guild name when running this command outside of a guild.')
+      return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
     }
 
     let guild = message.guild
@@ -37,7 +37,7 @@ class RolesCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
-    const color = await this.client.util.getGuildColor(guild)
+    const color = await this.client.guildColors.get(guild)
 
     // Sort roles by their position descendingly.
     let roles = guild.roles.sort((a, b) => b.position - a.position)
@@ -63,7 +63,7 @@ class RolesCommand extends Command {
       embed.footer = 'Consider running "membersfetch" command if members count seem incorrect.'
     }
 
-    let content = `Roles of the currently viewed guild:`
+    let content = 'Roles of the currently viewed guild:'
     if (args.keyword) {
       content = `Roles of the guild matching keyword \`${args.keyword}\`:`
     }

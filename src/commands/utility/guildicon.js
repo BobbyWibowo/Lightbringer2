@@ -53,14 +53,14 @@ class GuildIconCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
-    const color = await this.client.util.getGuildColor(guild)
+    const color = await this.client.guildColors.get(guild)
 
     let size = 2048
     if (args.size) {
       if (AllowedImageSizes.includes(args.size)) {
         size = args.size
       } else {
-        return message.status.error(`The size you specified was unavailable! Try one of the following: ${AllowedImageSizes.map(s => `\`${s}\``).join(', ')}.`)
+        return message.status('error', `The size you specified was unavailable! Try one of the following: ${AllowedImageSizes.map(s => `\`${s}\``).join(', ')}.`)
       }
     }
 
@@ -69,7 +69,7 @@ class GuildIconCommand extends Command {
 
     // If could not get avatar.
     if (!iconURL) {
-      return message.status.error('Could not get icon of the specified guild.')
+      return message.status('error', 'Could not get icon of the specified guild.')
     }
 
     // "--direct" flag.

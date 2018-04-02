@@ -1,5 +1,11 @@
 class Stats {
   constructor (client) {
+    Object.defineProperties(this, {
+      client: {
+        value: client
+      }
+    })
+
     this._stats = {}
   }
 

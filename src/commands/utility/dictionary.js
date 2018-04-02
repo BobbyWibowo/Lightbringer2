@@ -56,11 +56,11 @@ class DictionaryCommand extends Command {
     if (args.apiKey) {
       this.storage.set('apiKey', args.apiKey)
       this.storage.save()
-      return message.status.success('Successfully saved API key to the storage file.')
+      return message.status('success', 'Successfully saved API key to the storage file.')
     }
 
     if (!this.storage.get('apiKey')) {
-      return message.status.error(`Missing API key!\nGet your Merriam-Webster's Collegiate® Dictionary API key from **http://dictionaryapi.com/** then run \`dict --key=<api key>\` to save the API key to the storage file!`, -1)
+      return message.status('error', `Missing API key!\nGet your Merriam-Webster's Collegiate® Dictionary API key from **http://dictionaryapi.com/** then run \`dict --key=<api key>\` to save the API key to the storage file!`, -1)
     }
 
     if (!this.dictClient) {
@@ -71,7 +71,7 @@ class DictionaryCommand extends Command {
     let index = args.index !== null ? (args.index - 1) : 0
 
     if (!args.keyword && !args.next) {
-      return message.status.error('You must specify something to search.')
+      return message.status('error', 'You must specify something to search.')
     }
 
     if (args.next) {
@@ -79,11 +79,11 @@ class DictionaryCommand extends Command {
         keyword = this.lastKeyword
         index = (this.lastIndex || 0) + 1
       } else {
-        return message.status.error('You have not previously used the command to look up a definition.')
+        return message.status('error', 'You have not previously used the command to look up a definition.')
       }
     }
 
-    await message.status.progress(`Searching for \`${keyword}\` on Merriam-Webster\u2026`)
+    await message.status('progress', `Searching for \`${keyword}\` on Merriam-Webster\u2026`)
 
     let result
     try {
@@ -108,7 +108,7 @@ class DictionaryCommand extends Command {
 
     const selected = result[index]
     if (!selected) {
-      return message.status.error(`Index \`${index + 1}\` of the search result is unavailable.`)
+      return message.status('error', `Index \`${index + 1}\` of the search result is unavailable.`)
     }
 
     await this.displayDefinition(message, index, result, keyword, args.more)

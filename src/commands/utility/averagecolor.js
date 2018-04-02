@@ -21,21 +21,21 @@ class AverageColorCommand extends Command {
 
   async exec (message, args) {
     if (!args.url) {
-      return message.status.error(`Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
     const exec = /^<?(.+?)>?$/.exec(args.url)
 
     if (!exec) {
-      return message.status.error('Could not parse input.')
+      return message.status('error', 'Could not parse input.')
     }
 
     // This will only prepend a progress icon to the message.
-    await message.status.progress(message.content)
+    await message.status('progress', message.content)
 
     const result = await this.client.util.snek(exec[1])
     if (result.status !== 200) {
-      return message.status.error(result.text)
+      return message.status('error', result.text)
     }
 
     const color = await this.client.util.getAverageColor(result.body).then(convert.rgb.hex)

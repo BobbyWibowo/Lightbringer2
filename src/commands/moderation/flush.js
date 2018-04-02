@@ -30,11 +30,13 @@ class FlushCommand extends Command {
         usage: 'flush [--reason=] [amount]'
       }
     })
+
+    this.timeout = undefined
   }
 
   async exec (message, args) {
     if (!message.guild || !this.client.util.hasPermissions(message.channel, 'MANAGE_MESSAGES')) {
-      return message.status.error('You do not have permission to delete messages sent by someone else.')
+      return message.status('error', 'You do not have permission to delete messages sent by someone else.')
     }
 
     let messages = await message.channel.messages.fetch({
@@ -44,10 +46,20 @@ class FlushCommand extends Command {
 
     messages = messages.filter(m => m.author.bot)
 
-    await message.status.progress(`Flushing ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
+    await message.status('progress', `Flushing ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
     await Promise.all(messages.map(m => m.delete({ reason: args.reason })))
 
-    return message.status.success(`Flushed \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, 3000)
+    return message.status('success', `Flushed \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, this.timeout)
+  }
+
+  onReady () {
+    const {
+      purgeCommandsTimeout
+    } = this.client.akairoOptions
+
+    if (purgeCommandsTimeout !== undefined) {
+      this.timeout = purgeCommandsTimeout
+    }
   }
 }
 

@@ -28,7 +28,7 @@ class DiscriminatorCommand extends Command {
 
   async exec (message, args) {
     if (!args.discriminator) {
-      return message.status.error(`Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
     let displayCapped = false

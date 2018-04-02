@@ -66,12 +66,12 @@ class ColorCommand extends Command {
 
   async exec (message, args) {
     if (!args.input) {
-      return message.status.error('You must specify a color input.')
+      return message.status('error', 'You must specify a color input.')
     }
 
     const parsed = this.parseInput(args.input)
     if (!parsed) {
-      return message.status.error('Could not parse the input color.')
+      return message.status('error', 'Could not parse the input color.')
     }
 
     const width = Number(args.dimension) || Number(args.width) || WIDTH

@@ -791,44 +791,6 @@ class LClientUtil extends ClientUtil {
       })
     })
   }
-
-  // Guild Colors utils.
-
-  initGuildColors () {
-    this.guildColors = this.client.storage('guild-colors')
-  }
-
-  async getGuildColor (guild) {
-    if (!this.guildColors) {
-      throw new Error('Storage system of guild colors is not yet ready.')
-    }
-
-    if (!guild.icon) {
-      return null
-    }
-
-    const saved = this.guildColors.get(guild.id)
-    if (saved && saved.icon === guild.icon) {
-      return saved.color
-    }
-
-    const iconSnek = await this.snek(guild.iconURL({
-      size: 128,
-      format: 'png'
-    }))
-
-    if (iconSnek.status !== 200) {
-      throw new Error(iconSnek.text)
-    }
-
-    const color = await this.getAverageColor(iconSnek.body)
-    this.guildColors.set(guild.id, {
-      icon: guild.icon,
-      color
-    })
-    this.guildColors.save()
-    return color
-  }
 }
 
 module.exports = LClientUtil

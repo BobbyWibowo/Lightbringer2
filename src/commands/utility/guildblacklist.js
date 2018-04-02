@@ -69,7 +69,7 @@ class GuildBlacklistCommand extends Command {
 
     if (args.list) {
       if (!guilds || !guilds.length) {
-        return message.status.error('There are no blacklisted guilds.')
+        return message.status('error', 'There are no blacklisted guilds.')
       }
 
       let char = '\n'
@@ -89,16 +89,16 @@ class GuildBlacklistCommand extends Command {
       const isID = args.addID !== null
       const { id, display } = await this.resolveSingleGuild(isID ? args.addID : args.add, isID)
       if (this.homeGuild === id) {
-        return message.status.error('You can not blacklist the bot\'s home guild.')
+        return message.status('error', 'You can not blacklist the bot\'s home guild.')
       }
 
       const index = guilds.indexOf(id)
       if (index > -1) {
-        return message.status.error(`Guild \`${display}\` is already blacklisted.`)
+        return message.status('error', `Guild \`${display}\` is already blacklisted.`)
       } else {
         guilds.push(id)
         this.stc('guilds', guilds)
-        return message.status.success(`Successfully blacklisted guild \`${display}\`.`)
+        return message.status('success', `Successfully blacklisted guild \`${display}\`.`)
       }
     } else if (args.remove || args.removeID) {
       const isID = args.removeID !== null
@@ -108,23 +108,23 @@ class GuildBlacklistCommand extends Command {
       if (index > -1) {
         guilds.splice(index, 1)
         this.stc('guilds', guilds)
-        return message.status.success(`Successfully removed guild \`${display}\` from the blacklist.`)
+        return message.status('success', `Successfully removed guild \`${display}\` from the blacklist.`)
       } else {
-        return message.status.error(`Guild \`${display}\` is not blacklisted.`)
+        return message.status('error', `Guild \`${display}\` is not blacklisted.`)
       }
     } else if (args.inhibitorID) {
       const inhibitor = this.client.inhibitorHandler.modules.get(args.inhibitorID)
 
       if (inhibitor) {
         this.stc('inhibitorID', inhibitor.id)
-        return message.status.success(`Successfully updated inhibitor to \`${inhibitor.id}\`.`)
+        return message.status('success', `Successfully updated inhibitor to \`${inhibitor.id}\`.`)
       } else {
-        return message.status.error(`Could not find inhibitor with ID \`${inhibitor.id}\`.`)
+        return message.status('error', `Could not find inhibitor with ID \`${inhibitor.id}\`.`)
       }
     }
 
     if (!message.guild) {
-      return message.status.error('You must use any option when running this command outside of a guild.')
+      return message.status('error', 'You must use any option when running this command outside of a guild.')
     }
 
     const index = guilds.indexOf(message.guild.id)
@@ -133,7 +133,7 @@ class GuildBlacklistCommand extends Command {
       guilds.splice(index, 1)
     } else {
       if (this.homeGuild === message.guild.id) {
-        return message.status.error('You can not blacklist the bot\'s home guild.')
+        return message.status('error', 'You can not blacklist the bot\'s home guild.')
       } else {
         guilds.push(message.guild.id)
       }
@@ -142,9 +142,9 @@ class GuildBlacklistCommand extends Command {
     this.stc('guilds', guilds)
 
     if (index > -1) {
-      return message.status.success(`Successfully removed the current guild from the blacklist.`)
+      return message.status('success', `Successfully removed the current guild from the blacklist.`)
     } else {
-      return message.status.success(`Successfully blacklisted the current guild.`)
+      return message.status('success', `Successfully blacklisted the current guild.`)
     }
   }
 

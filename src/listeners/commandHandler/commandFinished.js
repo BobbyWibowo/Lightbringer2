@@ -9,7 +9,7 @@ class CommandFinishedListener extends Listener {
   }
 
   async exec (message, command, args) {
-    this.client.commandHandler.clearStatus(message)
+    // TODO: Do something, I don't know.
   }
 }
 

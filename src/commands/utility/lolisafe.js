@@ -50,44 +50,44 @@ class LoliSafeCommand extends Command {
         this.storage.set('site')
         this.storage.save()
         this.url = DEFAULT_URL
-        return message.status.success(`Successfully restored site to <${this.url}>.`)
+        return message.status('success', `Successfully restored site to <${this.url}>.`)
       } else if (!/^https?:\/\//.test(args.site)) {
-        return message.status.error('Site did not start with a valid protocol (HTTP/HTTPS).')
+        return message.status('error', 'Site did not start with a valid protocol (HTTP/HTTPS).')
       } else {
         this.storage.set('site', args.site)
         this.storage.save()
         this.url = args.site
-        return message.status.success(`Successfully updated site to <${this.url}>.`)
+        return message.status('success', `Successfully updated site to <${this.url}>.`)
       }
     } else if (args.token) {
       if (args.token === 'null') {
         this.storage.set('token')
         this.storage.save()
         this.token = null
-        return message.status.success('Successfully removed token from the storage file.')
+        return message.status('success', 'Successfully removed token from the storage file.')
       } else {
         this.storage.set('token', args.token)
         this.storage.save()
         this.token = args.token
-        return message.status.success('Successfully saved token to the storage file.')
+        return message.status('success', 'Successfully saved token to the storage file.')
       }
     } else if (!args.url) {
-      return message.status.error(`Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
     const exec = /^<?(.+?)>?$/.exec(args.url)
     if (!exec) {
-      return message.status.error('Could not parse input.')
+      return message.status('error', 'Could not parse input.')
     }
 
     const url = exec[1]
 
     // This will only prepend a progress icon to the message.
-    await message.status.progress(message.content)
+    await message.status('progress', message.content)
 
     const download = await this.client.util.snek(url)
     if (download.status !== 200) {
-      return message.status.error(download.text)
+      return message.status('error', download.text)
     }
 
     let ext = 'unknown'
@@ -107,11 +107,11 @@ class LoliSafeCommand extends Command {
       .attach('files[]', download.body, `tmp.${ext}`)
 
     if (result.status !== 200) {
-      return message.status.error(result.text)
+      return message.status('error', result.text)
     }
 
     if (!result.body.success) {
-      return message.status.error(`Failed to upload <${this.url}>: \`${result.body.description.code}\`.`)
+      return message.status('error', `Failed to upload <${this.url}>: \`${result.body.description.code}\`.`)
     }
 
     return message.edit(result.body.files[0].url)

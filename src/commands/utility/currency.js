@@ -44,25 +44,25 @@ class CurrencyCommand extends Command {
 
   async exec (message, args) {
     if (args.source) {
-      return message.status.success('Exchange rate provided by http://fixer.io/.', -1)
+      return message.edit('ℹ\u2000Exchange rate provided by http://fixer.io/.')
     }
 
     if (!this.data || args.refresh) {
-      await message.status.progress('Updating exchange rate\u2026')
+      await message.status('progress', 'Updating exchange rate\u2026')
       await this.updateRates()
 
       if (args.refresh) {
-        return message.status.success('Successfully updated exchange rate.')
+        return message.status('success', 'Successfully updated exchange rate.')
       }
     }
 
     if (!args.input || args.input.length < 3) {
-      return message.status.error(`Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
     const val = parseFloat(args.input[0])
     if (isNaN(val)) {
-      return message.status.error('Invalid value.')
+      return message.status('error', 'Invalid value.')
     }
 
     const curr1 = args.input[1]
@@ -81,7 +81,7 @@ class CurrencyCommand extends Command {
 
     for (const curr of [curr1, curr2]) {
       if (rates[curr] === undefined && curr !== base) {
-        return message.status.error(`Currency \`${curr}\` is unavailable.`)
+        return message.status('error', `Currency \`${curr}\` is unavailable.`)
       }
     }
 
@@ -102,11 +102,10 @@ class CurrencyCommand extends Command {
   }
 
   async updateRates () {
+    // Allowing only 1 running instance of this function
     if (this._updatingRates) {
       return new Promise(resolve => setInterval(() => {
-        if (!this._updatingRates) {
-          resolve()
-        }
+        if (!this._updatingRates) { resolve() }
       }, 1000))
     }
 
@@ -135,7 +134,7 @@ class CurrencyCommand extends Command {
       this.updateRates()
     }, nextTimestamp - new Date())
 
-    delete this._updatingRates
+    this._updatingRates = false
   }
 
   onReady () {

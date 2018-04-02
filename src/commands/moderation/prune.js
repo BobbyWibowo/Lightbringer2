@@ -23,6 +23,8 @@ class PruneCommand extends Command {
         usage: 'prune [amount]'
       }
     })
+
+    this.timeout = undefined
   }
 
   async exec (message, args) {
@@ -34,13 +36,23 @@ class PruneCommand extends Command {
     messages = messages.filter(m => m.author.id === this.client.user.id)
 
     if (!messages.size) {
-      return message.status.error('There are no messages that you can prune.')
+      return message.status('error', 'There are no messages that you can prune.')
     }
 
-    await message.status.progress(`Pruning ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
+    await message.status('progress', `Pruning ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
     await Promise.all(messages.map(m => m.delete()))
 
-    return message.status.success(`Pruned \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, 3000)
+    return message.status('success', `Pruned \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, this.timeout)
+  }
+
+  onReady () {
+    const {
+      purgeCommandsTimeout
+    } = this.client.akairoOptions
+
+    if (purgeCommandsTimeout !== undefined) {
+      this.timeout = purgeCommandsTimeout
+    }
   }
 }
 

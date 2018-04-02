@@ -9,13 +9,11 @@ class MissingPermissionsListener extends Listener {
   }
 
   async exec (message, command, type, missing) {
-    await message.status.error(
+    return message.status('error',
       `Could not execute \`${command}\` command due to missing permissions: ` +
       missing.map(m => `\`${m}\``).join(', ') + '.',
       15000
     )
-
-    this.client.commandHandler.clearStatus(message)
   }
 }
 

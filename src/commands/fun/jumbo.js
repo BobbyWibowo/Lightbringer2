@@ -21,7 +21,7 @@ class JumboCommand extends Command {
 
   async exec (message, args) {
     if (!args.emojis) {
-      return message.status.error(`Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
     let files = args.emojis
@@ -45,7 +45,7 @@ class JumboCommand extends Command {
     files.length = Math.min(10, files.length)
 
     if (!files.length) {
-      return message.status.error('Could not parse message into emojis.')
+      return message.status('error', 'Could not parse message into emojis.')
     }
 
     await message.channel.send({ files })

@@ -84,13 +84,13 @@ class BooruCommand extends Command {
       if (args.defaultSite === 'null') {
         this.storage.set('defaultSite')
         this.storage.save()
-        return message.status.success(`Successfully restored default site to the hard-coded value: ${DEFAULT_SITE}.`)
+        return message.status('success', `Successfully restored default site to the hard-coded value: ${DEFAULT_SITE}.`)
       } else if (!this.getSiteKey(args.defaultSite)) {
-        return message.status.error('The site you specified is unavailable.')
+        return message.status('error', 'The site you specified is unavailable.')
       } else {
         this.storage.set('defaultSite', args.defaultSite)
         this.storage.save()
-        return message.status.success(`Successfully changed default site to \`${args.defaultSite}\`.`)
+        return message.status('success', `Successfully changed default site to \`${args.defaultSite}\`.`)
       }
     }
 
@@ -98,13 +98,13 @@ class BooruCommand extends Command {
     if (args.liteMode) {
       this.storage.set('liteMode', !liteMode)
       this.storage.save()
-      return message.status.success(`Lite mode was successfully ${liteMode ? 'disabled' : 'enabled'}.`)
+      return message.status('success', `Lite mode was successfully ${liteMode ? 'disabled' : 'enabled'}.`)
     }
 
     const site = args.site || this.storage.get('defaultSite') || DEFAULT_SITE
     const siteKey = this.getSiteKey(site)
     if (!siteKey) {
-      return message.status.error('The site you specified is unavailable.')
+      return message.status('error', 'The site you specified is unavailable.')
     }
 
     const tags = args.tags ? args.tags.split(' ') : []
@@ -113,7 +113,7 @@ class BooruCommand extends Command {
     const searchMessage = mappedTags
       ? `Searching for random image matching tags ${mappedTags} from \`${siteKey}\`\u2026`
       : `Searching for random image from \`${siteKey}\`\u2026`
-    await message.status.progress(searchMessage)
+    await message.status('progress', searchMessage)
 
     const images = await booru
       .search(site, tags, {
@@ -123,20 +123,20 @@ class BooruCommand extends Command {
       .then(booru.commonfy)
       .catch(error => {
         if (error.name === 'BooruError') {
-          return message.status.error(error.message)
+          return message.status('error', error.message)
         } else {
           throw error
         }
       })
 
     if (!images || !images.length) {
-      return message.status.error('Unexpected behavior occurred: empty "images" array.')
+      return message.status('error', 'Unexpected behavior occurred: empty "images" array.')
     }
 
     const image = images[0]
     // Skip site that did not return file_url (mostly danbooru)
     if (image.common.file_url === image.common.source) {
-      return message.status.error('Could not find any images from the booru site.')
+      return message.status('error', 'Could not find any images from the booru site.')
     }
     const imageUrl = this.client.util.cleanUrl(image.common.file_url)
 

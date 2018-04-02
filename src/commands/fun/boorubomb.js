@@ -75,22 +75,22 @@ class BooruCommand extends Command {
       if (args.defaultSites === 'null') {
         this.storage.set('defaultSites')
         this.storage.save()
-        return message.status.success(`Successfully restored default sites to the hard-coded value: ${this.inline(DEFAULT_SITES)}.`)
+        return message.status('success', `Successfully restored default sites to the hard-coded value: ${this.inline(DEFAULT_SITES)}.`)
       }
       const defaultSites = args.defaultSites.split(',')
       const invalids = defaultSites.map(s => [s, this.getSiteKey(s)]).filter(s => !s[1]).map(s => s[0])
       if (invalids.length) {
-        return message.status.error(`Unavailable sites: ${this.inline(invalids)}.`)
+        return message.status('error', `Unavailable sites: ${this.inline(invalids)}.`)
       }
       this.storage.set('defaultSites', defaultSites)
       this.storage.save()
-      return message.status.success(`Successfully changed default sites to: ${this.inline(defaultSites)}.`)
+      return message.status('success', `Successfully changed default sites to: ${this.inline(defaultSites)}.`)
     }
 
     const sites = (args.sites ? args.sites.split(',') : null) || this.storage.get('defaultSites') || DEFAULT_SITES
     const siteKeys = sites.map(this.getSiteKey).filter(k => k)
     if (!siteKeys.length) {
-      return message.status.error('The sites you specified are unavailable.')
+      return message.status('error', 'The sites you specified are unavailable.')
     }
 
     const tags = args.tags ? args.tags.split(' ') : []
@@ -98,7 +98,7 @@ class BooruCommand extends Command {
     const searchMessage = tags.length
       ? `Searching for random images matching tags ${this.inline(tags)} from various booru sites\u2026`
       : `Searching for random images from various booru sites\u2026`
-    await message.status.progress(searchMessage)
+    await message.status('progress', searchMessage)
 
     const imageUrls = []
     for (let i = 0; i < siteKeys.length; i++) {
@@ -119,7 +119,7 @@ class BooruCommand extends Command {
     }
 
     if (!imageUrls.length) {
-      return message.status.error('Could not find any images from the booru sites.')
+      return message.status('error', 'Could not find any images from the booru sites.')
     }
 
     return message.edit(imageUrls.join('\n\n'))

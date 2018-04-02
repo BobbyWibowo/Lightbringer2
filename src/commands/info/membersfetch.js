@@ -20,7 +20,7 @@ class MembersFetchCommand extends Command {
 
   async exec (message, args) {
     if (!message.guild && !args.keyword) {
-      return message.status.error('You must specify a guild name when running this command outside of a guild.')
+      return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
     }
 
     let guild = message.guild
@@ -30,10 +30,10 @@ class MembersFetchCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
-    await message.status.progress('Fetching guild members\u2026')
+    await message.status('progress', 'Fetching guild members\u2026')
     await guild.members.fetch()
 
-    return message.status.success('Members successfully fetched. Remember not to repeat this command too often on the same guild.')
+    return message.status('success', 'Members successfully fetched. Remember not to repeat this command too often on the same guild.')
   }
 }
 

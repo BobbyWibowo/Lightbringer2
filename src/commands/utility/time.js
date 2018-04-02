@@ -19,12 +19,12 @@ class TimeCommand extends Command {
 
   async exec (message, args) {
     if (!args.location) {
-      return message.status.error(`Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
     const result = await this.client.util.snek(`https://time.is/en/${args.location}`)
     if (result.status !== 200) {
-      return message.status.error('Failed to fetch time info of the specified location.')
+      return message.status('error', 'Failed to fetch time info of the specified location.')
     }
 
     const text = result.text || result.body.toString()

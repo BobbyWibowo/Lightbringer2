@@ -14,7 +14,7 @@ class PatCommand extends Command {
 
   async exec (message) {
     if (!message.mentions.users.size) {
-      return message.status.error('@mention someone to pat.')
+      return message.status('error', '@mention someone to pat.')
     }
 
     const result = await this.client.util.snek('https://nekos.life/api/v2/img/pat')

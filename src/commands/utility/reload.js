@@ -100,16 +100,16 @@ class ReloadCommand extends Command {
       if (args.type === 1 || args.type === null) { this.client.inhibitorHandler.reloadAll() }
       if (args.type === 2 || args.type === null) { this.client.listenerHandler.reloadAll() }
       if (args.type === null) {
-        return message.status.success('Reloaded all commands, inhibitors and listeners.')
+        return message.status('success', 'Reloaded all commands, inhibitors and listeners.')
       } else {
-        return message.status.success(`Reloaded all ${typeString}s.`)
+        return message.status('success', `Reloaded all ${typeString}s.`)
       }
     } else if (args._type && args.type === null) {
-      return message.status.error('That type is unavailable! Try either `commands`, `inhibitors` or `listeners`.')
+      return message.status('error', 'That type is unavailable! Try either `commands`, `inhibitors` or `listeners`.')
     } else if (args._modules) {
-      return message.status.error('Could not find any module with those IDs.')
+      return message.status('error', 'Could not find any module with those IDs.')
     } else {
-      return message.status.error('You must specify IDs of the modules that you want to reload.')
+      return message.status('error', 'You must specify IDs of the modules that you want to reload.')
     }
   }
 }

@@ -41,7 +41,7 @@ class ReverseCommand extends Command {
 
   async exec (message, args) {
     if (!args.content) {
-      return message.status.error(`Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
     const content = args.content.split('').reverse().join('')

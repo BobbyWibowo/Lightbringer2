@@ -15,7 +15,7 @@ class KillCommand extends Command {
 
   async exec (message) {
     if (!message.mentions.users.size) {
-      return message.status.error('@mention some people to kill.')
+      return message.status('error', '@mention some people to kill.')
     }
 
     const content = message.mentions.users

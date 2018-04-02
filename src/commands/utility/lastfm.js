@@ -100,7 +100,7 @@ class LastfmCommand extends Command {
         this.storage.save()
 
         this.clearRecentTrackTimeout()
-        await message.status.progress(`${!val ? 'Enabling' : 'Disabling'} ${toggle.string}\u2026`)
+        await message.status('progress', `${!val ? 'Enabling' : 'Disabling'} ${toggle.string}\u2026`)
 
         if (val && !toggle.alwaysPoll) {
           // Clear activity if the mode was previously enabled
@@ -111,7 +111,7 @@ class LastfmCommand extends Command {
           await this.getRecentTrack()
         }
 
-        return message.status.success(`${!val ? 'Enabled' : 'Disabled'} ${toggle.string}.`)
+        return message.status('success', `${!val ? 'Enabled' : 'Disabled'} ${toggle.string}.`)
       }
     }
 
@@ -125,7 +125,7 @@ class LastfmCommand extends Command {
 
     if (storageHit) {
       this.storage.save()
-      return message.status.success('Successfully saved new value(s) to storage file.')
+      return message.status('success', 'Successfully saved new value(s) to storage file.')
     }
 
     await message.edit('🎵\u2000Last fm configuration preview:\n' + this.client.util.formatCode(stripIndent`

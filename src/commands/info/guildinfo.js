@@ -50,7 +50,7 @@ class GuildInfoCommand extends Command {
 
   async exec (message, args) {
     if (!message.guild && !args.keyword) {
-      return message.status.error('You must specify a guild name when running this command outside of a guild.')
+      return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
     }
 
     let guild = message.guild
@@ -60,11 +60,11 @@ class GuildInfoCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
-    const color = await this.client.util.getGuildColor(guild)
+    const color = await this.client.guildColors.get(guild)
 
     if (args.refresh) {
       // Refresh GuildMemberStore.
-      await message.status.progress('Refreshing guild members\u2026')
+      await message.status('progress', 'Refreshing guild members\u2026')
       await guild.members.fetch()
     }
 

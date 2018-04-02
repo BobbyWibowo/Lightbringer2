@@ -49,16 +49,16 @@ class BanCommand extends Command {
 
   async exec (message, args) {
     if (!message.guild) {
-      return message.status.error('You can only use this command in a guild.')
+      return message.status('error', 'You can only use this command in a guild.')
     }
 
     if (!args.keyword) {
-      return message.status.error('You must specify a guild member to ban.')
+      return message.status('error', 'You must specify a guild member to ban.')
     }
 
     if (args.refresh) {
       // Refresh GuildMemberStore.
-      await message.status.progress('Refreshing guild members\u2026')
+      await message.status('progress', 'Refreshing guild members\u2026')
       await message.guild.members.fetch()
     }
 
@@ -66,11 +66,11 @@ class BanCommand extends Command {
     const resolved = this.client.util.resolveMembers(args.keyword, message.guild.members)
 
     if (resolved.size === 0) {
-      return message.status.error('Could not find matching guild members.')
+      return message.status('error', 'Could not find matching guild members.')
     }
 
     if (resolved.size > 1) {
-      return message.status.error(
+      return message.status('error',
         this.client.util.formatMatchesList(resolved, {
           name: 'guild members',
           prop: 'user.tag'
@@ -83,11 +83,11 @@ class BanCommand extends Command {
     const target = resolved.first()
 
     if (target.user.id === this.client.user.id) {
-      return message.status.error('You can not ban yourself.')
+      return message.status('error', 'You can not ban yourself.')
     }
 
     if (target.user.id === message.guild.ownerID) {
-      return message.status.error('You can not ban the server owner.')
+      return message.status('error', 'You can not ban the server owner.')
     }
 
     await target.ban({
@@ -99,7 +99,7 @@ class BanCommand extends Command {
       await message.guild.unban(target.user.id)
     }
 
-    return message.status.success(`Successfully ${args.soft ? 'soft-' : ''}banned ${escapeMarkdown(target.user.tag)} (ID: ${target.user.id}).`, -1)
+    return message.status('success', `Successfully ${args.soft ? 'soft-' : ''}banned ${escapeMarkdown(target.user.tag)} (ID: ${target.user.id}).`, -1)
   }
 }
 

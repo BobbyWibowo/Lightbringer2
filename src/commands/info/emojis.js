@@ -27,7 +27,7 @@ class EmojisCommand extends Command {
 
   async exec (message, args) {
     if (!message.guild && !args.keyword) {
-      return message.status.error('You must specify a guild name when running this command outside of a guild.')
+      return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
     }
 
     const match = /<a?:\w+?:(\d+?)>/.exec(args.keyword)
@@ -47,12 +47,12 @@ class EmojisCommand extends Command {
       guild = await this.client.util.assertGuild(args.keyword)
     }
 
-    const color = await this.client.util.getGuildColor(guild)
+    const color = await this.client.guildColors.get(guild)
 
     let emojis = guild.emojis
 
     if (!emojis.size) {
-      return message.status.error('The specified guild has no emojis.')
+      return message.status('error', 'The specified guild has no emojis.')
     }
 
     const embed = {
@@ -61,7 +61,7 @@ class EmojisCommand extends Command {
       color
     }
 
-    let content = `Emojis of the currently viewed guild:`
+    let content = 'Emojis of the currently viewed guild:'
     if (args.keyword) {
       content = `Emojis of the guild matching keyword \`${args.keyword}\`:`
     }

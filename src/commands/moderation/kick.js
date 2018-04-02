@@ -35,16 +35,16 @@ class KickCommand extends Command {
 
   async exec (message, args) {
     if (!message.guild) {
-      return message.status.error('You can only use this command in a guild.')
+      return message.status('error', 'You can only use this command in a guild.')
     }
 
     if (!args.keyword) {
-      return message.status.error('You must specify a guild member to kick.')
+      return message.status('error', 'You must specify a guild member to kick.')
     }
 
     if (args.refresh) {
       // Refresh GuildMemberStore.
-      await message.status.progress('Refreshing guild members\u2026')
+      await message.status('progress', 'Refreshing guild members\u2026')
       await message.guild.members.fetch()
     }
 
@@ -52,11 +52,11 @@ class KickCommand extends Command {
     const resolved = this.client.util.resolveMembers(args.keyword, message.guild.members)
 
     if (resolved.size === 0) {
-      return message.status.error('Could not find matching guild members.')
+      return message.status('error', 'Could not find matching guild members.')
     }
 
     if (resolved.size > 1) {
-      return message.status.error(
+      return message.status('error',
         this.client.util.formatMatchesList(resolved, {
           name: 'guild members',
           prop: 'user.tag'
@@ -69,15 +69,15 @@ class KickCommand extends Command {
     const target = resolved.first()
 
     if (target.user.id === this.client.user.id) {
-      return message.status.error('You can not kick yourself.')
+      return message.status('error', 'You can not kick yourself.')
     }
 
     if (target.user.id === message.guild.ownerID) {
-      return message.status.error('You can not kick the server owner.')
+      return message.status('error', 'You can not kick the server owner.')
     }
 
     await target.kick(args.reason)
-    return message.status.success(`Successfully kicked ${escapeMarkdown(target.user.tag)} (ID: ${target.user.id}).`, -1)
+    return message.status('success', `Successfully kicked ${escapeMarkdown(target.user.tag)} (ID: ${target.user.id}).`, -1)
   }
 }
 

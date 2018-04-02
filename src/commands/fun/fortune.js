@@ -43,7 +43,7 @@ class FortuneCommand extends Command {
 
   async exec (message, args) {
     if (args.type === null) {
-      return message.status.error('That type is unavailable! Use `--list` flag to list all available types.')
+      return message.status('error', 'That type is unavailable! Use `--list` flag to list all available types.')
     }
 
     if (args.list) {
@@ -54,7 +54,7 @@ class FortuneCommand extends Command {
     const result = await this.client.util.snek(`http://yerkee.com/api/fortune/${args.type}`)
 
     if (result.status !== 200) {
-      return message.status.error('Could not retrieve fortune.')
+      return message.status('error', 'Could not retrieve fortune.')
     }
 
     await message.edit(`🔮\u2000|\u2000**Fortune cookie${args.type.length ? ` (${args.type})` : ''}:**\n\n${result.body.fortune}`)

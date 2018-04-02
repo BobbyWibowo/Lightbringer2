@@ -1,4 +1,5 @@
 const { AkairoClient } = require('discord-akairo')
+const GuildColors = require('./GuildColors')
 const LClientUtil = require('./LClientUtil')
 const LCommandHandler = require('./LCommandHandler')
 const LInhibitorHandler = require('./LInhibitorHandler')
@@ -21,10 +22,9 @@ class LightbringerClient extends AkairoClient {
 
     this.storage = new Storage(this)
 
-    this.package = require('./../../package.json')
+    this.guildColors = new GuildColors(this)
 
-    // Init Guild Pixel Averages utils (this needs this.storage to be ready).
-    this.util.initGuildColors()
+    this.package = require('./../../package.json')
   }
 
   build () {

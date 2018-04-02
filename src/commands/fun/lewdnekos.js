@@ -26,7 +26,7 @@ class LewdNekosCommand extends Command {
       args.lewd = true
       return nekoCommand.exec(message, args)
     } else {
-      return message.status.error('Could not execute nekos command.')
+      return message.status('error', 'Could not execute nekos command.')
     }
   }
 }

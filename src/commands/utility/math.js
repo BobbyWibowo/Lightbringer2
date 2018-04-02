@@ -59,7 +59,7 @@ class MathCommand extends Command {
 
   async exec (message, args) {
     if (args.documentation) {
-      return message.status.success('Math.js documentation: http://mathjs.org/docs/.', -1)
+      return message.status('success', 'Math.js documentation: http://mathjs.org/docs/.', -1)
     }
 
     if (args.printScope) {
@@ -70,11 +70,11 @@ class MathCommand extends Command {
       this.scope = {}
       this.storage.set('scope', this.scope)
       this.storage.save()
-      return message.status.success('Cleared global scope.')
+      return message.status('success', 'Cleared global scope.')
     }
 
     if (!args.expressions) {
-      return message.status.error(`Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
     let scope = args.localScope ? {} : this.scope

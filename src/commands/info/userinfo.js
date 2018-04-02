@@ -38,7 +38,7 @@ class UserInfoCommand extends Command {
     // Fetch UserProfile if the user is not a bot.
     let profile
     if (!user.bot) {
-      await message.status.progress('Fetching user\'s profile\u2026')
+      await message.status('progress', 'Fetching user\'s profile\u2026')
       profile = await user.fetchProfile()
     }
 

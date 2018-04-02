@@ -52,7 +52,7 @@ class SetActivityCommand extends Command {
 
   async exec (message, args) {
     if (!args.type) {
-      return message.status.error('That type is unavailable! Use `--list` flag to list all available types.')
+      return message.status('error', 'That type is unavailable! Use `--list` flag to list all available types.')
     }
 
     if (args.list) {
@@ -77,10 +77,10 @@ class SetActivityCommand extends Command {
           url: args.url || null
         }
       })
-      return message.status.success(`Successfully updated your activity message into ${this.client.util.formatActivityType(activity.type, true)} **${activity.name}**.`)
+      return message.status('success', `Successfully updated your activity message into ${this.client.util.formatActivityType(activity.type, true)} **${activity.name}**.`)
     } else {
       await this.client.user.setPresence({ activity: null })
-      return message.status.success('Successfully cleared your activity message.')
+      return message.status('success', 'Successfully cleared your activity message.')
     }
   }
 }

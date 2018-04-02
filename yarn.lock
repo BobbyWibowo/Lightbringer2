@@ -344,13 +344,13 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
 
-discord-akairo@1Computer1/discord-akairo#a15fad602c7d0f05683c8d6ff85eb411b65e9b96:
+discord-akairo@1Computer1/discord-akairo:
   version "8.0.0-dev"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/a15fad602c7d0f05683c8d6ff85eb411b65e9b96"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/03805445a3feef113c2b6f1711f1adb46f4ac40a"
 
-discord.js@hydrabolt/discord.js#623d4c0076c49b4df827dbc4ef064e9b098bc229:
+discord.js@hydrabolt/discord.js:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/623d4c0076c49b4df827dbc4ef064e9b098bc229"
+  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/a5e8f05d01e34b69b80736688704ee594b4d0900"
   dependencies:
     pako "^1.0.0"
     prism-media "^0.2.0"
@@ -421,23 +421,23 @@ eslint-import-resolver-node@^0.3.1:
     debug "^2.6.9"
     resolve "^1.5.0"
 
-eslint-module-utils@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.1.1.tgz#abaec824177613b8a95b299639e1b6facf473449"
+eslint-module-utils@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-module-utils/-/eslint-module-utils-2.2.0.tgz#b270362cd88b1a48ad308976ce7fa54e98411746"
   dependencies:
     debug "^2.6.8"
     pkg-dir "^1.0.0"
 
-eslint-plugin-import@^2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.9.0.tgz#26002efbfca5989b7288ac047508bd24f217b169"
+eslint-plugin-import@^2.10.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.10.0.tgz#fa09083d5a75288df9c6c7d09fe12255985655e7"
   dependencies:
     builtin-modules "^1.1.1"
     contains-path "^0.1.0"
     debug "^2.6.8"
     doctrine "1.5.0"
     eslint-import-resolver-node "^0.3.1"
-    eslint-module-utils "^2.1.1"
+    eslint-module-utils "^2.2.0"
     has "^1.0.1"
     lodash "^4.17.4"
     minimatch "^3.0.3"
@@ -1049,9 +1049,9 @@ mkdirp@0.5.1, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-moment@^2.21.0:
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.21.0.tgz#2a114b51d2a6ec9e6d83cf803f838a878d8a023a"
+moment@^2.22.0:
+  version "2.22.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.0.tgz#7921ade01017dd45186e7fee5f424f0b8663a730"
 
 ms@2.0.0:
   version "2.0.0"
@@ -1256,9 +1256,9 @@ prelude-ls@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
 
-"prism-media@github:hydrabolt/prism-media":
-  version "0.2.0"
-  resolved "https://codeload.github.com/hydrabolt/prism-media/tar.gz/b367fca09ecea193b17f3611cb41a05154c9d682"
+prism-media@^0.2.0:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-0.2.1.tgz#7968f2c7194588887c4c48081968d8c28e0d2469"
 
 process-nextick-args@~2.0.0:
   version "2.0.0"
@@ -1440,7 +1440,7 @@ slice-ansi@1.0.0:
   dependencies:
     is-fullwidth-code-point "^2.0.0"
 
-snekfetch@^3.5.0, snekfetch@^3.6.4:
+snekfetch@^3.6.0, snekfetch@^3.6.4:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/snekfetch/-/snekfetch-3.6.4.tgz#d13e80a616d892f3d38daae4289f4d258a645120"
 
@@ -1622,10 +1622,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-ultron@~1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.1.1.tgz#9fe1536a10a664a65266a1e3ccf85fd36302bc9c"
-
 universalify@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.1.tgz#fa71badd4437af4c148841e3b3b165f9e9e590b7"
@@ -1693,13 +1689,12 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
-ws@^3.3.1:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-3.3.3.tgz#f1cf84fe2d5e901ebce94efaece785f187a228f2"
+ws@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-4.1.0.tgz#a979b5d7d4da68bf54efe0408967c324869a7289"
   dependencies:
     async-limiter "~1.0.0"
     safe-buffer "~5.1.0"
-    ultron "~1.1.0"
 
 xhr@^2.0.1:
   version "2.4.1"

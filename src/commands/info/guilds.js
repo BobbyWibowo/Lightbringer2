@@ -49,7 +49,7 @@ class GuildsCommand extends Command {
     if (!self) {
       if (user.bot) {
         if (args.brute) {
-          await message.status.progress('Fetching user from all the guilds which you are a member of\u2026')
+          await message.status('progress', 'Fetching user from all the guilds which you are a member of\u2026')
           diff = process.hrtime()
         }
         // This is not 100% reliable when not using brute mode.
@@ -58,7 +58,7 @@ class GuildsCommand extends Command {
           diff = process.hrtime(diff)
         }
       } else {
-        await message.status.progress('Fetching user\'s profile\u2026')
+        await message.status('progress', 'Fetching user\'s profile\u2026')
         const profile = await user.fetchProfile()
         guilds = profile.mutualGuilds
       }

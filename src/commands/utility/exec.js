@@ -18,7 +18,7 @@ class ExecCommand extends Command {
 
   async exec (message, args) {
     if (!args.command) {
-      return message.status.error('You need to specify a command to execute on the shell.')
+      return message.status('error', 'You need to specify a command to execute on the shell.')
     }
 
     const outs = await new Promise((resolve, reject) => {

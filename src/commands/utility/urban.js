@@ -28,22 +28,22 @@ class UrbanCommand extends Command {
   }
 
   async exec (message, args) {
-    return message.status.error('This command is still work in progress.')
+    return message.status('error', 'This command is still work in progress.')
 
     // TODO
     /* eslint-disable no-unreachable */
 
     let result
     if (args.keyword) {
-      await message.status.progress(`Searching for \`${args.keyword}\` on Urban Dictionary\u2026`)
+      await message.status('progress', `Searching for \`${args.keyword}\` on Urban Dictionary\u2026`)
       result = await ud.term(args.keyword)
     } else {
-      await message.status.progress('Looking up random definition on Urban Dictionary\u2026')
+      await message.status('progress', 'Looking up random definition on Urban Dictionary\u2026')
       result = await ud.random()
     }
 
     if (!result) {
-      return message.status.error('Could not fetch any definition.')
+      return message.status('error', 'Could not fetch any definition.')
     }
   }
 

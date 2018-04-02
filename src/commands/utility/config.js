@@ -50,7 +50,7 @@ class ConfigCommand extends Command {
     }
 
     if (!args.key) {
-      return message.status.error(`Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
     if (!args.value) {
@@ -58,7 +58,7 @@ class ConfigCommand extends Command {
       try {
         value = this.client.configManager.get(args.key)
       } catch (error) {
-        return message.status.error(error.toString())
+        return message.status('error', error.toString())
       }
       return message.edit(`⚙\u2000Configuration: \`${args.key}\` = \`${value}\`.`)
     }
@@ -66,9 +66,9 @@ class ConfigCommand extends Command {
     try {
       this.client.configManager.set(args.key, args.value)
     } catch (error) {
-      return message.status.error(error.toString())
+      return message.status('error', error.toString())
     }
-    return message.status.success('Successfully saved value to the configuration file. Restart the bot in order for the changes to take effect.')
+    return message.status('success', 'Successfully saved value to the configuration file. Restart the bot in order for the changes to take effect.')
   }
 }
 

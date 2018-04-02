@@ -60,7 +60,7 @@ class AvatarCommand extends Command {
       if (AllowedImageSizes.includes(args.size)) {
         size = args.size
       } else {
-        return message.status.error(`The size you specified was unavailable! Try one of the following: ${AllowedImageSizes.map(s => `\`${s}\``).join(', ')}.`)
+        return message.status('error', `The size you specified was unavailable! Try one of the following: ${AllowedImageSizes.map(s => `\`${s}\``).join(', ')}.`)
       }
     }
 
@@ -69,7 +69,7 @@ class AvatarCommand extends Command {
 
     // If could not get avatar.
     if (!avatarURL) {
-      return message.status.error('Could not get display avatar of the specified user.')
+      return message.status('error', 'Could not get display avatar of the specified user.')
     }
 
     // "--direct" flag.

@@ -17,17 +17,19 @@ if (config.token) {
       emitters: {
         process
       },
+      prefix: config.prefix || 'lb',
       commandDirectory: './src/commands/',
       inhibitorDirectory: './src/inhibitors/',
       listenerDirectory: './src/listeners/',
       storageDirectory: './storage/',
       configManager,
-      prefix: config.prefix || 'lb'
+      statusTimeout: 7500, // timeout for status messages of all commands (success, error, question and progress)
+      purgeCommandsTimeout: 2500 // timeout for success messages of flush, prune and purge commands
     },
     {
-      messageCacheMaxSize: 20, // maximum number of messages to cache per channel (why? to reduce heap usage)
-      sync: true, // periodically sync guilds (it should be once every 30 seconds)
-      disabledEvents: [ // these websocket events will not be processed by the bot (potentially improving performance)
+      messageCacheMaxSize: 10, // maximum number of messages to cache per channel
+      sync: true, // sync guilds every 30 seconds
+      disabledEvents: [ // disable some websocket events to potentially increase overall performance
         'CHANNEL_PINS_UPDATE',
         'MESSAGE_REACTION_ADD',
         'MESSAGE_REACTION_REMOVE',

@@ -26,7 +26,7 @@ class CatsCommand extends Command {
       args.animal = 'cat'
       return nekoCommand.exec(message, args)
     } else {
-      return message.status.error('Could not execute animals command.')
+      return message.status('error', 'Could not execute animals command.')
     }
   }
 }

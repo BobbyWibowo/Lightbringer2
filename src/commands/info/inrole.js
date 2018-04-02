@@ -37,19 +37,19 @@ class InRoleCommand extends Command {
 
   async exec (message, args) {
     if (!args.keyword) {
-      return message.status.error('You must specify a role name.')
+      return message.status('error', 'You must specify a role name.')
     }
 
     const roleSource = args.guild || message.guild || null
     if (!roleSource) {
-      return message.status.error('You must be in a guild to run this command without "--guild" flag.')
+      return message.status('error', 'You must be in a guild to run this command without "--guild" flag.')
     }
 
     // Assert Role.
     const role = await this.client.util.assertRole(args.keyword, roleSource)
 
     if (!role.members.size) {
-      return message.status.error('The specified role has no members.')
+      return message.status('error', 'The specified role has no members.')
     }
 
     // Check whether the keyword was a mention or not.
