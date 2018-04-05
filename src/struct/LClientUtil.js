@@ -337,7 +337,7 @@ class LClientUtil extends ClientUtil {
 
     const size = matches.size
 
-    let list = matches
+    const list = matches
       .map(match => {
         if (!prop) {
           return match
@@ -574,11 +574,14 @@ class LClientUtil extends ClientUtil {
   }
 
   async multiSend (channel, text, options) {
-    let {
+    const {
       firstMessage = null,
-      maxLength = 2000,
       code = null,
       char = '\n'
+    } = options
+
+    let {
+      maxLength = 2000
     } = options
 
     if (typeof code === 'string') {
@@ -612,14 +615,17 @@ class LClientUtil extends ClientUtil {
     const messages = []
     const description = data.description || '' // Long-ass description that needs to be properly split.
 
-    let {
+    const {
       firstMessage = null,
       content = null, // Content that will only be used for the first message.
       prefix = null, // Prefix that will only be prepended to the first embed.
       suffix = null, // Suffix that will only be appended to the last embed.
-      maxLength = 2000,
       code = null,
       char = '\n'
+    } = options
+
+    let {
+      maxLength = 2000
     } = options
 
     if (typeof code === 'string') {
@@ -726,7 +732,7 @@ class LClientUtil extends ClientUtil {
     }
 
     for (let i = 0; i < messages.length; i++) {
-      let t = [messages[i].content, { embed: messages[i].embed }]
+      const t = [messages[i].content, { embed: messages[i].embed }]
       if (firstMessage instanceof Message && i === 0) {
         await firstMessage.edit(...t)
       } else {

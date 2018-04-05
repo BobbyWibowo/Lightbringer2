@@ -14,7 +14,7 @@ class ReadyListener extends Listener {
   async exec () {
     if (this.client.stats.get('initiated')) {
       console.log('Connection resumed.')
-      return this.client.util.sendStatus(`🔄\u2000Connection resumed.`)
+      return this.client.util.sendStatus('🔄\u2000Connection resumed.')
     }
 
     console.log('Successfully logged in.')
@@ -73,7 +73,7 @@ class ReadyListener extends Listener {
 
     this.client.stats.set('initiated', true)
     console.log('Bot is ready.')
-    await this.client.util.sendStatus(`✅\u2000Bot is ready.`)
+    await this.client.util.sendStatus('✅\u2000Bot is ready.')
 
     if (autoReboot) {
       if (autoReboot >= 300) { // if at least 5 minutes

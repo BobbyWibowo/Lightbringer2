@@ -99,7 +99,7 @@ class GuildsCommand extends Command {
       }
     }
 
-    let content = `My guilds:`
+    let content = 'My guilds:'
     if (mention) {
       content = `Mutual guilds with ${user.toString()}:`
     } else if (args.keyword) {

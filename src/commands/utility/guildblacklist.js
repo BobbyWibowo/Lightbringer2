@@ -72,7 +72,7 @@ class GuildBlacklistCommand extends Command {
         return message.status('error', 'There are no blacklisted guilds.')
       }
 
-      let char = '\n'
+      const char = '\n'
       const embed = {
         description: guilds.map(id => {
           const guild = this.client.guilds.get(id)
@@ -142,9 +142,9 @@ class GuildBlacklistCommand extends Command {
     this.stc('guilds', guilds)
 
     if (index > -1) {
-      return message.status('success', `Successfully removed the current guild from the blacklist.`)
+      return message.status('success', 'Successfully removed the current guild from the blacklist.')
     } else {
-      return message.status('success', `Successfully blacklisted the current guild.`)
+      return message.status('success', 'Successfully blacklisted the current guild.')
     }
   }
 

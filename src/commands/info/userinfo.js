@@ -66,7 +66,7 @@ class UserInfoCommand extends Command {
 
     // Account Information field: Bot for bots, Nitro and Mutual guilds for regular users.
     if (user.bot) {
-      embed.fields[0].value += `\n•  **Bot:** yes`
+      embed.fields[0].value += '\n•  **Bot:** yes'
     } else if (profile) {
       embed.fields[0].value += `\n•  **Nitro${profile.premiumSince ? ' since' : ''}:** ${profile.premiumSince ? this.client.util.formatFromNow(profile.premiumSince) : 'no'}`
       if (user.id !== message.author.id) {

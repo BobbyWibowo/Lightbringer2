@@ -95,7 +95,7 @@ class ConfigManager {
     }
 
     if (this._validKeys[key].protected) {
-      return `<protected>`
+      return '<protected>'
     }
 
     return this._config[key]

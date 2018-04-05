@@ -62,6 +62,17 @@
         "error",
         "all"
       ],
+      "prefer-const": [
+        "error",
+        {
+          "destructuring": "any",
+          "ignoreReadBeforeAssign": false
+        }
+      ],
+      "object-shorthand": [
+        "error",
+        "always"
+      ],
       "quotes": [
         "error",
         "single"

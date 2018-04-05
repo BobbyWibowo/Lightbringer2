@@ -49,7 +49,7 @@ class EmojisCommand extends Command {
 
     const color = await this.client.guildColors.get(guild)
 
-    let emojis = guild.emojis
+    const emojis = guild.emojis
 
     if (!emojis.size) {
       return message.status('error', 'The specified guild has no emojis.')

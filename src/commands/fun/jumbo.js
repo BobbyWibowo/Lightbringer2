@@ -24,7 +24,7 @@ class JumboCommand extends Command {
       return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
-    let files = args.emojis
+    const files = args.emojis
       .split(' ')
       .map(s => {
         const match = /<a?:\w+?:(\d{17,19})>/.exec(s)

@@ -60,7 +60,7 @@ class DictionaryCommand extends Command {
     }
 
     if (!this.storage.get('apiKey')) {
-      return message.status('error', `Missing API key!\nGet your Merriam-Webster's Collegiate® Dictionary API key from **http://dictionaryapi.com/** then run \`dict --key=<api key>\` to save the API key to the storage file!`, -1)
+      return message.status('error', 'Missing API key!\nGet your Merriam-Webster\'s Collegiate® Dictionary API key from **http://dictionaryapi.com/** then run `dict --key=<api key>` to save the API key to the storage file!', -1)
     }
 
     if (!this.dictClient) {
@@ -158,7 +158,7 @@ class DictionaryCommand extends Command {
 
   beautify (m, depth = 0) {
     let temp = ''
-    let hasContent = m.meanings || m.synonyms || m.illustrations || m.senses
+    const hasContent = m.meanings || m.synonyms || m.illustrations || m.senses
 
     if (m.senses && (m.senses.findIndex(s => s.number === m.number) !== -1)) {
       // Skip current Sense if it has additional Senses

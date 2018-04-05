@@ -97,7 +97,7 @@ class BooruCommand extends Command {
 
     const searchMessage = tags.length
       ? `Searching for random images matching tags ${this.inline(tags)} from various booru sites\u2026`
-      : `Searching for random images from various booru sites\u2026`
+      : 'Searching for random images from various booru sites\u2026'
     await message.status('progress', searchMessage)
 
     const imageUrls = []

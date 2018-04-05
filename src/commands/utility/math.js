@@ -77,7 +77,7 @@ class MathCommand extends Command {
       return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
-    let scope = args.localScope ? {} : this.scope
+    const scope = args.localScope ? {} : this.scope
 
     const expressions = args.expressions.split('\n')
     const results = []
@@ -93,7 +93,7 @@ class MathCommand extends Command {
       }
 
       try {
-        let result = parsed.eval(scope)
+        const result = parsed.eval(scope)
         results.push(result)
       } catch (err) {
         results.push(err.toString())

@@ -1,6 +1,6 @@
 # Lightbringer2
 
-![Logo](https://s.fiery.me/nbI4.png)
+![Lightbringer2](https://s.fiery.me/nbI4.png)
 
 Lightbringer2 is yet another [Discord](https://discordapp.com) self-bot written with [discord.js](https://discord.js.org/) (and [Discord Akairo](https://1computer1.gitbooks.io/akairo-tutorials/content/v/v8/) framework).
 
