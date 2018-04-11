@@ -6,11 +6,11 @@ class GuildColors {
       }
     })
 
-    this.guildColors = client.storage('guild-colors')
+    this.storage = client.storage('guild-colors')
   }
 
   async get (guild) {
-    if (!this.guildColors) {
+    if (!this.storage) {
       throw new Error('Storage system of guild colors is not yet ready.')
     }
 
@@ -18,7 +18,7 @@ class GuildColors {
       return null
     }
 
-    const saved = this.guildColors.get(guild.id)
+    const saved = this.storage.get(guild.id)
     if (saved && saved.icon === guild.icon) {
       return saved.color
     }
@@ -33,11 +33,11 @@ class GuildColors {
     }
 
     const color = await this.client.util.getAverageColor(snek.body)
-    this.guildColors.set(guild.id, {
+    this.storage.set(guild.id, {
       icon: guild.icon,
       color
     })
-    this.guildColors.save()
+    this.storage.save()
     return color
   }
 }

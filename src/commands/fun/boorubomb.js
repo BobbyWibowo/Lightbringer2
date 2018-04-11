@@ -12,7 +12,7 @@ const DEFAULT_SITES = [
 class BooruCommand extends Command {
   constructor () {
     super('boorubomb', {
-      aliases: ['boorubomb', 'bb', 'hentaibomb'],
+      aliases: ['boorubomb', 'bbomb', 'bb', 'hentaibomb'],
       description: 'Shows you a total of 4 random images from different booru sites (using gelbooru.com, konachan.com, konachan.net and yande.re by default).',
       args: [
         {

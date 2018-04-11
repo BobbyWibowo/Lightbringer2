@@ -8,17 +8,17 @@ class BooruCache {
       }
     })
 
-    this.booruCache = client.storage('booru-cache')
+    this.storage = client.storage('booru-cache')
   }
 
   clear () {
-    this.booruCache.data = {}
-    this.booruCache.save()
+    this.storage.data = {}
+    this.storage.save()
     return true
   }
 
   async get (sites, tags = []) {
-    if (!this.booruCache) {
+    if (!this.storage) {
       throw new Error('Storage system of booru cache is not yet ready.')
     }
 
@@ -29,7 +29,7 @@ class BooruCache {
     if (!(sites instanceof Array)) { sites = [sites] }
 
     const stringTags = tags.join(' ')
-    let matchingKey = this.booruCache.keys.find(key => {
+    let matchingKey = this.storage.keys.find(key => {
       if (key === stringTags) { return true }
       const splitKey = key.split(' ')
       const equalLengths = splitKey.length === tags.length
@@ -37,11 +37,11 @@ class BooruCache {
       return equalLengths
     })
     if (matchingKey === undefined) {
-      this.booruCache.set(stringTags, {})
+      this.storage.set(stringTags, {})
       matchingKey = stringTags
     }
 
-    const storedSites = this.booruCache.get(matchingKey)
+    const storedSites = this.storage.get(matchingKey)
     const images = await Promise.all(sites.map(site => {
       return new Promise(async resolve => {
         if (!storedSites[site] || !storedSites[site].length) {
@@ -88,8 +88,8 @@ class BooruCache {
       })
     }))
 
-    this.booruCache.set(matchingKey, storedSites)
-    this.booruCache.save()
+    this.storage.set(matchingKey, Object.keys(storedSites).length ? storedSites : undefined)
+    this.storage.save()
     return images.filter(u => u)
   }
 }
