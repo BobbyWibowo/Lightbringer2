@@ -1,4 +1,5 @@
 const { AkairoClient } = require('discord-akairo')
+const BooruCache = require('./BooruCache')
 const GuildColors = require('./GuildColors')
 const LClientUtil = require('./LClientUtil')
 const LCommandHandler = require('./LCommandHandler')
@@ -21,6 +22,8 @@ class LightbringerClient extends AkairoClient {
     this.stats = new Stats(this)
 
     this.storage = new Storage(this)
+
+    this.booruCache = new BooruCache(this)
 
     this.guildColors = new GuildColors(this)
 

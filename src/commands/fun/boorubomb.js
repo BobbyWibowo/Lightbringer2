@@ -4,6 +4,7 @@ const { stripIndents } = require('common-tags')
 
 const DEFAULT_SITES = [
   'gelbooru.com',
+  'danbooru.donmai.us',
   'konachan.net',
   'yande.re'
 ]
@@ -100,28 +101,12 @@ class BooruCommand extends Command {
       : 'Searching for random images from various booru sites\u2026'
     await message.status('progress', searchMessage)
 
-    const imageUrls = []
-    for (let i = 0; i < siteKeys.length; i++) {
-      const images = await booru
-        .search(siteKeys[i], tags, {
-          limit: 1,
-          random: true
-        })
-        .then(booru.commonfy)
-        .catch(() => {})
-      if (images && images.length) {
-        const image = images[0]
-        // Skip site that did not return file_url (mostly danbooru)
-        if (image.common.file_url === image.common.source) { continue }
-        const imageUrl = this.client.util.cleanUrl(image.common.file_url)
-        imageUrls.push(imageUrl)
-      }
-    }
-
-    if (!imageUrls.length) {
+    const images = await this.client.booruCache.get(siteKeys, tags)
+    if (!images.length) {
       return message.status('error', 'Could not find any images from the booru sites.')
     }
 
+    const imageUrls = images.map(image => this.client.util.cleanUrl(image.file_url))
     return message.edit(imageUrls.join('\n\n'))
   }
 

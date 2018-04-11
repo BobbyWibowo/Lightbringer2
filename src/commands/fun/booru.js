@@ -115,30 +115,13 @@ class BooruCommand extends Command {
       : `Searching for random image from \`${siteKey}\`\u2026`
     await message.status('progress', searchMessage)
 
-    const images = await booru
-      .search(site, tags, {
-        limit: 1,
-        random: true
-      })
-      .then(booru.commonfy)
-      .catch(error => {
-        if (error.name === 'BooruError') {
-          return message.status('error', error.message)
-        } else {
-          throw error
-        }
-      })
-
-    if (!images || !images.length) {
-      return message.status('error', 'Unexpected behavior occurred: empty "images" array.')
+    const images = await this.client.booruCache.get(siteKey, tags)
+    if (!images.length) {
+      return message.status('error', 'Could not find any images from the booru site.')
     }
 
     const image = images[0]
-    // Skip site that did not return file_url (mostly danbooru)
-    if (image.common.file_url === image.common.source) {
-      return message.status('error', 'Could not find any images from the booru site.')
-    }
-    const imageUrl = this.client.util.cleanUrl(image.common.file_url)
+    const imageUrl = this.client.util.cleanUrl(image.file_url)
 
     if (liteMode) {
       return message.edit(imageUrl)
@@ -148,9 +131,9 @@ class BooruCommand extends Command {
         : `Random image from \`${siteKey}\`:`
       return message.edit(stripIndent`
         ${title}
-        •  **Score:** ${image.common.score}
-        •  **Rating:** ${RATINGS[image.common.rating]}
-        •  **Source:** ${image.common.source ? `<${image.common.source}>` : 'N/A'}
+        •  **Score:** ${image.score}
+        •  **Rating:** ${RATINGS[image.rating]}
+        •  **Source:** ${image.source ? `<${image.source}>` : 'N/A'}
         •  **Image:** ${imageUrl}
       `)
     }
