@@ -46,9 +46,10 @@ class HelpCommand extends Command {
       const formatted = this.handler.categories
         .map(category => {
           const id = category.id
-          const modules = this.handler.modules.filter(m => m.category.id === id && (m.options && !m.options.hidden))
+          const modules = Array.from(category.values())
+            .filter(m => m.category.id === id && (m.options && !m.options.hidden))
 
-          if (!modules.size) {
+          if (!modules.length) {
             return false
           }
 
