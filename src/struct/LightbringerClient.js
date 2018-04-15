@@ -5,17 +5,32 @@ const LClientUtil = require('./LClientUtil')
 const LCommandHandler = require('./LCommandHandler')
 const LInhibitorHandler = require('./LInhibitorHandler')
 const LListenerHandler = require('./LListenerHandler')
+const path = require('path')
 const Stats = require('./Stats')
 const Storage = require('./Storage')
 
 class LightbringerClient extends AkairoClient {
-  /**
-   * The Lightbringer client.
-   * @param {AkairoOptions} [options={}] - Options to use for the Akairo framework.
-   * @param {ClientOptions} [clientOptions] - Options for Discord JS client.
-   */
-  constructor (options = {}, clientOptions) {
-    super(options, clientOptions)
+  constructor (configManager) {
+    super({
+      selfbot: true,
+      allowMention: false,
+      automateCategories: true,
+      prefix: configManager.get('prefix') || 'lb',
+      commandDirectory: path.join(__dirname, '..', 'commands'),
+      inhibitorDirectory: path.join(__dirname, '..', 'inhibitors'),
+      listenerDirectory: path.join(__dirname, '..', 'listeners'),
+      storageDirectory: path.join(__dirname, '..', '..', 'storage'),
+      statusTimeout: 7500,
+      purgeCommandsTimeout: 2500
+    }, {
+      messageCacheMaxSize: 10,
+      sync: true,
+      disabledEvents: [
+        'TYPING_START'
+      ]
+    })
+
+    this.configManager = configManager
 
     this.util = new LClientUtil(this)
 

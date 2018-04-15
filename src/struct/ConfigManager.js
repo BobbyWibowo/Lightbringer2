@@ -11,9 +11,7 @@ class ConfigManager {
       prefix: {
         default: 'lb'
       },
-      token: {
-        protected: true // This is only protected by the get/set functions
-      },
+      token: {},
       statusChannel: {},
       onlineStatus: {
         default: 'idle',
@@ -55,7 +53,7 @@ class ConfigManager {
 
     try {
       this._config = fse.readJSONSync(this._path)
-      return this._config
+      return true
     } catch (error) {
       console.error(error)
       return process.exit(1)
@@ -94,20 +92,12 @@ class ConfigManager {
       throw new Error('The key you specified is INVALID.')
     }
 
-    if (this._validKeys[key].protected) {
-      return '<protected>'
-    }
-
     return this._config[key]
   }
 
   set (key, value) {
     if (this._validKeys[key] === undefined) {
       throw new Error('The key you specified is INVALID.')
-    }
-
-    if (this._validKeys[key].protected) {
-      throw new Error('The key you specified is PROTECTED.')
     }
 
     const allowed = this._validKeys[key].allowed
