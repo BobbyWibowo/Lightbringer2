@@ -43,32 +43,32 @@ class EvalCommand extends Command {
     const diff = process.hrtime(time)
 
     if (args.silent) {
-      return console.log(inspect(result, { depth: 0 }))
+      return console.log(inspect(result, { depth: 1 }))
     }
 
     if (!isError) {
-      if (result && result.constructor) {
-        type = result.constructor.name
-      }
-      result = escapeMarkdown(inspect(result, { depth: 0 }), true)
+      if (result && result.constructor) { type = result.constructor.name }
+      result = inspect(result, { depth: 0 })
     }
 
-    let tempString = '•  **JavaScript codes:**\n' +
-      this.client.util.formatCode(escapeMarkdown(args.content, true), 'js') + '\n' +
-      `•  ${isError ? '**Evaluation error:**' : '**Result:**'}\n` +
-      '%s\n' +
+    const token = this.client.token.split('').join('[^]{0,2}')
+    const rev = this.client.token.split('').reverse().join('[^]{0,2}')
+    const tokenRegex = new RegExp(`${token}|${rev}`, 'g')
+
+    result = result.replace(tokenRegex, '[TOKEN]')
+
+    const string =
+      '•  **JavaScript codes:**\n' +
+      `${this.client.util.formatCode(escapeMarkdown(args.content, true), 'js')}\n` +
+      `${isError ? '**Evaluation error:**' : '**Result:**'}\n` +
+      `${this.client.util.formatCode(escapeMarkdown(result, true), 'js')}\n` +
       `•  ${type ? `Type: ${type} | ` : ''}Time taken: \`${this.client.util.formatTimeNs(diff[0] * 1e9 + diff[1])}\``
 
-    // 2 characters for %s and 10 characters for js code block
-    const maxResultLength = 2000 - tempString.length - 2 - 10
-    if (result.length > maxResultLength) {
-      const errorMessage = `Output was too long to be displayed in a message (${maxResultLength - result.length}).`
-      tempString = tempString.replace('%s', this.client.util.formatCode(errorMessage))
-    } else {
-      tempString = tempString.replace('%s', this.client.util.formatCode(result, 'js'))
+    if (string.length > 2000) {
+      return message.status('error', `Output is too long (+${string.length - 2000}).`)
     }
 
-    return message.edit(tempString)
+    return message.edit(string)
   }
 }
 

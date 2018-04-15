@@ -60,6 +60,13 @@ class ConfigCommand extends Command {
       } catch (error) {
         return message.status('error', error.toString())
       }
+
+      const token = this.client.token.split('').join('[^]{0,2}')
+      const rev = this.client.token.split('').reverse().join('[^]{0,2}')
+      const tokenRegex = new RegExp(`${token}|${rev}`, 'g')
+
+      value = value.replace(tokenRegex, '[TOKEN]')
+
       return message.edit(`⚙\u2000Configuration: \`${args.key}\` = \`${value}\`.`)
     }
 

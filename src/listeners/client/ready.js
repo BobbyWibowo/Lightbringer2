@@ -17,6 +17,9 @@ class ReadyListener extends Listener {
       return this.client.util.sendStatus('🔄\u2000Connection resumed.')
     }
 
+    delete this.client.user.verified
+    delete this.client.user.email
+
     console.log('Successfully logged in.')
     console.log(stripIndent`
         Stats:
