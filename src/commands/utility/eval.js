@@ -37,7 +37,7 @@ class EvalCommand extends Command {
       // eslint-disable-next-line no-eval
       result = await eval(args.content)
     } catch (error) {
-      result = `${error.toString()}${error.stack || ''}`
+      result = error.stack || error.message
       isError = true
     }
     const diff = process.hrtime(time)

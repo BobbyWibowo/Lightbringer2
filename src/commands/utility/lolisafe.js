@@ -30,6 +30,12 @@ class LoliSafeCommand extends Command {
           match: 'prefix',
           prefix: ['--token=', '-t='],
           description: 'Token for the lolisafe-based host. This will be saved to the storage.'
+        },
+        {
+          id: 'album',
+          match: 'prefix',
+          prefix: ['--album=', '-a='],
+          description: 'Album ID for the lolisafe-based host. This will be saved to the storage.'
         }
       ],
       options: {
@@ -42,6 +48,8 @@ class LoliSafeCommand extends Command {
     this.url = DEFAULT_URL
 
     this.token = null
+
+    this.album = null
   }
 
   async exec (message, args) {
@@ -71,6 +79,18 @@ class LoliSafeCommand extends Command {
         this.token = args.token
         return message.status('success', 'Successfully saved token to the storage file.')
       }
+    } else if (args.album) {
+      if (args.album === 'null') {
+        this.storage.set('token')
+        this.storage.save()
+        this.album = null
+        return message.status('success', 'Successfully removed album ID from the storage file.')
+      } else {
+        this.storage.set('album', args.album)
+        this.storage.save()
+        this.album = args.album
+        return message.status('success', 'Successfully saved album ID to the storage file.')
+      }
     } else if (!args.url) {
       return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
@@ -82,8 +102,7 @@ class LoliSafeCommand extends Command {
 
     const url = exec[1]
 
-    // This will only prepend a progress icon to the message.
-    await message.status('progress', message.content)
+    await message.status('progress', `Uploading to \`${this.client.util.getHostName(this.url)}\`\u2026`)
 
     const download = await this.client.util.snek(url)
     if (download.status !== 200) {
@@ -103,7 +122,10 @@ class LoliSafeCommand extends Command {
     const result = await this.client.util.snekfetch
       .post(this.url)
       .set('Content-Type', 'multipart/form-data')
-      .set({ token: this.token })
+      .set({
+        token: this.token,
+        albumid: this.album
+      })
       .attach('files[]', download.body, `tmp.${ext}`)
 
     if (result.status !== 200) {
@@ -128,6 +150,11 @@ class LoliSafeCommand extends Command {
     const token = this.storage.get('token')
     if (token) {
       this.token = token
+    }
+
+    const album = this.storage.get('album')
+    if (album) {
+      this.album = album
     }
   }
 

@@ -1063,9 +1063,9 @@ mute-stream@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
 
-mw-dict@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/mw-dict/-/mw-dict-2.2.0.tgz#971571530f77e374071679d3a2e03bd8e1a946d4"
+mw-dict@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/mw-dict/-/mw-dict-3.0.0.tgz#6eaf4c7b439319cf1a3f805003b829c69a7000a7"
   dependencies:
     axios "^0.16.2"
     lodash "^4.17.4"
@@ -1652,9 +1652,9 @@ uuid@^3.1.0:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.2.1.tgz#12c528bb9d58d0b9265d9a2f6f0fe8be17ff1f14"
 
-uws@^9.14.0:
-  version "9.14.0"
-  resolved "https://registry.yarnpkg.com/uws/-/uws-9.14.0.tgz#fac8386befc33a7a3705cbd58dc47b430ca4dd95"
+uws@^9.147.0:
+  version "9.147.0"
+  resolved "https://registry.yarnpkg.com/uws/-/uws-9.147.0.tgz#aec775fb28074ab520f65802eff609c6662be7e8"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.3"
