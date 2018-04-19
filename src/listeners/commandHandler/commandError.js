@@ -1,6 +1,6 @@
 const { AkairoError, Listener } = require('discord-akairo')
 const { DiscordAPIError } = require('discord.js')
-const LightbringerError = require('./../../util/LightbringerError')
+const LError = require('./../../util/LError')
 
 class CommandErrorListener extends Listener {
   constructor () {
@@ -13,7 +13,7 @@ class CommandErrorListener extends Listener {
   async exec (error, message, command) {
     if (error instanceof DiscordAPIError || error instanceof AkairoError) {
       return message.status('error', error.toString())
-    } else if (error instanceof LightbringerError) {
+    } else if (error instanceof LError) {
       return message.status('error', error.message, error.timeout)
     }
 

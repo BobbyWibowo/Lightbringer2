@@ -1,5 +1,5 @@
 const { Command } = require('discord-akairo')
-const LightbringerError = require('../../util/LightbringerError')
+const LError = require('../../util/LError')
 
 const INHIBITOR_ID = 'guildBlacklist'
 
@@ -151,7 +151,7 @@ class GuildBlacklistCommand extends Command {
   async resolveSingleGuild (keyword, isID) {
     if (isID) {
       if (!/^\d+$/.test(keyword)) {
-        throw new LightbringerError('Guild ID is invalid.')
+        throw new LError('Guild ID is invalid.')
       }
       return { id: keyword, display: keyword }
     } else {

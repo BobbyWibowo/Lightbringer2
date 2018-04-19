@@ -2,7 +2,7 @@ const { ActivityTypes } = require('discord.js').Constants
 const { ClientUtil } = require('discord-akairo')
 const { Collection, Guild, Message, MessageEmbed, MessageMentions, TextChannel } = require('discord.js')
 const encodeUrl = require('encodeurl')
-const LightbringerError = require('./../util/LightbringerError')
+const LError = require('./../util/LError')
 const moment = require('moment')
 const pixelAverage = require('pixel-average')
 const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
@@ -198,9 +198,9 @@ class LClientUtil extends ClientUtil {
     if (items.size === 1) {
       return items.first()
     } else if (items.size > 1) {
-      throw new LightbringerError(this.formatMatchesList(items, { name, prop, syntax }), this.matchesListTimeout)
+      throw new LError(this.formatMatchesList(items, { name, prop, syntax }), this.matchesListTimeout)
     } else if (!disableNotFound) {
-      throw new LightbringerError(`Could not find any ${name} matching the keyword.`)
+      throw new LError(`Could not find any ${name} matching the keyword.`)
     }
   }
 
@@ -305,7 +305,7 @@ class LClientUtil extends ClientUtil {
     if (result.user === undefined) {
       // This shall not ever be triggered as "this.assertUser" will
       // throw an Error when it can not find any matches.
-      throw new LightbringerError('Could not find any members or users matching the keyword.')
+      throw new LError('Could not find any members or users matching the keyword.')
     }
 
     return result

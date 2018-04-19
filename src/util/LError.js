@@ -1,4 +1,4 @@
-class LightbringerError extends Error {
+class LError extends Error {
   constructor (message, timeout = 8000) {
     super(message)
 
@@ -6,4 +6,4 @@ class LightbringerError extends Error {
   }
 }
 
-module.exports = LightbringerError
+module.exports = LError
