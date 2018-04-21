@@ -24,6 +24,12 @@ class BooruCommand extends Command {
           description: 'Lists all available booru sites and their aliases.'
         },
         {
+          id: 'last',
+          match: 'flag',
+          prefix: ['--last'],
+          description: 'Uses last used arguments.'
+        },
+        {
           id: 'upload',
           match: 'flag',
           prefix: ['--upload', '-u'],
@@ -54,11 +60,13 @@ class BooruCommand extends Command {
         }
       ],
       options: {
-        usage: 'booru [ --list | [--upload] [--site=] tags | --defaultSite= | --lite ]'
+        usage: 'booru [ --list | --last | [--upload] [--site=] tags | --defaultSite= | --lite ]'
       }
     })
 
     this.storage = null
+
+    this.lastArgs = null
   }
 
   async exec (message, args) {
@@ -99,6 +107,15 @@ class BooruCommand extends Command {
       this.storage.set('liteMode', !liteMode)
       this.storage.save()
       return message.status('success', `Lite mode was successfully ${liteMode ? 'disabled' : 'enabled'}.`)
+    }
+
+    if (args.last) {
+      if (!this.lastArgs) {
+        return message.status('error', 'There are no saved arguments.')
+      }
+      args = this.lastArgs
+    } else {
+      this.lastArgs = args
     }
 
     const site = args.site || this.storage.get('defaultSite') || DEFAULT_SITE

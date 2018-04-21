@@ -22,6 +22,12 @@ class BooruCommand extends Command {
           description: 'Lists all available booru sites and their aliases.'
         },
         {
+          id: 'last',
+          match: 'flag',
+          prefix: ['--last'],
+          description: 'Uses last used arguments.'
+        },
+        {
           id: 'upload',
           match: 'flag',
           prefix: ['--upload', '-u'],
@@ -51,6 +57,8 @@ class BooruCommand extends Command {
     })
 
     this.storage = null
+
+    this.lastArgs = null
   }
 
   async exec (message, args) {
@@ -86,6 +94,15 @@ class BooruCommand extends Command {
       this.storage.set('defaultSites', defaultSites)
       this.storage.save()
       return message.status('success', `Successfully changed default sites to: ${this.inline(defaultSites)}.`)
+    }
+
+    if (args.last) {
+      if (!this.lastArgs) {
+        return message.status('error', 'There are no saved arguments.')
+      }
+      args = this.lastArgs
+    } else {
+      this.lastArgs = args
     }
 
     const sites = (args.sites ? args.sites.split(',') : null) || this.storage.get('defaultSites') || DEFAULT_SITES
