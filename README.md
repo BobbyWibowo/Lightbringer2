@@ -23,8 +23,13 @@ Lightbringer2 makes full use of ES2017's `async/await` functionality for clear, 
 - `git` ([Windows](https://git-scm.com/download/win) | [Linux](https://git-scm.com/download/linux) | [macOS](https://git-scm.com/download/mac))
 - `node` ([Windows](https://nodejs.org/en/download/current/) | [Linux](https://nodejs.org/en/download/package-manager/) | [macOS](https://nodejs.org/en/download/current/))
 - `yarn` ([Windows](https://yarnpkg.com/en/docs/install#windows-tab) | [Linux](https://yarnpkg.com/en/docs/install#linux-tab) | [macOS](https://yarnpkg.com/en/docs/install#mac-tab))
-
 > This bot requires node `8.0.0` or newer (run `node -v` to check your node version).
+
+### Additional Requirements
+
+- `cairo` ([Installation instructions](https://www.npmjs.com/package/canvas#installation))
+> This is required by `color` command. If you do not want to use the command, you may remove `canvas` from package.json, since that dependency is the one that requires `cairo`.
+
 
 ### Installing
 
