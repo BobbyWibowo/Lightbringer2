@@ -30,7 +30,6 @@ Lightbringer2 makes full use of ES2017's `async/await` functionality for clear, 
 - `cairo` ([Installation instructions](https://www.npmjs.com/package/canvas#installation))
 > This is required by `color` command. If you do not want to use the command, you may remove `canvas` from package.json, since that dependency is the one that requires `cairo`.
 
-
 ### Installing
 
 ```bash
