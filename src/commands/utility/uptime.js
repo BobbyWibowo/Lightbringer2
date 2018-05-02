@@ -28,7 +28,7 @@ class UpTimeCommand extends Command {
   }
 
   async exec (message, args) {
-    await message.edit(`⏰\u2000${args.short ? 'Up' : 'Uptime'}: ${this.client.util.humanizeDuration(this.client.uptime, args.maxUnits, args.short)}.`)
+    await message.edit(`⏰\u2000${args.short ? 'Up' : 'Uptime'}: ${this.client.util.humanizeDuration(Date.now() - this.client.startTimestamp, args.maxUnits, args.short)}.`)
   }
 }
 

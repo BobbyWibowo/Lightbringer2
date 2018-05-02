@@ -69,6 +69,8 @@ class LightbringerClient extends AkairoClient {
       this.listenerHandler = new LListenerHandler(this)
     }
 
+    this.startTimestamp = Date.now()
+
     return this
   }
 }

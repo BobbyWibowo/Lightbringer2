@@ -27,7 +27,7 @@ class StatsCommand extends Command {
             •  **Node.js:** [${process.versions.node}](${process.release.sourceUrl})
             •  **Heap:** ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB
             •  **Heartbeat:** \`${this.client.ping.toFixed(0)}ms\`
-            •  **Uptime:** ${this.client.util.humanizeDuration(this.client.uptime, 2, true)}
+            •  **Uptime:** ${this.client.util.humanizeDuration(Date.now() - this.client.startTimestamp, 2, true)}
           `
         },
         {
