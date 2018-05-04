@@ -1,4 +1,5 @@
 const { Command } = require('discord-akairo')
+const path = require('path')
 
 class JumboCommand extends Command {
   constructor () {
@@ -31,11 +32,9 @@ class JumboCommand extends Command {
         if (match && match[1]) {
           const emoji = this.client.emojis.get(match[1])
           if (emoji) {
-            const attachment = emoji.url
-            const format = /\d{17,19}\.(\w*?)$/.exec(attachment)
             return {
-              attachment,
-              name: `${emoji.name}.${format ? format[1] : 'png'}`
+              attachment: emoji.url,
+              name: path.basename(emoji.url)
             }
           }
         }

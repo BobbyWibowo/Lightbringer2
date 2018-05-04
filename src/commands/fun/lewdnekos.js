@@ -3,7 +3,7 @@ const { Command } = require('discord-akairo')
 class LewdNekosCommand extends Command {
   constructor () {
     super('lewdnekos', {
-      aliases: ['lewdnekos', 'lewdneko', 'lewd', 'nekol'],
+      aliases: ['lewdnekos', 'lewdneko', 'lewdnyaa', 'lewd', 'nekol'],
       description: 'An alias for "neko --lewd".',
       args: [
         {

@@ -1,4 +1,5 @@
 const { Command } = require('discord-akairo')
+const path = require('path')
 
 const DEFAULT_URL = 'https://safe.fiery.me/api/upload'
 
@@ -17,7 +18,7 @@ class LoliSafeCommand extends Command {
           id: 'ext',
           match: 'prefix',
           prefix: ['--extension=', '--ext=', '-e='],
-          description: 'The command will try to parse an extension from the URL, and in case of failure it will use \'.unknown\'. Use this option to override the extension.'
+          description: 'The command will try to parse an extension from the URL, and in case of failure it will not have an extension. Use this option to override the extension.'
         },
         {
           id: 'site',
@@ -96,29 +97,24 @@ class LoliSafeCommand extends Command {
     }
 
     const exec = /^<?(.+?)>?$/.exec(args.url)
-    if (!exec) {
+    if (!exec || !exec[1]) {
       return message.status('error', 'Could not parse input.')
     }
-
-    const url = exec[1]
+    args.url = exec[1].trim()
 
     await message.status('progress', `Uploading to \`${this.client.util.getHostName(this.url)}\`\u2026`)
 
-    const download = await this.client.util.snek(url)
+    const download = await this.client.util.snek(args.url)
     if (download.status !== 200) {
       return message.status('error', download.text)
     }
 
-    let ext = 'unknown'
-    if (args.ext) {
-      ext = args.ext
-    } else {
-      const _exec = /.([\w]+)(\?|$)/.exec(url)
-      if (_exec) {
-        ext = _exec[1]
-      }
+    if (args.ext && !args.ext.startsWith('.')) {
+      args.ext = `.${args.ext}`
     }
 
+    const parsed = path.parse(args.url)
+    const filename = `${parsed.name || 'tmp'}${args.ext || parsed.ext}`
     const result = await this.client.util.snekfetch
       .post(this.url)
       .set('Content-Type', 'multipart/form-data')
@@ -126,7 +122,7 @@ class LoliSafeCommand extends Command {
         token: this.token,
         albumid: this.album
       })
-      .attach('files[]', download.body, `tmp.${ext}`)
+      .attach('files[]', download.body, filename)
 
     if (result.status !== 200) {
       return message.status('error', result.text)

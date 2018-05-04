@@ -3,7 +3,7 @@ const { Command } = require('discord-akairo')
 class NekosCommand extends Command {
   constructor () {
     super('nekos', {
-      aliases: ['nekos', 'neko'],
+      aliases: ['nekos', 'neko', 'nyaa'],
       description: 'Shows you random neko pictures from nekos.life.',
       args: [
         {

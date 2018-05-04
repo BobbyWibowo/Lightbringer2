@@ -1,16 +1,17 @@
 const { Command } = require('discord-akairo')
+const path = require('path')
 
 class UploadCommand extends Command {
   constructor () {
     super('upload', {
-      aliases: ['upload', 'attach'],
+      aliases: ['upload', 'upl', 'attach'],
       description: 'Uploads a file from a URL as an attachment (works for either regular files or images).',
       args: [
         {
           id: 'name',
           match: 'prefix',
           prefix: ['--name=', '-n='],
-          description: 'File name for the attachment.'
+          description: 'The command will try to parse file name from the URL, and in case of failure it will use \'tmp\'. Use this option to override the file name.'
         },
         {
           id: 'url',
@@ -31,31 +32,24 @@ class UploadCommand extends Command {
     }
 
     const exec = /^<?(.+?)>?$/.exec(args.url)
-    if (!exec) {
+    if (!exec || !exec[1]) {
       return message.status('error', 'Could not parse input.')
     }
+    args.url = exec[1].trim()
 
     // This will only prepend a progress icon to the message.
     await message.status('progress', message.content)
 
-    const result = await this.client.util.snek(exec[1])
+    const result = await this.client.util.snek(args.url)
     if (result.status !== 200) {
       return message.status('error', result.text)
     }
 
-    const file = { attachment: result.body }
-
-    if (args.name) {
-      file.name = args.name
-    } else {
-      const _exec = /(?:.+\/)([^#?]+)/.exec(args.url)
-      if (_exec) {
-        file.name = _exec[1]
-      }
-    }
-
     await message.channel.send({
-      files: [ file ]
+      files: [{
+        attachment: result.body,
+        name: args.name || path.basename(args.url) || 'tmp'
+      }]
     })
     await message.delete()
   }
