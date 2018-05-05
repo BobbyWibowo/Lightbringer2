@@ -14,6 +14,12 @@ class UploadCommand extends Command {
           description: 'The command will try to parse file name from the URL, and in case of failure it will use \'tmp\'. Use this option to override the file name.'
         },
         {
+          id: 'plain',
+          match: 'flag',
+          prefix: ['--plain', '-p'],
+          description: 'Plain mode. The command will not print the source URL in the message that contains the attachment.'
+        },
+        {
           id: 'url',
           match: 'rest',
           description: 'URL of the file.'
@@ -38,20 +44,20 @@ class UploadCommand extends Command {
     args.url = exec[1].trim()
 
     // This will only prepend a progress icon to the message.
-    await message.status('progress', message.content)
+    await message.status('progress', 'Uploading URL as an attachment\u2026')
 
     const result = await this.client.util.snek(args.url)
     if (result.status !== 200) {
       return message.status('error', result.text)
     }
 
-    await message.channel.send({
+    await message.channel.send(args.plain ? null : `<${args.url}>`, {
       files: [{
         attachment: result.body,
         name: args.name || path.basename(args.url) || 'tmp'
       }]
     })
-    await message.delete()
+    return message.delete()
   }
 }
 

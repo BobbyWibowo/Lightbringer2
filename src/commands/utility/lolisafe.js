@@ -7,7 +7,7 @@ class LoliSafeCommand extends Command {
   constructor () {
     super('lolisafe', {
       aliases: ['lolisafe', 'safe', 's'],
-      description: `Uploads a file from a URL to a lolisafe-based host (default to ${DEFAULT_URL}).`,
+      description: `Uploads a file from a URL to a lolisafe-based host (defaults to ${DEFAULT_URL}).`,
       args: [
         {
           id: 'url',
