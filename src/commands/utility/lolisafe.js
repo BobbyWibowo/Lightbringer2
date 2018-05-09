@@ -104,7 +104,13 @@ class LoliSafeCommand extends Command {
 
     await message.status('progress', `Uploading to \`${this.client.util.getHostName(this.url)}\`\u2026`)
 
-    const download = await this.client.util.snek(args.url)
+    const options = {}
+    if (/^https?:\/\/i\.pximg\.net\/img-original\//.test(args.url)) {
+      options.headers = {
+        referer: 'https://www.pixiv.net/member_illust.php?mode=medium&illust_id=0'
+      }
+    }
+    const download = await this.client.util.snek(args.url, options)
     if (download.status !== 200) {
       return message.status('error', download.text)
     }

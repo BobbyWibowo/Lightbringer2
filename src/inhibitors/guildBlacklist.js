@@ -4,7 +4,7 @@ class GuildBlacklistInhibitor extends Inhibitor {
   constructor () {
     super('guildBlacklist', {
       reason: 'GUILD_BLACKLISTED',
-      type: 'all'
+      type: 'post'
     })
 
     this.storage = null

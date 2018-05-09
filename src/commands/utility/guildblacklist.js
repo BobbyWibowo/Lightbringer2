@@ -44,14 +44,18 @@ class GuildBlacklistCommand extends Command {
           id: 'inhibitorID',
           match: 'prefix',
           prefix: ['--inhibitorID=', '--inhibitor=', '-i'],
-          description: 'ID of the inhibitor that (do not change this unless you know what you are doing).'
+          description: 'ID of the inhibitor that will be called whenever a guild is being added to or removed from the blacklist (do not change this unless you know what you are doing).'
         }
       ],
       options: {
-        usage: 'guildblacklist [ --list | --add= | --remove= ]',
+        usage: 'guildblacklist [ --list | --add= | --addID= | --remove= | --removeID= | --inhibitorID= ]',
         examples: [
+          {
+            content: 'guildblacklist',
+            description: 'Blacklist the currently viewed guild.'
+          },
           'guildblacklist --add="super guild"',
-          'guildblacklist --add=123456789012345678',
+          'guildblacklist --addID=123456789012345678',
           'guildblacklist --inhibitorID=guildBlacklist'
         ]
       }

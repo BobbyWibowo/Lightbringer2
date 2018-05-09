@@ -1,6 +1,8 @@
 const { Command } = require('discord-akairo')
 const path = require('path')
 
+const EMOJI_REGEX = /<a?:[a-zA-Z0-9_]+:(\d+)>/
+
 class JumboCommand extends Command {
   constructor () {
     super('jumbo', {
@@ -28,7 +30,7 @@ class JumboCommand extends Command {
     const files = args.emojis
       .split(' ')
       .map(s => {
-        const match = /<a?:\w+?:(\d{17,19})>/.exec(s)
+        const match = EMOJI_REGEX.exec(s)
         if (match && match[1]) {
           const emoji = this.client.emojis.get(match[1])
           if (emoji) {

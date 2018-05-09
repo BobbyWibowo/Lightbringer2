@@ -46,7 +46,13 @@ class UploadCommand extends Command {
     // This will only prepend a progress icon to the message.
     await message.status('progress', 'Uploading URL as an attachment\u2026')
 
-    const result = await this.client.util.snek(args.url)
+    const options = {}
+    if (/^https?:\/\/i\.pximg\.net\/img-original\//.test(args.url)) {
+      options.headers = {
+        referer: 'https://www.pixiv.net/member_illust.php?mode=medium&illust_id=0'
+      }
+    }
+    const result = await this.client.util.snek(args.url, options)
     if (result.status !== 200) {
       return message.status('error', result.text)
     }
