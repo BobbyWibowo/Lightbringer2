@@ -17,12 +17,12 @@ class EmojiManageCommand extends Command {
             if (/^r(en(ame)?)?$/.test(word)) { return 3 }
             return null
           },
-          description: 'Can be "add", "create", "delete" or "remove". Add/create action will create the emoji in the currently viewed guild, while delete/remove action will delete the emoji globally unless the resolvable is only a name (instead of an ID or the emoji itself).'
+          description: 'Can be "add", "create", "delete", "remove" or "rename". Add/create action will create the emoji in the currently viewed guild, while delete/remove and rename actions will delete/rename the emoji globally unless the resolvable is only a name (instead of an ID or the emoji itself).'
         },
         {
           id: 'name',
           match: 'word',
-          description: 'Emoji resolvable (ID, name or the emoji itself).'
+          description: 'With add/create action, this must be the name that will be used as a new emoji. With delete/remove and rename actions, this can be an emoji resolvable (ID, name or the emoji itself). Using name (for delete/remove/rename actions) will make the command only search for emojis in the currently viewed guild. It is also not case-sensitive and do not have to be typed in full.'
         },
         {
           id: 'extra',
@@ -31,7 +31,7 @@ class EmojiManageCommand extends Command {
         }
       ],
       options: {
-        usage: 'emojis <action> <name> [extra]',
+        usage: 'emojis <action> <resolvable> [extra]',
         examples: [
           'emojimanage add emojiname http://url/to/image',
           'emojimanage delete emojiname',
