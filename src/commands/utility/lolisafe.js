@@ -120,7 +120,8 @@ class LoliSafeCommand extends Command {
     }
 
     const parsed = path.parse(args.url)
-    const filename = `${parsed.name || 'tmp'}${args.ext || parsed.ext}`
+    const extname = parsed.ext.split(/[?#]/)[0]
+    const filename = `${parsed.name || 'tmp'}${args.ext || extname}`
     const result = await this.client.util.snekfetch
       .post(this.url)
       .set('Content-Type', 'multipart/form-data')

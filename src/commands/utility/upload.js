@@ -57,10 +57,12 @@ class UploadCommand extends Command {
       return message.status('error', result.text)
     }
 
+    const parsed = path.parse(args.url)
+    const extname = parsed.ext.split(/[?#]/)[0]
     await message.channel.send(args.plain ? null : `<${args.url}>`, {
       files: [{
         attachment: result.body,
-        name: args.name || path.basename(args.url) || 'tmp'
+        name: args.name || `${parsed.name}${extname}` || 'tmp'
       }]
     })
     return message.delete()
