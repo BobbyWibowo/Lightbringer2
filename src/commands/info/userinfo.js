@@ -102,12 +102,12 @@ class UserInfoCommand extends Command {
         .array() // Get an array instance of the Collection.
         .slice(1) // Slice @everyone role.
         .sort((a, b) => b.position - a.position) // Sort by their positions in the Guild.
-        .map(role => escapeMarkdown(role.name, true)) // Escape markdown from their names.
+        .map(role => escapeMarkdown(role.name)) // Escape markdown from their names.
 
       embed.fields.push(
         {
           name: `Guild Roles [${roles.length}]`,
-          value: this.client.util.formatCode(roles.length ? roles.join(', ') : 'N/A')
+          value: roles.length ? roles.join(', ') : 'N/A'
         }
       )
     } else if (message.guild) {
