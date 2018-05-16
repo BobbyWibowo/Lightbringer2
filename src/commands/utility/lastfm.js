@@ -146,22 +146,21 @@ class LastfmCommand extends Command {
 
     const rich = this.storage.get('rich')
     const clientID = this.storage.get('clientID')
-    // const username = this.storage.get('username')
+    const username = this.storage.get('username')
 
     if (rich && clientID) {
       return this.client.user.setPresence({
         activity: {
           application: clientID,
-          name: this.trackName,
+          name: 'Last.fm',
           type: 'LISTENING',
           details: this.trackName,
           state: this.artist,
           assets: {
             largeImage: this.storage.get('largeImageID') || null,
             smallImage: this.storage.get('smallImageID') || null,
-            largeText: `${this.totalScrobbles.toLocaleString()} scrobbles`,
-            // smallText: `User: ${username}`
-            smallText: 'Powered by Lightbringer'
+            largeText: `${username} (${this.totalScrobbles.toLocaleString()})`,
+            smallText: 'Powered by Lightbringer2'
           },
           timestamps: {
             start: this.timestamp

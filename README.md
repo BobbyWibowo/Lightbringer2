@@ -1,6 +1,6 @@
 # Lightbringer2
 
-![Lightbringer2](https://the.fiery.me/nbI4.png)
+![Lightbringer2](https://i.fiery.me/nbI4.png)
 
 Lightbringer2 is yet another [Discord](https://discordapp.com) self-bot written with [discord.js](https://discord.js.org/) (and [Discord Akairo](https://1computer1.gitbooks.io/akairo-tutorials/content/v/v8/) framework).
 
@@ -75,7 +75,7 @@ If you simply want to run the bot in background, you can try [screen](https://ww
 6. At the bottom of the list, the last key should be `token`
 7. Copy the value on the right side (omitting the quotes)
 
-![Getting your user-token](https://the.fiery.me/ETRI.png)
+![Getting your user-token](https://i.fiery.me/ETRI.png)
 
 ## Contact
 

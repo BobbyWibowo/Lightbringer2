@@ -54,7 +54,7 @@ class StatsCommand extends Command {
       inline: true,
       author: {
         name: 'Lightbringer Statistics',
-        icon: 'https://a.safe.moe/F2a1H.png'
+        icon: 'https://i.fiery.me/Ec8h.png'
       },
       color: '#ff0000',
       footer: `Currently caching ${this.client.users.size.toLocaleString()} users.`
@@ -72,7 +72,7 @@ class StatsCommand extends Command {
 
   onReady () {
     if (this.client.package.repository) {
-      this.git = 'https://github.com/' + this.client.package.repository.replace(/^github:/, '')
+      this.git = `https://github.com/${this.client.package.repository.replace(/^github:/, '')}`
     }
   }
 }

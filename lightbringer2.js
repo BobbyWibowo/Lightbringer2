@@ -2,6 +2,9 @@ const ConfigManager = require('./src/struct/ConfigManager')
 const Logger = require('./src/struct/Logger')
 const LightbringerClient = require('./src/struct/LightbringerClient')
 
+process.on('unhandledRejection', console.error)
+process.on('uncaughtException', console.error)
+
 const configManager = new ConfigManager('./config.json')
 configManager.load()
 
@@ -17,14 +20,6 @@ if (!token) {
 }
 
 const client = new LightbringerClient(configManager)
-
-process.on('unhandledRejection', err => {
-  console.error(err)
-})
-
-process.on('uncaughtException', err => {
-  console.error(err)
-})
 
 process.on('exit', () => {
   if (client.storage) {

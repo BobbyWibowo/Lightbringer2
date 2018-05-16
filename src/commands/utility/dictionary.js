@@ -96,7 +96,7 @@ class DictionaryCommand extends Command {
             description: error.suggestions.join('; '),
             footer: {
               text: 'Merriam-Webster\'s Collegiate® Dictionary',
-              icon: 'https://a.safe.moe/jGuCr.png'
+              icon: 'https://i.fiery.me/ucGj.png'
             },
             color: '#ff0000'
           })
@@ -133,7 +133,7 @@ class DictionaryCommand extends Command {
       ],
       footer: {
         text: 'Merriam-Webster\'s Collegiate® Dictionary',
-        icon: 'https://a.safe.moe/jGuCr.png'
+        icon: 'https://i.fiery.me/ucGj.png'
       },
       color: '#2d5f7c'
     }
