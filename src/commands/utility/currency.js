@@ -25,15 +25,39 @@ class CurrencyCommand extends Command {
           match: 'flag',
           prefix: ['--source', '-s'],
           description: 'Displays the source of the exchange rate.'
+        },
+        {
+          id: 'default',
+          match: 'prefix',
+          prefix: ['--default=', '-d='],
+          type: 'uppercase',
+          description: 'Sets default "to" currency.'
         }
       ],
       options: {
-        usage: 'currency < input | --refresh | --source >'
+        usage: 'currency < input | --refresh | --source | --default= >',
+        examples: [
+          {
+            content: 'currency 25 usd eur',
+            description: 'Convert 25 USD to EUR.'
+          },
+          {
+            content: 'currency 50 usd to eur',
+            description: 'Optionally, if there is a "to" in between the two currencies, it will assume the string after it as the actual "to" currency". So it will convert 50 USD to EUR.'
+          },
+          {
+            content: 'currency --default=usd',
+            description: 'Sets default "to" currency to USD. So running something like "currency 50 eur" will convert 50 EUR to USD (since USD is the default "to" currency).'
+          }
+        ]
       }
     })
 
     // Exchange rates data fetched from fixer.io
     this.data = null
+
+    // Default currency
+    this.default = null
 
     // Timeout instance
     this._timeout = null
@@ -56,7 +80,19 @@ class CurrencyCommand extends Command {
       }
     }
 
-    if (!args.input || args.input.length < 3) {
+    const base = this.data.base
+    const rates = this.data.rates
+
+    if (args.default) {
+      const curr = args.default
+      if (rates[curr] === undefined && curr !== base) {
+        return message.status('error', `Currency \`${curr}\` is unavailable.`)
+      }
+      this.default = args.default
+      return message.status('success', `Successfully updated default currency to \`${this.default}\`.`)
+    }
+
+    if (!args.input || args.input.length < 2) {
       return message.status('error', `Usage: \`${this.options.usage}\`.`)
     }
 
@@ -68,16 +104,20 @@ class CurrencyCommand extends Command {
     const curr1 = args.input[1]
     let curr2 = args.input[2]
 
-    // If the 2nd input is "to", then expect
-    // the 2nd currency to be in the 3rd input
+    // If the 2nd input is "to", then expect the 2nd currency to be in the 3rd input
     if (/^to$/i.test(curr2)) {
-      if (args.input[3] !== undefined) {
-        curr2 = args.input[3]
-      }
+      curr2 = args.input[3]
     }
 
-    const base = this.data.base
-    const rates = this.data.rates
+    if (!curr2 && this.default) {
+      curr2 = this.default
+    }
+
+    console.log(curr2)
+
+    if (!curr2) {
+      return message.status('error', 'Missing "to" currency.')
+    }
 
     for (const curr of [curr1, curr2]) {
       if (rates[curr] === undefined && curr !== base) {
@@ -138,6 +178,10 @@ class CurrencyCommand extends Command {
   }
 
   onReady () {
+    this.storage = this.client.storage('currency')
+    this.default = this.storage.get('default')
+    if (!this.default) { this.default = null }
+
     this.updateRates().catch(error => {
       console.error(`[currency] ${error}`)
     })

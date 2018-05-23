@@ -44,7 +44,7 @@ class UploadCommand extends Command {
     args.url = exec[1].trim()
 
     // This will only prepend a progress icon to the message.
-    await message.status('progress', 'Uploading URL as an attachment\u2026')
+    await message.status('progress', 'Uploading\u2026')
 
     const options = {}
     if (/^https?:\/\/i\.pximg\.net\/img-original\//.test(args.url)) {
