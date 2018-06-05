@@ -2,6 +2,12 @@ const { Command } = require('discord-akairo')
 const { escapeMarkdown } = require('discord.js').Util
 const { stripIndent } = require('common-tags')
 
+// Listening activity with this name will have their track name displayed too.
+const LISTENING_TYPES = [
+  'Spotify',
+  'Last.fm'
+]
+
 class UserInfoCommand extends Command {
   constructor () {
     super('userinfo', {
@@ -142,7 +148,7 @@ class UserInfoCommand extends Command {
   }
 
   formatActivityMessage (activity) {
-    if (activity.type === 'LISTENING' && activity.name === 'Spotify') {
+    if (activity.type === 'LISTENING' && LISTENING_TYPES.includes(activity.name)) {
       return `Listening to **${activity.details}** on Spotify`
     } else {
       return `${this.client.util.formatActivityType(activity.type)} **${activity.name}**`
