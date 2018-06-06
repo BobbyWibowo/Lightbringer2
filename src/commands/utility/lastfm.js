@@ -7,6 +7,13 @@ const POLL_TIMEOUT = 5000
 // Maximum amount of consecutive errors
 const MAX_RETRY = 3
 
+const ACTIVITY_TYPES = {
+  PLAYING: /^p(lay(ing)?)?$/i,
+  STREAMING: /^s(tream(ing)?)?$/i,
+  LISTENING: /^l(isten(ing( to)?)?)?$/i,
+  WATCHING: /^w(atch(ing)?)?$/i
+}
+
 class LastfmCommand extends Command {
   constructor () {
     super('lastfm', {
@@ -60,6 +67,18 @@ class LastfmCommand extends Command {
           match: 'prefix',
           prefix: ['--smallImage=', '--small='],
           description: 'Saves the ID of the "small image" that you want to use with your Rich Presence.'
+        },
+        {
+          id: 'type',
+          match: 'prefix',
+          prefix: ['--type='],
+          description: 'Sets the type that will be used for activity. Try "setactivity --list" to see available types.',
+          type: (word, message, args) => {
+            const keys = Object.keys(ACTIVITY_TYPES)
+            for (const key of keys) {
+              if (ACTIVITY_TYPES[key].test(word)) { return key }
+            }
+          }
         }
       ],
       options: {
@@ -67,7 +86,7 @@ class LastfmCommand extends Command {
       }
     })
 
-    this._storageKeys = ['apiKey', 'username', 'clientID', 'largeImageID', 'smallImageID']
+    this._storageKeys = ['apiKey', 'username', 'clientID', 'largeImageID', 'smallImageID', 'type']
 
     this.storage = null
 
@@ -136,6 +155,7 @@ class LastfmCommand extends Command {
       Enabled         :: ${String(this.storage.get('enabled'))}
       Rich Presence   :: ${String(this.storage.get('rich'))}
       Monitor Mode    :: ${String(this.storage.get('monitorMode'))}
+      Activity Type   :: ${this.getActivityType()}
     `, 'asciidoc'))
   }
 
@@ -153,7 +173,7 @@ class LastfmCommand extends Command {
         activity: {
           application: clientID,
           name: 'Last.fm',
-          type: 'LISTENING',
+          type: this.getActivityType(),
           details: this.trackName,
           state: this.artist,
           assets: {
@@ -172,7 +192,7 @@ class LastfmCommand extends Command {
     return this.client.user.setPresence({
       activity: {
         name: `${this.artist} – ${this.trackName} | ♪ Last.fm`,
-        type: 'LISTENING'
+        type: this.getActivityType()
       }
     })
   }
@@ -272,6 +292,10 @@ class LastfmCommand extends Command {
     this.artist = null
     this.trackName = null
     this.client.clearTimeout(this._timeout)
+  }
+
+  getActivityType () {
+    return this.storage.get('type') || 'LISTENING'
   }
 
   onReady () {
