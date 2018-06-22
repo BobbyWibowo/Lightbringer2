@@ -46,12 +46,7 @@ class UploadCommand extends Command {
     // This will only prepend a progress icon to the message.
     await message.status('progress', 'Uploading\u2026')
 
-    const options = {}
-    if (/^https?:\/\/i\.pximg\.net\/img-original\//.test(args.url)) {
-      options.headers = {
-        referer: 'https://www.pixiv.net/member_illust.php?mode=medium&illust_id=0'
-      }
-    }
+    const options = this.patch(args.url)
     const result = await this.client.util.snek(args.url, options)
     if (result.status !== 200) {
       return message.status('error', result.text)
@@ -66,6 +61,21 @@ class UploadCommand extends Command {
       }]
     })
     return message.delete()
+  }
+
+  patch (url, options = {}) {
+    if (options.headers === undefined) {
+      options.headers = {}
+    }
+
+    // Only apply referer patch if it was not specified beforehand
+    if (options.headers.referer === undefined) {
+      if (/^https?:\/\/i\.pximg\.net\/img-original\//.test(url)) {
+        options.headers.referer = 'https://www.pixiv.net/member_illust.php?mode=medium&illust_id=0'
+      }
+    }
+
+    return options
   }
 }
 

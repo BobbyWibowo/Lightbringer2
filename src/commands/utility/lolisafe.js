@@ -104,12 +104,7 @@ class LoliSafeCommand extends Command {
 
     await message.status('progress', `Uploading to \`${this.client.util.getHostName(this.url)}\`\u2026`)
 
-    const options = {}
-    if (/^https?:\/\/i\.pximg\.net\/img-original\//.test(args.url)) {
-      options.headers = {
-        referer: 'https://www.pixiv.net/member_illust.php?mode=medium&illust_id=0'
-      }
-    }
+    const options = this.patch(args.url)
     const download = await this.client.util.snek(args.url, options)
     if (download.status !== 200) {
       return message.status('error', download.text)
@@ -140,6 +135,13 @@ class LoliSafeCommand extends Command {
     }
 
     return message.edit(result.body.files[0].url)
+  }
+
+  patch (url, options) {
+    // Use patch function of "upload" command, if available
+    const uploadCommand = this.handler.modules.get('upload')
+    if (!uploadCommand) { return null }
+    return uploadCommand.patch(url, options)
   }
 
   onReady () {
