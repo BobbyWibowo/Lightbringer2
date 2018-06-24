@@ -1,21 +1,18 @@
 const ConfigManager = require('./src/struct/ConfigManager')
-const Logger = require('./src/struct/Logger')
+const Logger = require('./src/util/Logger')
 const LightbringerClient = require('./src/struct/LightbringerClient')
 
-process.on('unhandledRejection', console.error)
-process.on('uncaughtException', console.error)
+process.on('unhandledRejection', Logger.error)
+process.on('uncaughtException', Logger.error)
 
 const configManager = new ConfigManager('./config.json')
 configManager.load()
 
-const logger = new Logger()
-logger.inject()
-
 const token = configManager.get('token')
 
 if (!token) {
-  console.info('Token is missing from the configuration file.')
-  console.info('Please edit the configuration file then start the bot again.')
+  Logger.error('Token is missing from the configuration file.')
+  Logger.error('Please edit the configuration file then start the bot again.')
   process.exit(1)
 }
 
@@ -27,5 +24,5 @@ process.on('exit', () => {
   }
 })
 
-console.log('Logging in\u2026')
+Logger.log('Logging in\u2026')
 client.login(token)

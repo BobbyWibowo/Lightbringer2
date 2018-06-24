@@ -1,4 +1,5 @@
 const { Listener } = require('discord-akairo')
+const Logger = require('./../../util/Logger')
 
 class ErrorListener extends Listener {
   constructor () {
@@ -9,7 +10,7 @@ class ErrorListener extends Listener {
   }
 
   async exec (error) {
-    console.error(error.stack || error)
+    Logger.stacktrace(error)
   }
 }
 

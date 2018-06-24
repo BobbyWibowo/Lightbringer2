@@ -1,4 +1,5 @@
 const booru = require('booru')
+const Logger = require('./../util/Logger')
 
 class BooruCache {
   constructor (client) {
@@ -7,6 +8,8 @@ class BooruCache {
         value: client
       }
     })
+
+    this.tag = 'BooruCache'
 
     this.storage = client.storage('booru-cache')
   }
@@ -45,7 +48,7 @@ class BooruCache {
     const images = await Promise.all(sites.map(site => {
       return new Promise(async resolve => {
         if (!storedSites[site] || !storedSites[site].length) {
-          console.log(`BooruCache: ${site}: ${tags}: MISS.`)
+          Logger.log(`${site}: ${tags}: MISS.`, { tag: this.tag })
           const _images = await booru
             .search(site, tags, {
               limit: 20,
@@ -68,14 +71,14 @@ class BooruCache {
               return commonfied.filter(c => c)
             })
             .catch(error => {
-              console.error(`BooruCache: ${site}: ${tags}: Error: ${error.message}`)
+              Logger.error(`${site}: ${tags}: Error: ${error.message}`, { tag: this.tag })
             })
 
           if (!_images || !_images.length) { return resolve(null) }
 
           storedSites[site] = _images
         } else {
-          console.log(`BooruCache: ${site}: ${tags}: HIT.`)
+          Logger.info(`${site}: ${tags}: HIT.`, { tag: this.tag })
         }
 
         const index = Math.floor(Math.random() * storedSites[site].length)
@@ -83,7 +86,7 @@ class BooruCache {
         storedSites[site].splice(index, 1)
 
         if (!image) { return resolve(null) }
-        console.log(`BooruCache: ${site}: ${tags}: ${storedSites[site].length} leftover.`)
+        Logger.log(`BooruCache: ${site}: ${tags}: ${storedSites[site].length} leftover.`, { tag: this.tag })
         return resolve(image)
       })
     }))

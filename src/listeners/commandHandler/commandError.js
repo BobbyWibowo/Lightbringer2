@@ -1,6 +1,7 @@
 const { AkairoError, Listener } = require('discord-akairo')
 const { DiscordAPIError } = require('discord.js')
 const LError = require('./../../util/LError')
+const Logger = require('./../../util/Logger')
 
 class CommandErrorListener extends Listener {
   constructor () {
@@ -17,7 +18,7 @@ class CommandErrorListener extends Listener {
       return message.status('error', error.message, error.timeout)
     }
 
-    console.error(error.stack || error)
+    Logger.stacktrace(error.stack || error)
     return message.status('error',
       'An unexpected error occurred (this message will self-destruct in 30 seconds):\n' +
         this.client.util.formatCode(error.stack || error, 'js'),

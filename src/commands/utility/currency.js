@@ -1,12 +1,13 @@
 const { Command } = require('discord-akairo')
 const mathjs = require('mathjs')
 const moment = require('moment')
+const Logger = require('./../../util/Logger')
 
 class CurrencyCommand extends Command {
   constructor () {
     super('currency', {
       aliases: ['exchangerate', 'currency', 'curr'],
-      description: 'Converts currency using exchange rates from http://fixer.io/.',
+      description: 'Converts currency using exchange rates from Fixer.io.',
       args: [
         {
           id: 'input',
@@ -32,6 +33,12 @@ class CurrencyCommand extends Command {
           prefix: ['--default=', '-d='],
           type: 'uppercase',
           description: 'Sets default "to" currency.'
+        },
+        {
+          id: 'apiKey',
+          match: 'prefix',
+          prefix: ['--apiKey=', '--api=', '--key='],
+          description: 'Saves your Fixer.io API key to the storage file.'
         }
       ],
       options: {
@@ -68,10 +75,20 @@ class CurrencyCommand extends Command {
 
   async exec (message, args) {
     if (args.source) {
-      return message.edit('ℹ\u2000Exchange rate provided by http://fixer.io/.')
+      return message.edit('ℹ\u2000Exchange rate provided by https://fixer.io/.')
+    }
+
+    if (args.apiKey) {
+      this.storage.set('apiKey', args.apiKey)
+      this.storage.save()
+      return message.status('success', 'Successfully saved API key to the storage file.')
     }
 
     if (!this.data || args.refresh) {
+      if (!this.storage.get('apiKey')) {
+        return message.status('error', 'Missing API key!\nGet your Fixer.io API key from **https://fixer.io** then run `currency --key=<apiKey>` to save the API key to the storage file!', -1)
+      }
+
       await message.status('progress', 'Updating exchange rate\u2026')
       await this.updateRates()
 
@@ -113,8 +130,6 @@ class CurrencyCommand extends Command {
       curr2 = this.default
     }
 
-    console.log(curr2)
-
     if (!curr2) {
       return message.status('error', 'Missing "to" currency.')
     }
@@ -142,6 +157,8 @@ class CurrencyCommand extends Command {
   }
 
   async updateRates () {
+    if (!this.storage.get('apiKey')) { return }
+
     // Allowing only 1 running instance of this function
     if (this._updatingRates) {
       return new Promise(resolve => setInterval(() => {
@@ -151,13 +168,18 @@ class CurrencyCommand extends Command {
 
     this._updatingRates = true
 
-    const result = await this.client.util.snek('https://api.fixer.io/latest', {
+    const result = await this.client.util.snek('http://data.fixer.io/api/latest', {
       query: {
-        base: 'USD'
+        access_key: this.storage.get('apiKey')
       }
     })
+
     if (result.status !== 200) {
       throw new Error(result.text)
+    }
+
+    if (!result.body.success) {
+      throw new Error(`${result.body.error.code}: ${result.body.error.type}`)
     }
 
     this.data = result.body
@@ -183,7 +205,7 @@ class CurrencyCommand extends Command {
     if (!this.default) { this.default = null }
 
     this.updateRates().catch(error => {
-      console.error(`[currency] ${error}`)
+      Logger.error(error, { tag: this.id })
     })
   }
 

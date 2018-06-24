@@ -1,5 +1,6 @@
 const fse = require('fs-extra')
 const { OnlineStatuses } = require('./../util/Constants')
+const Logger = require('./../util/Logger')
 
 class ConfigManager {
   constructor (path) {
@@ -46,8 +47,8 @@ class ConfigManager {
   load () {
     if (!fse.existsSync(this._path)) {
       fse.outputJsonSync(this._path, this._template(), { spaces: 2 })
-      console.log(`Configuration template saved to: ${this._path}`)
-      console.log('Please edit the file then start the bot again.')
+      Logger.info(`Configuration template saved to: ${this._path}`)
+      Logger.info('Please edit the file then start the bot again.')
       return process.exit(0)
     }
 
@@ -55,7 +56,7 @@ class ConfigManager {
       this._config = fse.readJSONSync(this._path)
       return true
     } catch (error) {
-      console.error(error)
+      Logger.error(error)
       return process.exit(1)
     }
   }
@@ -82,7 +83,7 @@ class ConfigManager {
       fse.outputJsonSync(this._path, this._config, { spaces: 2 })
       fse.removeSync(backupPath)
     } catch (error) {
-      console.error(error)
+      Logger.error(error)
       throw new Error('Failed to save configuration file. Check your console.')
     }
   }

@@ -1,4 +1,5 @@
 const { Listener } = require('discord-akairo')
+const Logger = require('./../../util/Logger')
 
 class WarnListener extends Listener {
   constructor () {
@@ -9,7 +10,7 @@ class WarnListener extends Listener {
   }
 
   async exec (warn) {
-    console.info(warn.stack || warn)
+    Logger.warn(warn.stack || warn)
   }
 }
 

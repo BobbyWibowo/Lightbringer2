@@ -7,6 +7,7 @@ const moment = require('moment')
 const pixelAverage = require('pixel-average')
 const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
 const snekfetch = require('snekfetch')
+const Logger = require('./../util/Logger')
 
 const PATTERNS = {
   USERS: new RegExp(`^${MessageMentions.USERS_PATTERN.source}$`),
@@ -169,24 +170,10 @@ class LClientUtil extends ClientUtil {
   }
 
   async snek (url, options, logError = true) {
-    /**
-     * Since this will return the Promise, any snek's
-     * functions which could have been used to alter the options,
-     * such as .set(), etc. will not be usable on the returned value.
-     * Thus make sure to get used to using SnekfetchOptions when
-     * using Snekfetch with this function.
-     * On some failures such as 403 Forbidden, Snekfetch will throw an Error
-     * instead of returning an Object with 403 on its "status" property, so
-     * this will catch it and return an Object to less complicate things
-     * when using Snekfetch anywhere else (meaning there will be no need for
-     * .catch() but instead simply make sure the "status" property is 200).
-     */
     return this.snekfetch
       .get(url, options)
       .catch(error => {
-        if (logError) {
-          console.error(error)
-        }
+        if (logError) { Logger.error(error) }
         return {
           status: -1,
           text: error.toString()
@@ -700,9 +687,9 @@ class LClientUtil extends ClientUtil {
       })
 
       /*
-      console.log(`maxLength: ${maxLength}`)
-      console.log(`content.length: ${content.length}`)
-      console.log(`description.length: ${tempData.description.length}`)
+      Logger.log(`maxLength: ${maxLength}`)
+      Logger.log(`content.length: ${content.length}`)
+      Logger.log(`description.length: ${tempData.description.length}`)
       */
     }
 

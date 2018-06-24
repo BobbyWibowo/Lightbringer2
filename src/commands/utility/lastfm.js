@@ -1,5 +1,6 @@
 const { Command } = require('discord-akairo')
 const { stripIndent } = require('common-tags')
+const Logger = require('./../../util/Logger')
 
 // Timeout between each polls to Last.fm
 const POLL_TIMEOUT = 5000
@@ -41,7 +42,7 @@ class LastfmCommand extends Command {
         {
           id: 'apiKey',
           match: 'prefix',
-          prefix: ['--apikey=', '--api=', '--key='],
+          prefix: ['--apiKey=', '--api=', '--key='],
           description: 'Saves your Last.fm Developer API key to the storage file.'
         },
         {
@@ -53,13 +54,13 @@ class LastfmCommand extends Command {
         {
           id: 'clientID',
           match: 'prefix',
-          prefix: ['--clientid=', '--client='],
+          prefix: ['--clientID=', '--client='],
           description: 'Saves the Client ID of your Discord API Application to the storage file (required to use Rich Presence).'
         },
         {
           id: 'largeImageID',
           match: 'prefix',
-          prefix: ['--largeimage=', '--large='],
+          prefix: ['--largeImage=', '--large='],
           description: 'Saves the ID of the "large image" that you want to use with your Rich Presence.'
         },
         {
@@ -213,7 +214,7 @@ class LastfmCommand extends Command {
     }, false)
 
     if (result.status !== 200) {
-      console.error(`[lastfm-s] ${result.text}`)
+      Logger.error(result.text, { tag: this.id })
       return this.setRecentTrackTimeout(true)
     }
 
@@ -259,7 +260,7 @@ class LastfmCommand extends Command {
       }
       return this.setRecentTrackTimeout()
     } catch (error) {
-      console.error(`[lastfm-t] ${error}`)
+      Logger.error(error, { tag: this.id })
       return this.setRecentTrackTimeout(true)
     }
   }

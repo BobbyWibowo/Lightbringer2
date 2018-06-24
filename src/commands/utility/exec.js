@@ -1,5 +1,8 @@
 const { Command } = require('discord-akairo')
 const { exec } = require('child_process')
+const os = require('os')
+
+const USERNAME = true
 
 class ExecCommand extends Command {
   constructor () {
@@ -22,23 +25,15 @@ class ExecCommand extends Command {
     }
 
     const outs = await new Promise((resolve, reject) => {
-      const outs = [`$ ${args.command}`]
-      exec(args.command, (error, stdout, stderr) => {
-        if (error) {
-          reject(error)
-        }
-
-        if (stdout) {
-          outs.push(stdout)
-        }
-
-        if (stderr) {
-          outs.push(stderr)
-        }
-
-        if (error === null) {
-          resolve(outs)
-        }
+      const outs = []
+      outs.push(`${USERNAME ? `${os.userInfo().username} ` : ''}$ ${args.command}`)
+      exec(args.command, {
+        timeout: 60000 // 60 seconds
+      }, (error, stdout, stderr) => {
+        if (stdout) { outs.push(stdout) }
+        if (stderr) { outs.push(stderr) }
+        if (error) { outs.push(`Exit code: ${error.code}`) }
+        resolve(outs)
       })
     })
 

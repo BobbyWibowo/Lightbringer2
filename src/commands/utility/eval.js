@@ -1,6 +1,7 @@
 const { Command } = require('discord-akairo')
 const { escapeMarkdown } = require('discord.js').Util
 const { inspect } = require('util')
+const Logger = require('./../../util/Logger')
 
 class EvalCommand extends Command {
   constructor () {
@@ -43,7 +44,7 @@ class EvalCommand extends Command {
     const diff = process.hrtime(time)
 
     if (args.silent) {
-      return console.log(inspect(result, { depth: 1 }))
+      return Logger.log(inspect(result, { depth: 1 }), { tag: this.id })
     }
 
     if (!isError) {

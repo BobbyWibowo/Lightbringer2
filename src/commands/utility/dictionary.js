@@ -1,5 +1,6 @@
 const { CollegiateDictionary, WordNotFoundError } = require('mw-dict')
 const { Command } = require('discord-akairo')
+const Logger = require('./../../util/Logger')
 
 class DictionaryCommand extends Command {
   constructor () {
@@ -60,7 +61,7 @@ class DictionaryCommand extends Command {
     }
 
     if (!this.storage.get('apiKey')) {
-      return message.status('error', 'Missing API key!\nGet your Merriam-Webster\'s Collegiate® Dictionary API key from **http://dictionaryapi.com/** then run `dict --key=<api key>` to save the API key to the storage file!', -1)
+      return message.status('error', 'Missing API key!\nGet your Merriam-Webster\'s Collegiate® Dictionary API key from **http://dictionaryapi.com/** then run `dict --key=<apiKey>` to save the API key to the storage file!', -1)
     }
 
     if (!this.dictClient) {
@@ -182,7 +183,7 @@ class DictionaryCommand extends Command {
     }
 
     if (!hasContent) {
-      console.log(require('util').inspect(m))
+      Logger.log(require('util').inspect(m), { tag: this.id })
       return temp + '*This meaning may not have any content. Check your console\u2026*'
     }
 

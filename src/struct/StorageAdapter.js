@@ -1,4 +1,5 @@
 const fse = require('fs-extra')
+const Logger = require('./../util/Logger')
 
 class StorageAdapter {
   /**
@@ -66,7 +67,8 @@ class StorageAdapter {
     try {
       this.data = fse.readJSONSync(this.storageFile)
     } catch (error) {
-      console.error(`Failed to load ${this.storageFile}!`, error)
+      Logger.error(`Failed to load ${this.storageFile}.`)
+      Logger.stacktrace(error)
       this.data = null
     }
   }
@@ -84,7 +86,8 @@ class StorageAdapter {
     try {
       fse.writeJSONSync(this.storageFile, this.data, { spaces: 2 })
     } catch (error) {
-      console.error(`Failed to save data to ${this.storageFile}!`, error)
+      Logger.error(`Failed to save data to ${this.storageFile}.`)
+      Logger.stacktrace(error)
     }
   }
 
