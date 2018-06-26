@@ -9,8 +9,8 @@ class FlushCommand extends Command {
       args: [
         {
           id: 'reason',
-          match: 'prefix',
-          prefix: ['--reason=', '-r='],
+          match: 'option',
+          flag: ['--reason=', '-r='],
           description: 'Reason for flushing.'
         },
         {
@@ -21,8 +21,8 @@ class FlushCommand extends Command {
         },
         {
           id: 'before',
-          match: 'prefix',
-          prefix: ['--before=', '-b='],
+          match: 'option',
+          flag: ['--before=', '-b='],
           description: 'An ID of the message which will be used as an anchor. If this is set, it will prune X messages before it, but not itself. By default, this will be set to the command message.'
         }
       ],
@@ -49,17 +49,7 @@ class FlushCommand extends Command {
     await message.status('progress', `Flushing ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
     await Promise.all(messages.map(m => m.delete({ reason: args.reason })))
 
-    return message.status('success', `Flushed \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, this.timeout)
-  }
-
-  onReady () {
-    const {
-      purgeCommandsTimeout
-    } = this.client.akairoOptions
-
-    if (purgeCommandsTimeout !== undefined) {
-      this.timeout = purgeCommandsTimeout
-    }
+    return message.status('success', `Flushed \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, this.handler.purgeCommandsTimeout)
   }
 }
 

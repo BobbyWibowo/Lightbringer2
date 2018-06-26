@@ -15,37 +15,37 @@ class MathCommand extends Command {
         {
           id: 'localScope',
           match: 'flag',
-          prefix: ['--localScope', '--local', '-l'],
+          flag: ['--localScope', '--local', '-l'],
           description: 'Turns on local scope. When this is enabled, previously saved variables will not be accessible from the expression (when this is not enabled, all variables will be stored in a global scope).'
         },
         {
           id: 'clearScope',
           match: 'flag',
-          prefix: ['--clearScope', '--clear', '-c'],
+          flag: ['--clearScope', '--clear', '-c'],
           description: 'Clear all saved variables from the global scope. This can be used while running the command with math expressions, in which case it will clear the scope BEFORE evaluating the math expressions.'
         },
         {
           id: 'singleResult',
           match: 'flag',
-          prefix: ['--singleResult', '--single', '-s'],
+          flag: ['--singleResult', '--single', '-s'],
           description: 'Shows only the final result of the expression.'
         },
         {
           id: 'hideLineNumbers',
           match: 'flag',
-          prefix: ['--hideLineNumbers', '--hide', '--hln', '-h'],
+          flag: ['--hideLineNumbers', '--hide', '--hln', '-h'],
           description: 'Hides line numbers. It will not show line numbers if there is only one expression.'
         },
         {
           id: 'printScope',
           match: 'flag',
-          prefix: ['--printScope', '--print', '-p'],
+          flag: ['--printScope', '--print', '-p'],
           description: 'Prints scope.'
         },
         {
           id: 'documentation',
           match: 'flag',
-          prefix: ['--documentation', '--docs', '-d', '--reference', '--ref', '-r'],
+          flag: ['--documentation', '--docs', '-d', '--reference', '--ref', '-r'],
           description: 'Displays link to mathjs online documentation.'
         }
       ],

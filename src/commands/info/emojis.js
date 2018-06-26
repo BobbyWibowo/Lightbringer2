@@ -9,7 +9,7 @@ class EmojisCommand extends Command {
         {
           id: 'newline',
           match: 'flag',
-          prefix: ['--newline', '--nl', '-n'],
+          flag: ['--newline', '--nl', '-n'],
           description: 'Splits the emojis with new line instead of space when listing them.'
         },
         {
@@ -69,7 +69,7 @@ class EmojisCommand extends Command {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      prefix: `**Guild ID:** ${guild.id}\n`,
+      flag: `**Guild ID:** ${guild.id}\n`,
       char
     })
   }

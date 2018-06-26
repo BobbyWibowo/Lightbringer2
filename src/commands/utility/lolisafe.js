@@ -1,5 +1,6 @@
 const { Command } = require('discord-akairo')
 const path = require('path')
+const snekfetch = require('snekfetch')
 
 const DEFAULT_URL = 'https://safe.fiery.me/api/upload'
 
@@ -16,26 +17,26 @@ class LoliSafeCommand extends Command {
         },
         {
           id: 'ext',
-          match: 'prefix',
-          prefix: ['--extension=', '--ext=', '-e='],
+          match: 'option',
+          flag: ['--extension=', '--ext=', '-e='],
           description: 'The command will try to parse an extension from the URL, and in case of failure it will not have an extension. Use this option to override the extension.'
         },
         {
           id: 'site',
-          match: 'prefix',
-          prefix: ['--site=', '-s='],
+          match: 'option',
+          flag: ['--site=', '-s='],
           description: 'Full URL to the upload API of a lolisafe-based host. This will be saved to the storage.'
         },
         {
           id: 'token',
-          match: 'prefix',
-          prefix: ['--token=', '-t='],
+          match: 'option',
+          flag: ['--token=', '-t='],
           description: 'Token for the lolisafe-based host. This will be saved to the storage.'
         },
         {
           id: 'album',
-          match: 'prefix',
-          prefix: ['--album=', '-a='],
+          match: 'option',
+          flag: ['--album=', '-a='],
           description: 'Album ID for the lolisafe-based host. This will be saved to the storage.'
         }
       ],
@@ -117,7 +118,7 @@ class LoliSafeCommand extends Command {
     const parsed = path.parse(args.url)
     const extname = parsed.ext.split(/[?#]/)[0]
     const filename = `${parsed.name || 'tmp'}${args.ext || extname}`
-    const result = await this.client.util.snekfetch
+    const result = await snekfetch
       .post(this.url)
       .set('Content-Type', 'multipart/form-data')
       .set({

@@ -17,18 +17,18 @@ class SetActivityCommand extends Command {
         {
           id: 'list',
           match: 'flag',
-          prefix: ['--list', '-l']
+          flag: ['--list', '-l']
         },
         {
           id: 'url',
-          match: 'prefix',
-          prefix: ['--streaming=', '--stream=', '--url='],
+          match: 'option',
+          flag: ['--streaming=', '--stream=', '--url='],
           description: 'URL of the streaming activity (this flag will forcibly enables Streaming activity type).'
         },
         {
           id: 'type',
-          match: 'prefix',
-          prefix: ['--type='],
+          match: 'option',
+          flag: ['--type='],
           description: 'The type of the activity (can either be Playing, Streaming, Listening to, or Watching).',
           type: (word, message, args) => {
             const keys = Object.keys(ACTIVITY_TYPES)

@@ -11,20 +11,20 @@ class DictionaryCommand extends Command {
         {
           id: 'index',
           type: 'integer',
-          match: 'prefix',
-          prefix: ['--index=', '-i='],
+          match: 'option',
+          flag: ['--index=', '-i='],
           description: 'Sets index of which definition to show.'
         },
         {
           id: 'more',
           match: 'flag',
-          prefix: ['--more', '-m'],
+          flag: ['--more', '-m'],
           description: 'Lists the rest of the search result if available.'
         },
         {
           id: 'next',
           match: 'flag',
-          prefix: ['--next', '-n'],
+          flag: ['--next', '-n'],
           description: 'Shows the next definition of the last used keyword.'
         },
         {
@@ -33,8 +33,8 @@ class DictionaryCommand extends Command {
         },
         {
           id: 'apiKey',
-          match: 'prefix',
-          prefix: ['--apikey=', '--api=', '--key='],
+          match: 'option',
+          flag: ['--apikey=', '--api=', '--key='],
           description: 'Saves your Merriam-Webster\'s Collegiate® Dictionary API key to the storage file.'
         }
       ],

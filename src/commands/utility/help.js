@@ -10,7 +10,7 @@ class HelpCommand extends Command {
         {
           id: 'all',
           match: 'flag',
-          prefix: ['--all', '-a'],
+          flag: ['--all', '-a'],
           description: 'Lists all commands and their description.'
         },
         {
@@ -97,10 +97,10 @@ class HelpCommand extends Command {
         const _args = args.command.args
           .filter(arg => arg instanceof Argument)
           .map(arg => {
-            const prefix = (typeof arg.prefix === 'string') ? [arg.prefix] : arg.prefix
+            const flag = (typeof arg.flag === 'string') ? [arg.flag] : arg.flag
             return {
-              prefix,
-              tag: prefix ? prefix.join(', ') : arg.id,
+              flag,
+              tag: flag ? flag.join(', ') : arg.id,
               description: arg.description
             }
           })
@@ -151,8 +151,8 @@ class HelpCommand extends Command {
   }
 
   onReady () {
-    if (this.client.package.repository) {
-      this.git = 'https://github.com/' + this.client.package.repository.replace(/^github:/, '')
+    if (this.client.data.package.repository) {
+      this.git = 'https://github.com/' + this.client.data.package.repository.replace(/^github:/, '')
     }
   }
 }

@@ -1,23 +1,18 @@
 class Stats {
   constructor (client) {
-    Object.defineProperties(this, {
-      client: {
-        value: client
-      }
-    })
-
-    this._stats = {}
+    this.client = client
+    this.data = {}
   }
 
   get (key) {
-    return this._stats[key]
+    return this.data[key]
   }
 
   set (key, value) {
     if (value === undefined) {
-      delete this._stats[key]
+      delete this.data[key]
     } else {
-      this._stats[key] = value
+      this.data[key] = value
     }
   }
 

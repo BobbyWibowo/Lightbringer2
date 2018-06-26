@@ -9,13 +9,13 @@ class NekosCommand extends Command {
         {
           id: 'upload',
           match: 'flag',
-          prefix: ['--upload', '-u'],
+          flag: ['--upload', '-u'],
           description: 'Uploads the image as an attachment instead.'
         },
         {
           id: 'lewd',
           match: 'flag',
-          prefix: ['--lewd', '-l'],
+          flag: ['--lewd', '-l'],
           description: 'Shows lewd neko pictures instead.'
         }
       ],

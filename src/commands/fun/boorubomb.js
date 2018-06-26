@@ -18,25 +18,25 @@ class BooruCommand extends Command {
         {
           id: 'list',
           match: 'flag',
-          prefix: ['--list', '-l'],
+          flag: ['--list', '-l'],
           description: 'Lists all available booru sites and their aliases.'
         },
         {
           id: 'last',
           match: 'flag',
-          prefix: ['--last'],
+          flag: ['--last'],
           description: 'Uses last used arguments.'
         },
         {
           id: 'upload',
           match: 'flag',
-          prefix: ['--upload', '-u'],
+          flag: ['--upload', '-u'],
           description: 'Uploads the images as attachments.'
         },
         {
           id: 'sites',
-          match: 'prefix',
-          prefix: ['--sites=', '-s='],
+          match: 'option',
+          flag: ['--sites=', '-s='],
           description: 'Uses a specific set of booru site, separated by commas. Technically there is no limit to how many sites you can use, unless you want to use "--upload" flag, then it will be limited by the amount of images you can attach into a single message.'
         },
         {
@@ -46,8 +46,8 @@ class BooruCommand extends Command {
         },
         {
           id: 'defaultSites',
-          match: 'prefix',
-          prefix: ['--defaultSites=', '--default=', '-d='],
+          match: 'option',
+          flag: ['--defaultSites=', '--default=', '-d='],
           description: 'Changes the default set of booru sites used when not using "--sites" option. This will be saved to the storage.'
         }
       ],

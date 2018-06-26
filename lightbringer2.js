@@ -1,9 +1,13 @@
 const ConfigManager = require('./src/struct/ConfigManager')
-const Logger = require('./src/util/Logger')
 const LightbringerClient = require('./src/struct/LightbringerClient')
+const Logger = require('./src/util/Logger')
 
-process.on('unhandledRejection', Logger.error)
-process.on('uncaughtException', Logger.error)
+process.on('unhandledRejection', error => {
+  Logger.error(error.stack || error, { tag: 'unhandledRejection' })
+})
+process.on('uncaughtException', error => {
+  Logger.error(error.stack || error, { tag: 'unhandledRejection' })
+})
 
 const configManager = new ConfigManager('./config.json')
 configManager.load()
@@ -24,5 +28,4 @@ process.on('exit', () => {
   }
 })
 
-Logger.log('Logging in\u2026')
-client.login(token)
+client.start(token)

@@ -13,37 +13,37 @@ class GuildBlacklistCommand extends Command {
         {
           id: 'list',
           match: 'flag',
-          prefix: ['--list', '-l'],
+          flag: ['--list', '-l'],
           description: 'Lists blacklisted guilds.'
         },
         {
           id: 'add',
-          match: 'prefix',
-          prefix: ['--add=', '-a='],
+          match: 'option',
+          flag: ['--add=', '-a='],
           description: 'Adds a guild to the blacklist.'
         },
         {
           id: 'addID',
-          match: 'prefix',
-          prefix: ['--addID=', '-ai='],
+          match: 'option',
+          flag: ['--addID=', '-ai='],
           description: 'Adds a guild ID to the blacklist.'
         },
         {
           id: 'remove',
-          match: 'prefix',
-          prefix: ['--remove=', '-r=', '--delete=', '-d='],
+          match: 'option',
+          flag: ['--remove=', '-r=', '--delete=', '-d='],
           description: 'Removes a guild from the backlist.'
         },
         {
           id: 'removeID',
-          match: 'prefix',
-          prefix: ['--removeID=', '-ri=', '--deleteID=', '-di='],
+          match: 'option',
+          flag: ['--removeID=', '-ri=', '--deleteID=', '-di='],
           description: 'Deletes a guild ID from the blacklist.'
         },
         {
           id: 'inhibitorID',
-          match: 'prefix',
-          prefix: ['--inhibitorID=', '--inhibitor=', '-i'],
+          match: 'option',
+          flag: ['--inhibitorID=', '--inhibitor=', '-i'],
           description: 'ID of the inhibitor that will be called whenever a guild is being added to or removed from the blacklist (do not change this unless you know what you are doing).'
         }
       ],

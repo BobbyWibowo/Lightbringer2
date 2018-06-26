@@ -1,7 +1,7 @@
 const { Command } = require('discord-akairo')
+const Logger = require('./../../util/Logger')
 const mathjs = require('mathjs')
 const moment = require('moment')
-const Logger = require('./../../util/Logger')
 
 class CurrencyCommand extends Command {
   constructor () {
@@ -18,26 +18,26 @@ class CurrencyCommand extends Command {
         {
           id: 'refresh',
           match: 'flag',
-          prefix: ['--refresh'],
+          flag: ['--refresh'],
           description: 'Refreshes the exchange rate.'
         },
         {
           id: 'source',
           match: 'flag',
-          prefix: ['--source', '-s'],
+          flag: ['--source', '-s'],
           description: 'Displays the source of the exchange rate.'
         },
         {
           id: 'default',
-          match: 'prefix',
-          prefix: ['--default=', '-d='],
+          match: 'option',
+          flag: ['--default=', '-d='],
           type: 'uppercase',
           description: 'Sets default "to" currency.'
         },
         {
           id: 'apiKey',
-          match: 'prefix',
-          prefix: ['--apiKey=', '--api=', '--key='],
+          match: 'option',
+          flag: ['--apiKey=', '--api=', '--key='],
           description: 'Saves your Fixer.io API key to the storage file.'
         }
       ],

@@ -10,14 +10,14 @@ class KickCommand extends Command {
       args: [
         {
           id: 'reason',
-          match: 'prefix',
-          prefix: ['--reason=', '-r='],
+          match: 'option',
+          flag: ['--reason=', '-r='],
           description: 'Reason for kicking.'
         },
         {
           id: 'refresh',
           match: 'flag',
-          prefix: ['--refresh'],
+          flag: ['--refresh'],
           description: 'Refresh guild members (should be used in large guilds). This works the same as "membersfetch" command, so you should have no need to use this flag IF you had already used "membersfetch" not too long ago.'
         },
         {

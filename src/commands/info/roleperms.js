@@ -48,8 +48,8 @@ class RolePermsCommand extends Command {
       args: [
         {
           id: 'guild',
-          match: 'prefix',
-          prefix: ['--guild=', '-g='],
+          match: 'option',
+          flag: ['--guild=', '-g='],
           description: 'Tries to display information of a role from a specific guild instead.'
         },
         {

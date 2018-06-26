@@ -9,7 +9,7 @@ class RolesCommand extends Command {
         {
           id: 'brief',
           match: 'flag',
-          prefix: ['--brief', '-b'],
+          flag: ['--brief', '-b'],
           description: 'Brief list.'
         },
         {
@@ -71,7 +71,7 @@ class RolesCommand extends Command {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      prefix: `**Guild ID:** ${guild.id}\n${args.brief ? '' : '\n'}`,
+      flag: `**Guild ID:** ${guild.id}\n${args.brief ? '' : '\n'}`,
       code: args.brief ? '' : null,
       char
     })

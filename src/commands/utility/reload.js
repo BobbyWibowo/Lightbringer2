@@ -11,13 +11,13 @@ class ReloadCommand extends Command {
         {
           id: 'all',
           match: 'flag',
-          prefix: ['--all', '-a'],
+          flag: ['--all', '-a'],
           description: 'Reloads all commands, inhibitors and listeners.'
         },
         {
           id: 'type',
-          match: 'prefix',
-          prefix: ['--type=', '-t='],
+          match: 'option',
+          flag: ['--type=', '-t='],
           description: 'Type of the modules. This will reload all modules of the type when being used with "all" flag.',
           type: (word, message, args) => {
             args._type = Boolean(word.length)
@@ -68,22 +68,22 @@ class ReloadCommand extends Command {
   async exec (message, args) {
     const typeString = TYPE_STRINGS[args.type || 0].toLowerCase()
     if (args.modules && args.modules.length) {
-      const s = []
-      const f = []
+      const success = []
+      const failure = []
       const x = args._nomatches || []
-      for (const m of args.modules) {
-        if (m.reload()) {
-          s.push(`\`${m.id}\``)
+      for (const mod of args.modules) {
+        if (mod.reload()) {
+          success.push(`\`${mod.id}\``)
         } else {
-          f.push(`\`${m.id}\``)
+          failure.push(`\`${mod.id}\``)
         }
       }
       const string = []
-      if (s.length) {
-        string.push(`✅\u2000Reloaded ${typeString}${s.length === 1 ? '' : 's'}: ${s.join(', ')}.`)
+      if (success.length) {
+        string.push(`✅\u2000Reloaded ${typeString}${success.length === 1 ? '' : 's'}: ${success.join(', ')}.`)
       }
-      if (f.length) {
-        string.push(`⛔\u2000Could not reload ${typeString}${f.length === 1 ? '' : 's'}: ${f.join(', ')}.`)
+      if (failure.length) {
+        string.push(`⛔\u2000Could not reload ${typeString}${failure.length === 1 ? '' : 's'}: ${failure.join(', ')}.`)
       }
       if (x.length) {
         string.push(`❓\u2000Could not find matching ${typeString}${x.length === 1 ? '' : 's'}: ${x.join(', ')}.`)

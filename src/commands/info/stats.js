@@ -43,11 +43,11 @@ class StatsCommand extends Command {
         {
           name: 'Others',
           value: stripIndent`
-            •  **Lightbringer:** [${this.client.package.version}](${this.git})
+            •  **Lightbringer:** [${this.client.data.package.version}](${this.git})
             •  **discord.js:** [${require('discord.js').version}](https://github.com/hydrabolt/discord.js)
             •  **discord-akairo:** [${require('discord-akairo').version}](https://github.com/1Computer1/discord-akairo)
             •  **Modules:** ${modules.toLocaleString()}
-            •  **Prefix:** \`${this.client.akairoOptions.prefix}\`
+            •  **Prefix:** \`${this.client.commandHandler.prefix}\`
           `
         }
       ],
@@ -71,8 +71,8 @@ class StatsCommand extends Command {
   }
 
   onReady () {
-    if (this.client.package.repository) {
-      this.git = `https://github.com/${this.client.package.repository.replace(/^github:/, '')}`
+    if (this.client.data.package.repository) {
+      this.git = `https://github.com/${this.client.data.package.repository.replace(/^github:/, '')}`
     }
   }
 }

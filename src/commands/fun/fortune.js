@@ -20,7 +20,7 @@ class FortuneCommand extends Command {
         {
           id: 'list',
           match: 'flag',
-          prefix: ['--list', '-l'],
+          flag: ['--list', '-l'],
           description: 'Lists all available types.'
         },
         {

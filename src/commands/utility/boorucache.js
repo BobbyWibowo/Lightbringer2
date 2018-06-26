@@ -9,7 +9,7 @@ class BooruCacheCommand extends Command {
         {
           id: 'clear',
           match: 'flag',
-          prefix: ['--clear', '-c'],
+          flag: ['--clear', '-c'],
           description: 'Clear the cache.'
         }
       ],

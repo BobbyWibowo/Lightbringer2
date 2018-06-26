@@ -14,8 +14,8 @@ class PruneCommand extends Command {
         },
         {
           id: 'before',
-          match: 'prefix',
-          prefix: ['--before=', '-b='],
+          match: 'option',
+          flag: ['--before=', '-b='],
           description: 'An ID of the message which will be used as an anchor. If this is set, it will prune X messages before it, but not itself. By default, this will be set to the command message.'
         }
       ],
@@ -23,8 +23,6 @@ class PruneCommand extends Command {
         usage: 'prune [amount]'
       }
     })
-
-    this.timeout = undefined
   }
 
   async exec (message, args) {
@@ -42,17 +40,7 @@ class PruneCommand extends Command {
     await message.status('progress', `Pruning ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
     await Promise.all(messages.map(m => m.delete()))
 
-    return message.status('success', `Pruned \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, this.timeout)
-  }
-
-  onReady () {
-    const {
-      purgeCommandsTimeout
-    } = this.client.akairoOptions
-
-    if (purgeCommandsTimeout !== undefined) {
-      this.timeout = purgeCommandsTimeout
-    }
+    return message.status('success', `Pruned \`${messages.size}\` message${messages.size !== 1 ? 's' : ''}!`, this.handler.purgeCommandsTimeout)
   }
 }
 

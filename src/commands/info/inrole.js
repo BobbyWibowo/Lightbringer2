@@ -10,14 +10,14 @@ class InRoleCommand extends Command {
       args: [
         {
           id: 'guild',
-          match: 'prefix',
-          prefix: ['--guild=', '-g='],
+          match: 'option',
+          flag: ['--guild=', '-g='],
           description: 'Tries to use role from a specific guild instead.'
         },
         {
           id: 'online',
           match: 'flag',
-          prefix: ['--online', '--on', '-o'],
+          flag: ['--online', '--on', '-o'],
           description: 'Lists online members only.'
         },
         {
@@ -87,7 +87,7 @@ class InRoleCommand extends Command {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      prefix: `**Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})\n` +
+      flag: `**Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})\n` +
         (displayCapped ? `Displaying the first ${this.maxUsersListing} members alphabetically\u2026` : ''),
       code: 'css',
       char: ', '

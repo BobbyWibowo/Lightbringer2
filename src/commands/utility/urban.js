@@ -10,8 +10,8 @@ class UrbanCommand extends Command {
         {
           id: 'index',
           type: 'integer',
-          match: 'prefix',
-          prefix: ['--index=', '-i='],
+          match: 'option',
+          flag: ['--index=', '-i='],
           description: 'Sets index of which definition to show.'
         },
         {

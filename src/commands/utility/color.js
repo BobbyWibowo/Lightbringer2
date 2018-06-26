@@ -19,20 +19,20 @@ class ColorCommand extends Command {
         },
         {
           id: 'width',
-          match: 'prefix',
-          prefix: ['--width=', '-w='],
+          match: 'option',
+          flag: ['--width=', '-w='],
           description: `Specify a width in pixels (defaults to ${WIDTH}).`
         },
         {
           id: 'height',
-          match: 'prefix',
-          prefix: ['--height=', '-h='],
+          match: 'option',
+          flag: ['--height=', '-h='],
           description: `Specify a height in pixels (defaults to ${HEIGHT}).`
         },
         {
           id: 'dimension',
-          match: 'prefix',
-          prefix: ['--dimension=', '--dim=', '-d=', '--size=', '-s='],
+          match: 'option',
+          flag: ['--dimension=', '--dim=', '-d=', '--size=', '-s='],
           description: 'Specify a square dimension in pixels (will ignore "width" and "height" options when used).'
         }
       ],

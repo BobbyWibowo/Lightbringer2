@@ -9,13 +9,13 @@ class MarkAsReadCommand extends Command {
         {
           id: 'all',
           match: 'flag',
-          prefix: ['--all', '-a'],
+          flag: ['--all', '-a'],
           description: 'Mark all unmuted guilds as read.'
         },
         {
           id: 'muted',
           match: 'flag',
-          prefix: ['--muted', '-m'],
+          flag: ['--muted', '-m'],
           description: 'If using "--all", include muted guilds.'
         },
         {

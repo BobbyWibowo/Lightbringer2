@@ -10,7 +10,7 @@ class MembersCommand extends Command {
         {
           id: 'online',
           match: 'flag',
-          prefix: ['--online', '--on', '-o'],
+          flag: ['--online', '--on', '-o'],
           description: 'Lists online members only.'
         },
         {
@@ -78,7 +78,7 @@ class MembersCommand extends Command {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      prefix: `**Guild ID:** ${guild.id}\n` +
+      flag: `**Guild ID:** ${guild.id}\n` +
         (displayCapped ? `Displaying the first ${this.maxUsersListing} active members\u2026` : ''),
       code: 'css',
       char: ', '

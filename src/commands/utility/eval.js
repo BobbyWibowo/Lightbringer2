@@ -12,7 +12,7 @@ class EvalCommand extends Command {
         {
           id: 'silent',
           match: 'flag',
-          prefix: ['--silent', '-s'],
+          flag: ['--silent', '-s'],
           description: 'Silent mode.'
         },
         {
@@ -44,7 +44,7 @@ class EvalCommand extends Command {
     const diff = process.hrtime(time)
 
     if (args.silent) {
-      return Logger.log(inspect(result, { depth: 1 }), { tag: this.id })
+      return Logger.log(inspect(result, { depth: 1 }), { tag: `${this.id}/silent` })
     }
 
     if (!isError) {

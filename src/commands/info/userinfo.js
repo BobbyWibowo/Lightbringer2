@@ -11,8 +11,8 @@ class UserInfoCommand extends Command {
       args: [
         {
           id: 'guild',
-          match: 'prefix',
-          prefix: ['--guild=', '-g='],
+          match: 'option',
+          flag: ['--guild=', '-g='],
           description: 'Tries to fetch member information from a specific guild instead.'
         },
         {

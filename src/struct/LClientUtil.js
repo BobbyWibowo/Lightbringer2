@@ -1,13 +1,13 @@
 const { ActivityTypes } = require('discord.js').Constants
 const { ClientUtil } = require('discord-akairo')
 const { Collection, Guild, Message, MessageEmbed, MessageMentions, TextChannel } = require('discord.js')
+const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
 const encodeUrl = require('encodeurl')
 const LError = require('./../util/LError')
+const Logger = require('./../util/Logger')
 const moment = require('moment')
 const pixelAverage = require('pixel-average')
-const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
 const snekfetch = require('snekfetch')
-const Logger = require('./../util/Logger')
 
 const PATTERNS = {
   USERS: new RegExp(`^${MessageMentions.USERS_PATTERN.source}$`),
@@ -16,21 +16,13 @@ const PATTERNS = {
 }
 
 class LClientUtil extends ClientUtil {
-  constructor (client) {
+  constructor (client, {
+    matchesListTimeout = -1,
+    maxMatchesListLength
+  }) {
     super(client)
-
-    const {
-      matchesListTimeout = 15000,
-      maxMatchesListLength = 20
-    } = client.akairoOptions
-
-    this.matchesListTimeout = matchesListTimeout
-
-    this.maxMatchesListLength = maxMatchesListLength
-
-    this.guildColors = null
-
-    this.snekfetch = snekfetch
+    this.matchesListTimeout = Number(matchesListTimeout)
+    this.maxMatchesListLength = Number(maxMatchesListLength)
   }
 
   // Override parent functions.
@@ -170,7 +162,7 @@ class LClientUtil extends ClientUtil {
   }
 
   async snek (url, options, logError = true) {
-    return this.snekfetch
+    return snekfetch
       .get(url, options)
       .catch(error => {
         if (logError) { Logger.error(error) }
@@ -346,10 +338,11 @@ class LClientUtil extends ClientUtil {
       })
       .sort((a, b) => a.localeCompare(b))
 
-    list.length = Math.min(this.maxMatchesListLength, size)
-
-    if (size > this.maxMatchesListLength) {
-      list.push(`and ${size - list.length} more \u2026`)
+    if (!isNaN(this.maxMatchesListLength) && this.maxMatchesListLength > 0) {
+      list.length = Math.min(this.maxMatchesListLength, size)
+      if (size > this.maxMatchesListLength) {
+        list.push(`and ${size - list.length} more \u2026`)
+      }
     }
 
     return `Multiple ${name} found, please be more specific:\n` +

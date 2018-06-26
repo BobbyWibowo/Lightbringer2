@@ -3,39 +3,19 @@ const path = require('path')
 const StorageAdapter = require('./StorageAdapter')
 
 class Storage {
-  /**
-   * Creates an instance of Storage.
-   * @param {any} client
-   * @memberof Storage
-   */
-  constructor (client) {
-    Object.defineProperties(this, {
-      client: {
-        value: client
-      }
-    })
-
-    const {
-      storageDirectory = './../storage/'
-    } = client.akairoOptions
-
-    if (!fse.existsSync(storageDirectory)) {
-      fse.mkdirSync(storageDirectory)
+  constructor ({ directory }) {
+    if (!fse.existsSync(directory)) {
+      fse.mkdirSync(directory)
     }
 
-    const cache = this.cache = {}
-
+    const cache = {}
     const factory = function (file) {
-      let realPath = path.resolve(storageDirectory, file)
-      if (!realPath.endsWith('.json')) {
-        realPath += '.json'
-      }
-
+      let realPath = path.resolve(directory, file)
+      if (!realPath.endsWith('.json')) { realPath += '.json' }
       return cache[file] || (cache[file] = new StorageAdapter(realPath))
     }
 
     factory.saveAll = this.saveAll.bind(this)
-
     return factory
   }
 

@@ -1,8 +1,9 @@
+const { inspect } = require('util')
 const { Listener } = require('discord-akairo')
 const { OnlineStatuses } = require('./../../util/Constants')
-const readline = require('readline')
 const { stripIndent } = require('common-tags')
 const Logger = require('./../../util/Logger')
+const readline = require('readline')
 
 class ReadyListener extends Listener {
   constructor () {
@@ -28,7 +29,7 @@ class ReadyListener extends Listener {
         – Guilds: ${this.client.guilds.size.toLocaleString()}
         – Channels: ${this.client.channels.size.toLocaleString()}
         – Modules : ${this.client.commandHandler.modules.size.toLocaleString()}
-        – Prefix: ${this.client.akairoOptions.prefix}
+        – Prefix: ${this.client.commandHandler.prefix}
       `)
 
     this.client.stats.set('messages-received', 0)
@@ -42,12 +43,11 @@ class ReadyListener extends Listener {
       prompt: ''
     }).on('line', line => {
       try {
-        // eslint-disable-next-line no-unused-vars
-        const restart = () => process.exit(0)
+        if (line === '.exit') { process.exit(0) }
         // eslint-disable-next-line no-eval
-        Logger.log(eval(line) || 'undefined')
+        process.stdout.write(`${inspect(eval(line), { depth: 0 })}\n`)
       } catch (error) {
-        Logger.error(error)
+        process.stderr.write(error.stack || error)
       }
     }).on('SIGINT', () => {
       process.exit(0)
@@ -58,55 +58,33 @@ class ReadyListener extends Listener {
     Logger.log('For PM2 users, you can use: pm2 send lb2 "ARBRITRARY JAVASCRIPT CODES".')
 
     const statusChannel = this.client.configManager.get('statusChannel')
-    const onlineStatus = this.client.configManager.get('onlineStatus')
-    const autoReboot = this.client.configManager.get('autoReboot')
-
     if (statusChannel) {
       this.client._statusChannel = this.client.channels.get(statusChannel)
     }
 
+    await this.client.user.setAFK(true)
+    const onlineStatus = this.client.configManager.get('onlineStatus')
     if (OnlineStatuses.includes(onlineStatus)) {
       await this.client.user.setStatus(onlineStatus)
         .then(() => Logger.info(`Updated bot's online status to '${onlineStatus}'.`))
-        .catch(Logger.stacktrace)
+        .catch(Logger.error)
     }
 
-    await this.client.user.setAFK(true)
-
-    this.triggerOnReadyFunctions()
-
-    this.client.stats.set('initiated', true)
-    Logger.info('Bot is ready.')
-    await this.client.util.sendStatus('✅\u2000Bot is ready.')
-
+    const autoReboot = this.client.configManager.get('autoReboot')
     if (autoReboot) {
-      if (autoReboot >= 300) { // if at least 5 minutes
+      if (autoReboot > 0) {
         this.client.setTimeout(() => {
           Logger.info('Shutting down bot due to auto-reboot feature.')
           process.exit(0)
         }, autoReboot * 1000)
         Logger.info(`Bot will shutdown in ${autoReboot} second(s) due to auto-reboot feature.`)
-      } else {
-        Logger.info('Not enabling auto-reboot feature since it was set to less than 5 minutes.')
       }
     }
-  }
 
-  triggerOnReadyFunctions () {
-    // NOTE: This is an odd structure. This in itself is a module,
-    // but it is required to trigger all the other modules' onReady function.
+    Logger.info('Bot is ready.')
+    await this.client.util.sendStatus('✅\u2000Bot is ready.')
 
-    this.client.commandHandler.modules.forEach(m => {
-      if (typeof m.onReady === 'function') { m.onReady() }
-    })
-
-    this.client.inhibitorHandler.modules.forEach(m => {
-      if (typeof m.onReady === 'function') { m.onReady() }
-    })
-
-    this.client.listenerHandler.modules.forEach(m => {
-      if (typeof m.onReady === 'function') { m.onReady() }
-    })
+    this.client.stats.set('initiated', true)
   }
 }
 

@@ -1,6 +1,6 @@
+const { inspect } = require('util')
 const chalk = require('chalk')
 const moment = require('moment')
-const util = require('util')
 
 class Logger {
   static log (content, { color = 'grey', tag = 'Log' } = {}) {
@@ -33,7 +33,7 @@ class Logger {
 
   static clean (item) {
     if (typeof item === 'string') { return item }
-    const cleaned = util.inspect(item, { depth: Infinity })
+    const cleaned = inspect(item, { depth: Infinity })
     return cleaned
   }
 }

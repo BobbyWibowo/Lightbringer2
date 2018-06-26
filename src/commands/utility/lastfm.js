@@ -24,55 +24,55 @@ class LastfmCommand extends Command {
         {
           id: 'toggle',
           match: 'flag',
-          prefix: ['--toggle', '-t'],
+          flag: ['--toggle', '-t'],
           description: 'Toggle Last.fm polls. State will be saved to the configuration file.'
         },
         {
           id: 'toggleRich',
           match: 'flag',
-          prefix: ['--rich', '-r'],
+          flag: ['--rich', '-r'],
           description: 'Toggle Rich Presence. State will be saved to the configuration file.'
         },
         {
           id: 'monitorMode',
           match: 'flag',
-          prefix: ['--monitorMode', '-m'],
+          flag: ['--monitorMode', '-m'],
           description: 'When Monitor Mode is enabled, it will keep on polling Last.fm and posting status update to status channel, but it will not update the user\'s status message. This may be useful when you want to use Spotify client on Desktop.'
         },
         {
           id: 'apiKey',
-          match: 'prefix',
-          prefix: ['--apiKey=', '--api=', '--key='],
+          match: 'option',
+          flag: ['--apiKey=', '--api=', '--key='],
           description: 'Saves your Last.fm Developer API key to the storage file.'
         },
         {
           id: 'username',
-          match: 'prefix',
-          prefix: ['--username=', '--user='],
+          match: 'option',
+          flag: ['--username=', '--user='],
           description: 'Saves your Last.fm username to the storage file (required to use the API).'
         },
         {
           id: 'clientID',
-          match: 'prefix',
-          prefix: ['--clientID=', '--client='],
+          match: 'option',
+          flag: ['--clientID=', '--client='],
           description: 'Saves the Client ID of your Discord API Application to the storage file (required to use Rich Presence).'
         },
         {
           id: 'largeImageID',
-          match: 'prefix',
-          prefix: ['--largeImage=', '--large='],
+          match: 'option',
+          flag: ['--largeImage=', '--large='],
           description: 'Saves the ID of the "large image" that you want to use with your Rich Presence.'
         },
         {
           id: 'smallImageID',
-          match: 'prefix',
-          prefix: ['--smallImage=', '--small='],
+          match: 'option',
+          flag: ['--smallImage=', '--small='],
           description: 'Saves the ID of the "small image" that you want to use with your Rich Presence.'
         },
         {
           id: 'type',
-          match: 'prefix',
-          prefix: ['--type='],
+          match: 'option',
+          flag: ['--type='],
           description: 'Sets the type that will be used for activity. Try "setactivity --list" to see available types.',
           type: (word, message, args) => {
             const keys = Object.keys(ACTIVITY_TYPES)

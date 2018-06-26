@@ -12,19 +12,19 @@ class GuildIconCommand extends Command {
         {
           id: 'direct',
           match: 'flag',
-          prefix: ['--direct', '-d'],
+          flag: ['--direct', '-d'],
           description: 'Uses direct URL instead of CDN URL. This may not really work properly.'
         },
         {
           id: 'plain',
           match: 'flag',
-          prefix: ['--plain', '-p'],
+          flag: ['--plain', '-p'],
           description: 'Uses plain message (no embed).'
         },
         {
           id: 'size',
-          match: 'prefix',
-          prefix: ['--size=', '-s='],
+          match: 'option',
+          flag: ['--size=', '-s='],
           description: 'The size that you want to use to display the icon with.',
           type: 'number'
         },

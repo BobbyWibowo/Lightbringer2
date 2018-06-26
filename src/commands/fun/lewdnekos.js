@@ -9,7 +9,7 @@ class LewdNekosCommand extends Command {
         {
           id: 'upload',
           match: 'flag',
-          prefix: ['--upload', '-u'],
+          flag: ['--upload', '-u'],
           description: 'Uploads the image as an attachment instead.'
         }
       ],

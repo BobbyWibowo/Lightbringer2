@@ -9,8 +9,8 @@ class UserRolesCommand extends Command {
       args: [
         {
           id: 'guild',
-          match: 'prefix',
-          prefix: ['--guild=', '-g='],
+          match: 'option',
+          flag: ['--guild=', '-g='],
           description: 'Tries to fetch member roles from a specific guild instead.'
         },
         {
@@ -77,7 +77,7 @@ class UserRolesCommand extends Command {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      prefix: `**Guild:** ${escapeMarkdown(guild.name)} (ID: ${guild.id})\n\n`,
+      flag: `**Guild:** ${escapeMarkdown(guild.name)} (ID: ${guild.id})\n\n`,
       code: args.brief ? '' : null,
       char
     })

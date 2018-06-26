@@ -9,19 +9,19 @@ class GuildsCommand extends Command {
         {
           id: 'brief',
           match: 'flag',
-          prefix: ['--brief', '-b'],
+          flag: ['--brief', '-b'],
           description: 'Brief list.'
         },
         {
           id: 'positionsort',
           match: 'flag',
-          prefix: ['--positionsort', '--position', '-p'],
+          flag: ['--positionsort', '--position', '-p'],
           description: 'Sort the guilds by their position in your client.'
         },
         {
           id: 'brute',
           match: 'flag',
-          prefix: ['--brute'],
+          flag: ['--brute'],
           description: 'Brute mode, only usable if the specified user is a bot account. This will try to fetch member with the same ID from all of your guilds, which means this will make an API call for EVERY guild. The more guilds you have, the more time it will consume, and the more likely it is for you to be ratelimited. Please do not use this too often.'
         },
         {
@@ -109,7 +109,7 @@ class GuildsCommand extends Command {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      prefix: `**User ID:** ${user.id}\n${args.brief ? '' : '\n'}`,
+      flag: `**User ID:** ${user.id}\n${args.brief ? '' : '\n'}`,
       code: args.brief ? '' : null,
       char
     })

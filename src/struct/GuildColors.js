@@ -1,12 +1,10 @@
-class GuildColors {
-  constructor (client) {
-    Object.defineProperties(this, {
-      client: {
-        value: client
-      }
-    })
+const Logger = require('./../util/Logger')
 
-    this.storage = client.storage('guild-colors')
+class GuildColors {
+  constructor (client, { storage }) {
+    this.client = client
+    this.storage = storage
+    this.tag = 'GuildColors'
   }
 
   async get (guild) {
@@ -18,11 +16,14 @@ class GuildColors {
       return null
     }
 
+    const tag = `${this.tag}/${guild.id}`
     const saved = this.storage.get(guild.id)
     if (saved && saved.icon === guild.icon) {
+      Logger.log('Icon matched, loaded color from storage.', { tag })
       return saved.color
     }
 
+    Logger.log('Icon mismatched, fetching\u2026', { tag })
     const snek = await this.client.util.snek(guild.iconURL({
       size: 128,
       format: 'png'
@@ -38,6 +39,7 @@ class GuildColors {
       color
     })
     this.storage.save()
+    Logger.log('Saved color to storage.', { tag })
     return color
   }
 }

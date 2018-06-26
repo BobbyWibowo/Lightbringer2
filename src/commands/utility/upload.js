@@ -9,14 +9,14 @@ class UploadCommand extends Command {
       args: [
         {
           id: 'name',
-          match: 'prefix',
-          prefix: ['--name=', '-n='],
+          match: 'option',
+          flag: ['--name=', '-n='],
           description: 'The command will try to parse file name from the URL, and in case of failure it will use \'tmp\'. Use this option to override the file name.'
         },
         {
           id: 'plain',
           match: 'flag',
-          prefix: ['--plain', '-p'],
+          flag: ['--plain', '-p'],
           description: 'Plain mode. The command will not print the source URL in the message that contains the attachment.'
         },
         {

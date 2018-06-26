@@ -8,8 +8,8 @@ class UpTimeCommand extends Command {
       args: [
         {
           id: 'maxUnits',
-          match: 'prefix',
-          prefix: ['--maxUnits=', '--max=', '-m='],
+          match: 'option',
+          flag: ['--maxUnits=', '--max=', '-m='],
           description: 'Sets the maximum amount of time units being displayed.',
           type: 'integer',
           default: null
@@ -17,7 +17,7 @@ class UpTimeCommand extends Command {
         {
           id: 'short',
           match: 'flag',
-          prefix: ['--short', '-s'],
+          flag: ['--short', '-s'],
           description: 'Uses short format.'
         }
       ],

@@ -10,19 +10,19 @@ class ReverseCommand extends Command {
         {
           id: 'new',
           match: 'flag',
-          prefix: ['--new', '-n'],
+          flag: ['--new', '-n'],
           description: 'Sends the result as a new message instead of editing the command message.'
         },
         {
           id: 'prefix',
-          match: 'prefix',
-          prefix: ['--prefix=', '-p='],
+          match: 'option',
+          flag: ['--prefix=', '-p='],
           description: 'Sets the prefix of the new message (this option will forcibly enables "--new" flag).'
         },
         {
           id: 'delete',
           match: 'flag',
-          prefix: ['--delete', '-d'],
+          flag: ['--delete', '-d'],
           description: 'Deletes the new message if using "--new" flag.'
           // If you want to use t!reverse command (Tatsumaki bot), you can
           // do something like: "reverse --prefix=t!reverse -d reverse this text"

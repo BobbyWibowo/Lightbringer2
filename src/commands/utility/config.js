@@ -9,7 +9,7 @@ class ConfigCommand extends Command {
         {
           id: 'list',
           match: 'flag',
-          prefix: ['--list', '-l'],
+          flag: ['--list', '-l'],
           description: 'Lists available configuration keys.'
         },
         {

@@ -2,16 +2,10 @@ const booru = require('booru')
 const Logger = require('./../util/Logger')
 
 class BooruCache {
-  constructor (client) {
-    Object.defineProperties(this, {
-      client: {
-        value: client
-      }
-    })
-
+  constructor (client, { storage }) {
+    this.client = client
+    this.storage = storage
     this.tag = 'BooruCache'
-
-    this.storage = client.storage('booru-cache')
   }
 
   clear () {

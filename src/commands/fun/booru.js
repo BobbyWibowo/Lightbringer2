@@ -20,25 +20,25 @@ class BooruCommand extends Command {
         {
           id: 'list',
           match: 'flag',
-          prefix: ['--list', '-l'],
+          flag: ['--list', '-l'],
           description: 'Lists all available booru sites and their aliases.'
         },
         {
           id: 'last',
           match: 'flag',
-          prefix: ['--last'],
+          flag: ['--last'],
           description: 'Uses last used arguments.'
         },
         {
           id: 'upload',
           match: 'flag',
-          prefix: ['--upload', '-u'],
+          flag: ['--upload', '-u'],
           description: 'Uploads the image as an attachment.'
         },
         {
           id: 'site',
-          match: 'prefix',
-          prefix: ['--site=', '-s='],
+          match: 'option',
+          flag: ['--site=', '-s='],
           description: 'Uses a specific booru site.'
         },
         {
@@ -48,14 +48,14 @@ class BooruCommand extends Command {
         },
         {
           id: 'defaultSite',
-          match: 'prefix',
-          prefix: ['--defaultSite=', '--default=', '-d='],
+          match: 'option',
+          flag: ['--defaultSite=', '--default=', '-d='],
           description: 'Changes the default booru site used when not using "--site" option. This will be saved to the storage.'
         },
         {
           id: 'liteMode',
           match: 'flag',
-          prefix: ['--liteMode', '--lite'],
+          flag: ['--liteMode', '--lite'],
           description: 'Toggle lite mode. When lite mode is turned on, the command will not print extra information such as scores, ratings and sources.'
         }
       ],

@@ -10,28 +10,28 @@ class BanCommand extends Command {
       args: [
         {
           id: 'reason',
-          match: 'prefix',
-          prefix: ['--reason=', '-r='],
+          match: 'option',
+          flag: ['--reason=', '-r='],
           description: 'Reason for banning.'
         },
         {
           id: 'days',
           type: 'integer',
-          match: 'prefix',
-          prefix: ['--days=', '--day=', '--delete=', '-d='],
+          match: 'option',
+          flag: ['--days=', '--day=', '--delete=', '-d='],
           description: 'Number of days of messages to delete.',
           default: 0
         },
         {
           id: 'soft',
           match: 'flag',
-          prefix: ['--soft', '-s'],
+          flag: ['--soft', '-s'],
           description: 'Soft-ban (will immediately unban the user after the ban).'
         },
         {
           id: 'refresh',
           match: 'flag',
-          prefix: ['--refresh'],
+          flag: ['--refresh'],
           description: 'Refresh guild members (should be used in large guilds). This works the same as "membersfetch" command, so you should have no need to use this flag IF you had already used "membersfetch" not too long ago.'
         },
         {

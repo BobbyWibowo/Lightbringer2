@@ -5,6 +5,7 @@ const LClientUtil = require('./LClientUtil')
 const LCommandHandler = require('./LCommandHandler')
 const LInhibitorHandler = require('./LInhibitorHandler')
 const LListenerHandler = require('./LListenerHandler')
+const Logger = require('./../util/Logger')
 const path = require('path')
 const Stats = require('./Stats')
 const Storage = require('./Storage')
@@ -12,16 +13,7 @@ const Storage = require('./Storage')
 class LightbringerClient extends AkairoClient {
   constructor (configManager) {
     super({
-      selfbot: true,
-      allowMention: false,
-      automateCategories: true,
-      prefix: configManager.get('prefix') || 'lb',
-      commandDirectory: path.join(__dirname, '..', 'commands'),
-      inhibitorDirectory: path.join(__dirname, '..', 'inhibitors'),
-      listenerDirectory: path.join(__dirname, '..', 'listeners'),
-      storageDirectory: path.join(__dirname, '..', '..', 'storage'),
-      statusTimeout: 7500,
-      purgeCommandsTimeout: 2500
+      selfbot: true
     }, {
       messageCacheMaxSize: 10,
       sync: true,
@@ -32,46 +24,73 @@ class LightbringerClient extends AkairoClient {
 
     this.configManager = configManager
 
-    this.util = new LClientUtil(this)
+    this.util = new LClientUtil(this, {
+      matchesListTimeout: 15000,
+      maxMatchesListLength: 20
+    })
 
     this.stats = new Stats(this)
 
-    this.storage = new Storage(this)
+    this.storage = new Storage({
+      directory: path.join(__dirname, '..', '..', 'storage')
+    })
 
-    this.booruCache = new BooruCache(this)
+    this.data = {
+      package: require('./../../package.json')
+    }
 
-    this.guildColors = new GuildColors(this)
+    this.commandHandler = new LCommandHandler(this, {
+      allowMention: true,
+      automateCategories: true,
+      directory: path.join(__dirname, '..', 'commands'),
+      prefix: configManager.get('prefix') || 'lb',
+      statusTimeout: 7500,
+      purgeCommandsTimeout: 2500
+    })
 
-    this.package = require('./../../package.json')
+    this.inhibitorHandler = new LInhibitorHandler(this, {
+      directory: path.join(__dirname, '..', 'inhibitors')
+    })
+
+    this.listenerHandler = new LListenerHandler(this, {
+      directory: path.join(__dirname, '..', 'listeners')
+    })
+
+    this.booruCache = new BooruCache(this, {
+      storage: this.storage('booru-cache')
+    })
+
+    this.guildColors = new GuildColors(this, {
+      storage: this.storage('guild-colors')
+    })
+
+    this.setup()
   }
 
-  build () {
-    if (this._built) {
-      throw new Error('Client handlers can only be built once.')
-    }
+  setup () {
+    this.commandHandler.useInhibitorHandler(this.inhibitorHandler)
+    this.commandHandler.useListenerHandler(this.inhibitorHandler)
 
-    this._built = true
+    this.listenerHandler.setEmitters({
+      commandHandler: this.commandHandler,
+      inhibitorHandler: this.inhibitorHandler,
+      listenerHandler: this.listenerHandler
+    })
 
-    if (this.akairoOptions.configManager) {
-      this.configManager = this.akairoOptions.configManager
-      delete this.akairoOptions.configManager
-    }
+    this.commandHandler.loadAll()
+    this.inhibitorHandler.loadAll()
+    this.listenerHandler.loadAll()
+  }
 
-    if (this.akairoOptions.commandDirectory && !this.commandHandler) {
-      this.commandHandler = new LCommandHandler(this)
-    }
-
-    if (this.akairoOptions.inhibitorDirectory && !this.inhibitorHandler) {
-      this.inhibitorHandler = new LInhibitorHandler(this)
-    }
-
-    if (this.akairoOptions.listenerDirectory && !this.listenerHandler) {
-      this.listenerHandler = new LListenerHandler(this)
-    }
+  async start (token) {
+    Logger.log('Logging in\u2026')
+    await this.login(token)
 
     this.startTimestamp = Date.now()
 
-    return this
+    this.commandHandler.readyAll()
+    this.inhibitorHandler.readyAll()
+    this.listenerHandler.readyAll()
   }
 }
 

@@ -1,5 +1,5 @@
-const fse = require('fs-extra')
 const { OnlineStatuses } = require('./../util/Constants')
+const fse = require('fs-extra')
 const Logger = require('./../util/Logger')
 
 class ConfigManager {
@@ -56,7 +56,7 @@ class ConfigManager {
       this._config = fse.readJSONSync(this._path)
       return true
     } catch (error) {
-      Logger.error(error)
+      Logger.error(error.stack || error)
       return process.exit(1)
     }
   }
@@ -83,7 +83,7 @@ class ConfigManager {
       fse.outputJsonSync(this._path, this._config, { spaces: 2 })
       fse.removeSync(backupPath)
     } catch (error) {
-      Logger.error(error)
+      Logger.error(error.stack || error)
       throw new Error('Failed to save configuration file. Check your console.')
     }
   }
@@ -103,7 +103,7 @@ class ConfigManager {
 
     const allowed = this._validKeys[key].allowed
     if (allowed && !allowed.includes(value)) {
-      throw new Error('The key you specified can only be one of the following values: ' + allowed.join(', ') + '.')
+      throw new Error(`The key you specified can only be one of the following values: ${allowed.join(', ')}.`)
     }
 
     const cast = this._validKeys[key].cast
