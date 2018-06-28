@@ -439,11 +439,11 @@ class LClientUtil extends ClientUtil {
         int = int.toFixed(0)
       }
 
-      let substring = int + ' '
+      let substring = `${int}`
       if (short) {
         substring += parsed[i].name.charAt(0)
       } else {
-        substring += parsed[i].name
+        substring += ` ${parsed[i].name}`
         if (parseFloat(int) !== 1) { substring += 's' }
       }
 
