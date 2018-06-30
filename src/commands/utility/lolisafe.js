@@ -1,10 +1,10 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 const path = require('path')
 const snekfetch = require('snekfetch')
 
 const DEFAULT_URL = 'https://safe.fiery.me/api/upload'
 
-class LoliSafeCommand extends Command {
+class LoliSafeCommand extends LCommand {
   constructor () {
     super('lolisafe', {
       aliases: ['lolisafe', 'safe', 's'],
@@ -40,9 +40,7 @@ class LoliSafeCommand extends Command {
           description: 'Album ID for the lolisafe-based host. This will be saved to the storage.'
         }
       ],
-      options: {
-        usage: 'lolisafe < url | --site= | --token= >'
-      }
+      usage: 'lolisafe < url | --site= | --token= >'
     })
 
     this.storage = null
@@ -94,7 +92,7 @@ class LoliSafeCommand extends Command {
         return message.status('success', 'Successfully saved album ID to the storage file.')
       }
     } else if (!args.url) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     const exec = /^<?(.+?)>?$/.exec(args.url)

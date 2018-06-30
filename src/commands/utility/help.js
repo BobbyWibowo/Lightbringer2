@@ -1,7 +1,8 @@
-const { Argument, Command } = require('discord-akairo')
+const { ArgumentParser } = require('discord-akairo')
 const { stripIndent, stripIndents } = require('common-tags')
+const LCommand = require('./../../struct/LCommand')
 
-class HelpCommand extends Command {
+class HelpCommand extends LCommand {
   constructor () {
     super('help', {
       aliases: ['help', 'h'],
@@ -23,16 +24,14 @@ class HelpCommand extends Command {
           description: 'The command that you would want to show the help of.'
         }
       ],
-      options: {
-        usage: 'help < --all | command >',
-        examples: [
-          'help --all',
-          {
-            content: 'help reload',
-            description: 'Shows help of a command named "reload".'
-          }
-        ]
-      }
+      usage: 'help < --all | command >',
+      examples: [
+        'help --all',
+        {
+          content: 'help reload',
+          description: 'Shows help of a command named "reload".'
+        }
+      ]
     })
 
     this.git = null
@@ -46,7 +45,7 @@ class HelpCommand extends Command {
       const formatted = this.handler.categories
         .map(category => {
           const id = category.id
-          const modules = category.array().filter(m => m.category.id === id && (m.options && !m.options.hidden))
+          const modules = category.array().filter(m => m.category.id === id && !m.hidden)
 
           if (!modules.length) {
             return false
@@ -83,23 +82,21 @@ class HelpCommand extends Command {
         Description :: ${args.command.description || 'N/A'}
       `
 
-      if (args.command.options.credits) {
-        formatted += '\n' + `Credits     :: ${args.command.options.credits || 'N/A'}`
+      if (args.command.credits) {
+        formatted += '\n' + `Credits     :: ${args.command.credits || 'N/A'}`
       }
 
-      if (args.command.options.usage) {
-        formatted += '\n' + `Usage       :: ${args.command.options.usage || 'N/A'}`
+      if (args.command.usage) {
+        formatted += '\n' + `Usage       :: ${args.command.usage || 'N/A'}`
       }
 
       const MIN_PAD = 11 // length of "Description"
 
-      if (args.command.args instanceof Array) {
-        const _args = args.command.args
-          .filter(arg => arg instanceof Argument)
+      if (args.command.args instanceof ArgumentParser) {
+        const _args = args.command.args.args
           .map(arg => {
             const flag = (typeof arg.flag === 'string') ? [arg.flag] : arg.flag
             return {
-              flag,
               tag: flag ? flag.join(', ') : arg.id,
               description: arg.description
             }
@@ -119,8 +116,8 @@ class HelpCommand extends Command {
         }
       }
 
-      if (args.command.options.examples instanceof Array) {
-        const _expls = args.command.options.examples
+      if (args.command.examples instanceof Array) {
+        const _expls = args.command.examples
           .map(e => (typeof e === 'string') ? { content: e } : e)
 
         if (_expls.length) {
@@ -146,7 +143,7 @@ class HelpCommand extends Command {
       return message.status('error', 'Could not find a module with that ID.')
     } else {
       // When run without arguments.
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
   }
 

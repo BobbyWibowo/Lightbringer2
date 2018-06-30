@@ -1,8 +1,8 @@
-const { Command } = require('discord-akairo')
 const { escapeMarkdown } = require('discord.js').Util
 const { stripIndent } = require('common-tags')
+const LCommand = require('./../../struct/LCommand')
 
-class UserInfoCommand extends Command {
+class UserInfoCommand extends LCommand {
   constructor () {
     super('userinfo', {
       aliases: ['userinfo', 'uinfo', 'info'],
@@ -21,9 +21,7 @@ class UserInfoCommand extends Command {
           description: 'The user that you want to display the information of.'
         }
       ],
-      options: {
-        usage: 'userinfo [--guild=] [keyword]'
-      },
+      usage: 'userinfo [--guild=] [keyword]',
       clientPermissions: ['EMBED_LINKS']
     })
   }

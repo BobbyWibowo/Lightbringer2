@@ -1,8 +1,8 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
 const TYPE_STRINGS = ['Command', 'Inhibitor', 'Listener']
 
-class ReloadCommand extends Command {
+class ReloadCommand extends LCommand {
   constructor () {
     super('reload', {
       aliases: ['reload', 'r'],
@@ -59,9 +59,7 @@ class ReloadCommand extends Command {
           description: 'IDs of the modules (aliases can be used for command modules).'
         }
       ],
-      options: {
-        usage: 'reload < --all [--type=] | [--type=] module-1 [module-2] [...] [module-n] >'
-      }
+      usage: 'reload < --all [--type=] | [--type=] module-1 [module-2] [...] [module-n] >'
     })
   }
 

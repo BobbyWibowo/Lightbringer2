@@ -1,12 +1,12 @@
-const Canvas = require('canvas') // eslint-disable-line no-unused-vars
+const Canvas = require('canvas')
 const colors = require('color-name')
 const convert = require('color-convert')
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
 const WIDTH = 50
 const HEIGHT = 50
 
-class ColorCommand extends Command {
+class ColorCommand extends LCommand {
   constructor () {
     super('color', {
       aliases: ['color', 'colour', 'c'],
@@ -36,31 +36,29 @@ class ColorCommand extends Command {
           description: 'Specify a square dimension in pixels (will ignore "width" and "height" options when used).'
         }
       ],
-      options: {
-        usage: 'color <input>',
-        examples: [
-          {
-            content: 'color #ffffff',
-            description: 'Displays and converts the color white.'
-          },
-          {
-            content: 'color rgb(0, 0, 0)',
-            description: 'Displays and converts the color black.'
-          },
-          {
-            content: 'color hsl(0, 100%, 50%)',
-            description: 'Displays and converts the color red.'
-          },
-          {
-            content: 'color cmyk(100%, 100%, 100%, 100%)',
-            description: 'Displays and converts the color black.'
-          },
-          {
-            content: 'color blue',
-            description: 'Displays and converts the color blue.'
-          }
-        ]
-      }
+      usage: 'color <input>',
+      examples: [
+        {
+          content: 'color #ffffff',
+          description: 'Displays and converts the color white.'
+        },
+        {
+          content: 'color rgb(0, 0, 0)',
+          description: 'Displays and converts the color black.'
+        },
+        {
+          content: 'color hsl(0, 100%, 50%)',
+          description: 'Displays and converts the color red.'
+        },
+        {
+          content: 'color cmyk(100%, 100%, 100%, 100%)',
+          description: 'Displays and converts the color black.'
+        },
+        {
+          content: 'color blue',
+          description: 'Displays and converts the color blue.'
+        }
+      ]
     })
   }
 

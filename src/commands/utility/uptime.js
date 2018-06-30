@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class UpTimeCommand extends Command {
+class UpTimeCommand extends LCommand {
   constructor () {
     super('uptime', {
       aliases: ['uptime', 'up'],
@@ -21,9 +21,7 @@ class UpTimeCommand extends Command {
           description: 'Uses short format.'
         }
       ],
-      options: {
-        usage: 'uptime [--maxUnits=] [--short]'
-      }
+      usage: 'uptime [--maxUnits=] [--short]'
     })
   }
 

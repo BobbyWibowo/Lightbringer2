@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class MarkAsReadCommand extends Command {
+class MarkAsReadCommand extends LCommand {
   constructor () {
     super('markasread', {
       aliases: ['markasread', 'mar'],
@@ -24,9 +24,7 @@ class MarkAsReadCommand extends Command {
           description: 'The guild that you would want to be marked as read.'
         }
       ],
-      options: {
-        usage: 'markasread [ --all [--muted] | keyword ]'
-      }
+      usage: 'markasread [ --all [--muted] | keyword ]'
     })
   }
 

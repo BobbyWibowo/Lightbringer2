@@ -1,13 +1,11 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class PatCommand extends Command {
+class PatCommand extends LCommand {
   constructor () {
     super('pat', {
       aliases: ['pats', 'pat'],
       description: 'Pats someone using random GIFs from nekos.life.',
-      options: {
-        usage: 'hug <@mention>'
-      },
+      usage: 'hug <@mention>',
       clientPermissions: ['EMBED_LINKS']
     })
   }

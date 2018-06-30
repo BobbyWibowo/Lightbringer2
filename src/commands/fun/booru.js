@@ -1,6 +1,6 @@
-const booru = require('booru')
-const { Command } = require('discord-akairo')
 const { stripIndent, stripIndents } = require('common-tags')
+const booru = require('booru')
+const LCommand = require('./../../struct/LCommand')
 
 const RATINGS = {
   's': 'Safe',
@@ -11,7 +11,7 @@ const RATINGS = {
 
 const DEFAULT_SITE = 'gelbooru.com'
 
-class BooruCommand extends Command {
+class BooruCommand extends LCommand {
   constructor () {
     super('booru', {
       aliases: ['booru', 'b'],
@@ -59,9 +59,7 @@ class BooruCommand extends Command {
           description: 'Toggle lite mode. When lite mode is turned on, the command will not print extra information such as scores, ratings and sources.'
         }
       ],
-      options: {
-        usage: 'booru [ --list | --last | [--upload] [--site=] tags | --defaultSite= | --lite ]'
-      }
+      usage: 'booru [ --list | --last | [--upload] [--site=] tags | --defaultSite= | --lite ]'
     })
 
     this.storage = null

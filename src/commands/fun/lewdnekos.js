@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class LewdNekosCommand extends Command {
+class LewdNekosCommand extends LCommand {
   constructor () {
     super('lewdnekos', {
       aliases: ['lewdnekos', 'lewdneko', 'lewdnyaa', 'lewd', 'nekol'],
@@ -13,10 +13,8 @@ class LewdNekosCommand extends Command {
           description: 'Uploads the image as an attachment instead.'
         }
       ],
-      options: {
-        usage: 'lewdnekos [--upload]',
-        hidden: true
-      }
+      usage: 'lewdnekos [--upload]',
+      hidden: true
     })
   }
 

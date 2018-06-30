@@ -1,6 +1,6 @@
-const booru = require('booru')
-const { Command } = require('discord-akairo')
 const { stripIndents } = require('common-tags')
+const booru = require('booru')
+const LCommand = require('./../../struct/LCommand')
 
 const DEFAULT_SITES = [
   'gelbooru.com',
@@ -9,7 +9,7 @@ const DEFAULT_SITES = [
   'yande.re'
 ]
 
-class BooruCommand extends Command {
+class BooruCommand extends LCommand {
   constructor () {
     super('boorubomb', {
       aliases: ['boorubomb', 'bbomb', 'bb', 'hentaibomb'],
@@ -51,9 +51,7 @@ class BooruCommand extends Command {
           description: 'Changes the default set of booru sites used when not using "--sites" option. This will be saved to the storage.'
         }
       ],
-      options: {
-        usage: 'boorubomb [ --list | [--upload] [--sites=] tags | --defaultSites= ]'
-      }
+      usage: 'boorubomb [ --list | [--upload] [--sites=] tags | --defaultSites= ]'
     })
 
     this.storage = null

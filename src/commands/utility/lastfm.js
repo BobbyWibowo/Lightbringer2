@@ -1,5 +1,5 @@
-const { Command } = require('discord-akairo')
 const { stripIndent } = require('common-tags')
+const LCommand = require('./../../struct/LCommand')
 const Logger = require('./../../util/Logger')
 
 // Timeout between each polls to Last.fm
@@ -15,7 +15,7 @@ const ACTIVITY_TYPES = {
   WATCHING: /^w(atch(ing)?)?$/i
 }
 
-class LastfmCommand extends Command {
+class LastfmCommand extends LCommand {
   constructor () {
     super('lastfm', {
       aliases: ['lastfm'],
@@ -82,9 +82,7 @@ class LastfmCommand extends Command {
           }
         }
       ],
-      options: {
-        usage: 'lastfm [ --toggle | --rich | [--apikey=] [--username=] [--clientid=] [--largeimage=] [--smallimage=] ]'
-      }
+      usage: 'lastfm [ --toggle | --rich | [--apikey=] [--username=] [--clientid=] [--largeimage=] [--smallimage=] ]'
     })
 
     this._storageKeys = ['apiKey', 'username', 'clientID', 'largeImageID', 'smallImageID', 'type']

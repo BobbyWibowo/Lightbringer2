@@ -317,13 +317,13 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
 
-discord-akairo@1Computer1/discord-akairo#5e316d147d45d0bf203c33349a25515c21dd4558:
+discord-akairo@1Computer1/discord-akairo#0d29b4c6c7571dce6f38c1d63cd14a309695cb84:
   version "8.0.0-dev"
-  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/5e316d147d45d0bf203c33349a25515c21dd4558"
+  resolved "https://codeload.github.com/1Computer1/discord-akairo/tar.gz/0d29b4c6c7571dce6f38c1d63cd14a309695cb84"
 
-discord.js@hydrabolt/discord.js#bcdb8011e350ac57e57615d11659243fcb71fddd:
+discord.js@hydrabolt/discord.js#2694c0d442a008a1e40c17df147a22bc9534049a:
   version "12.0.0-dev"
-  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/bcdb8011e350ac57e57615d11659243fcb71fddd"
+  resolved "https://codeload.github.com/hydrabolt/discord.js/tar.gz/2694c0d442a008a1e40c17df147a22bc9534049a"
   dependencies:
     form-data "^2.3.2"
     node-fetch "^2.1.2"

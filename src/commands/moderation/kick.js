@@ -1,7 +1,7 @@
-const { Command } = require('discord-akairo')
 const { escapeMarkdown } = require('discord.js').Util
+const LCommand = require('./../../struct/LCommand')
 
-class KickCommand extends Command {
+class KickCommand extends LCommand {
   constructor () {
     super('kick', {
       aliases: ['kick'],
@@ -26,9 +26,7 @@ class KickCommand extends Command {
           description: 'The guild member that you want to kick.'
         }
       ],
-      options: {
-        usage: 'ban [--reason=] [--refresh] <keyword>'
-      },
+      usage: 'ban [--reason=] [--refresh] <keyword>',
       clientPermissions: ['BAN_MEMBERS']
     })
   }

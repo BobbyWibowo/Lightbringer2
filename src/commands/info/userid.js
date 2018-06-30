@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class UserIdCommand extends Command {
+class UserIdCommand extends LCommand {
   constructor () {
     super('userid', {
       aliases: ['userid', 'uid'],
@@ -12,9 +12,7 @@ class UserIdCommand extends Command {
           description: 'The user that you want to display the ID of.'
         }
       ],
-      options: {
-        usage: 'userid [keyword]'
-      }
+      usage: 'userid [keyword]'
     })
   }
 

@@ -1,9 +1,9 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 const Logger = require('./../../util/Logger')
 const mathjs = require('mathjs')
 const moment = require('moment')
 
-class CurrencyCommand extends Command {
+class CurrencyCommand extends LCommand {
   constructor () {
     super('currency', {
       aliases: ['exchangerate', 'currency', 'curr'],
@@ -41,23 +41,21 @@ class CurrencyCommand extends Command {
           description: 'Saves your Fixer.io API key to the storage file.'
         }
       ],
-      options: {
-        usage: 'currency < input | --refresh | --source | --default= >',
-        examples: [
-          {
-            content: 'currency 25 usd eur',
-            description: 'Convert 25 USD to EUR.'
-          },
-          {
-            content: 'currency 50 usd to eur',
-            description: 'Optionally, if there is a "to" in between the two currencies, it will assume the string after it as the actual "to" currency". So it will convert 50 USD to EUR.'
-          },
-          {
-            content: 'currency --default=usd',
-            description: 'Sets default "to" currency to USD. So running something like "currency 50 eur" will convert 50 EUR to USD (since USD is the default "to" currency).'
-          }
-        ]
-      }
+      usage: 'currency < input | --refresh | --source | --default= >',
+      examples: [
+        {
+          content: 'currency 25 usd eur',
+          description: 'Convert 25 USD to EUR.'
+        },
+        {
+          content: 'currency 50 usd to eur',
+          description: 'Optionally, if there is a "to" in between the two currencies, it will assume the string after it as the actual "to" currency". So it will convert 50 USD to EUR.'
+        },
+        {
+          content: 'currency --default=usd',
+          description: 'Sets default "to" currency to USD. So running something like "currency 50 eur" will convert 50 EUR to USD (since USD is the default "to" currency).'
+        }
+      ]
     })
 
     // Exchange rates data fetched from fixer.io
@@ -110,7 +108,7 @@ class CurrencyCommand extends Command {
     }
 
     if (!args.input || args.input.length < 2) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     const val = parseFloat(args.input[0])

@@ -1,16 +1,17 @@
 const { Inhibitor } = require('discord-akairo')
 
-class GuildBlacklistInhibitor extends Inhibitor {
+class BlacklistInhibitor extends Inhibitor {
   constructor () {
-    super('guildBlacklist', {
-      reason: 'GUILD_BLACKLISTED',
-      type: 'post'
+    super('blacklist', {
+      reason: 'blacklist',
+      type: 'pre',
+      priority: 10
     })
 
     this.storage = null
 
+    // We are caching these values into local variables for performance reasons
     this.guilds = []
-
     this.homeGuild = null
   }
 
@@ -23,7 +24,7 @@ class GuildBlacklistInhibitor extends Inhibitor {
     }
   }
 
-  callback () {
+  update () {
     // This should be called whenever the list is being updated
     this.guilds = this.storage.get('guilds') || []
   }
@@ -36,8 +37,8 @@ class GuildBlacklistInhibitor extends Inhibitor {
     }
 
     this.storage = this.client.storage('guild-blacklist')
-    this.callback()
+    this.update()
   }
 }
 
-module.exports = GuildBlacklistInhibitor
+module.exports = BlacklistInhibitor

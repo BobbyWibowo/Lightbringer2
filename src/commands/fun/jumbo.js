@@ -1,9 +1,9 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 const path = require('path')
 
 const EMOJI_REGEX = /<a?:[a-zA-Z0-9_]+:(\d+)>/
 
-class JumboCommand extends Command {
+class JumboCommand extends LCommand {
   constructor () {
     super('jumbo', {
       aliases: ['jumbo', 'j', 'enlarge', 'large'],
@@ -15,16 +15,14 @@ class JumboCommand extends Command {
           description: 'Emojis (may contain a maximum of 10 emojis).'
         }
       ],
-      options: {
-        usage: 'jumbo <emojis>'
-      },
+      usage: 'jumbo <emojis>',
       clientPermissions: ['ATTACH_FILES']
     })
   }
 
   async exec (message, args) {
     if (!args.emojis) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     const files = args.emojis

@@ -1,14 +1,12 @@
-const { Command } = require('discord-akairo')
 const { Foods } = require('../../util/Constants')
+const LCommand = require('./../../struct/LCommand')
 
-class FeedCommand extends Command {
+class FeedCommand extends LCommand {
   constructor () {
     super('feed', {
       aliases: ['feeds', 'feed'],
       description: 'Forces an item down someone\'s throat.',
-      options: {
-        usage: 'feed @mention-1 [@mention-2] [...] [@mention-n]'
-      }
+      usage: 'feed @mention-1 [@mention-2] [...] [@mention-n]'
     })
   }
 

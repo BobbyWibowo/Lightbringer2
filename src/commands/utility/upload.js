@@ -1,7 +1,7 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 const path = require('path')
 
-class UploadCommand extends Command {
+class UploadCommand extends LCommand {
   constructor () {
     super('upload', {
       aliases: ['upload', 'upl', 'attach'],
@@ -25,16 +25,14 @@ class UploadCommand extends Command {
           description: 'URL of the file.'
         }
       ],
-      options: {
-        usage: 'upload [--name=] <url>'
-      },
+      usage: 'upload [--name=] <url>',
       clientPermissions: ['ATTACH_FILES']
     })
   }
 
   async exec (message, args) {
     if (!args.url) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     const exec = /^<?(.+?)>?$/.exec(args.url)

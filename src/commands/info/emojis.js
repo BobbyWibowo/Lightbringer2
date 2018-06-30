@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class EmojisCommand extends Command {
+class EmojisCommand extends LCommand {
   constructor () {
     super('emojis', {
       aliases: ['emojis', 'emoji', 'emotes', 'emote'],
@@ -18,9 +18,7 @@ class EmojisCommand extends Command {
           description: 'The guild that you want to list the emotes of. This can be an emoji instead, in which case it will display the source of the said emoji.'
         }
       ],
-      options: {
-        usage: 'emojis [--newline] [keyword]'
-      },
+      usage: 'emojis [--newline] [keyword]',
       clientPermissions: ['EMBED_LINKS']
     })
   }

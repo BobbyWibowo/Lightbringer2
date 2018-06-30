@@ -1,15 +1,13 @@
-const { Command } = require('discord-akairo')
 const { Insults } = require('../../util/Constants')
+const LCommand = require('./../../struct/LCommand')
 
-class InsultCommand extends Command {
+class InsultCommand extends LCommand {
   constructor () {
     super('insult', {
       aliases: ['insults', 'insult'],
       description: 'Insults some users.',
-      options: {
-        credits: 'Twentysix#5252',
-        usage: 'insult @mention-1 [@mention-2] [...] [@mention-n]'
-      }
+      usage: 'insult @mention-1 [@mention-2] [...] [@mention-n]',
+      credits: 'Twentysix#5252'
     })
   }
 

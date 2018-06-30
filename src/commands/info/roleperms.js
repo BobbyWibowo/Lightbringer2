@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
 const { escapeMarkdown } = require('discord.js').Util
 const { stripIndent } = require('common-tags')
+const LCommand = require('./../../struct/LCommand')
 
 const PERMISSIONS = {
   General: {
@@ -39,7 +39,7 @@ const PERMISSIONS = {
   }
 }
 
-class RolePermsCommand extends Command {
+class RolePermsCommand extends LCommand {
   constructor () {
     super('roleperms', {
       aliases: ['rolepermissions', 'rolepermission', 'roleperms', 'roleperm', 'rperms', 'rperm'],
@@ -58,9 +58,7 @@ class RolePermsCommand extends Command {
           description: 'The role that you want to display the information of.'
         }
       ],
-      options: {
-        usage: 'roleperms [--guild=] <keyword>'
-      },
+      usage: 'roleperms [--guild=] <keyword>',
       clientPermissions: ['EMBED_LINKS']
     })
   }

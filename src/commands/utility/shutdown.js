@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class ShutDownCommand extends Command {
+class ShutDownCommand extends LCommand {
   constructor () {
     super('shutdown', {
       aliases: ['shutdown', 'exit'],

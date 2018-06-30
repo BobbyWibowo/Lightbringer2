@@ -1,7 +1,7 @@
-const { Command } = require('discord-akairo')
 const { escapeMarkdown } = require('discord.js').Util
+const LCommand = require('./../../struct/LCommand')
 
-class DiscriminatorCommand extends Command {
+class DiscriminatorCommand extends LCommand {
   constructor () {
     super('discriminator', {
       aliases: ['discriminator', 'discrim'],
@@ -15,12 +15,10 @@ class DiscriminatorCommand extends Command {
           }
         }
       ],
-      options: {
-        usage: 'discriminator <discriminator>',
-        examples: [
-          'discriminator 0001'
-        ]
-      }
+      usage: 'discriminator <discriminator>',
+      examples: [
+        'discriminator 0001'
+      ]
     })
 
     this.maxUsersListing = null
@@ -28,7 +26,7 @@ class DiscriminatorCommand extends Command {
 
   async exec (message, args) {
     if (!args.discriminator) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     let displayCapped = false

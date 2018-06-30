@@ -1,7 +1,7 @@
-const { Command } = require('discord-akairo')
 const { escapeMarkdown } = require('discord.js').Util
+const LCommand = require('./../../struct/LCommand')
 
-class InRoleCommand extends Command {
+class InRoleCommand extends LCommand {
   constructor () {
     super('inrole', {
       aliases: ['inrole'],
@@ -26,9 +26,7 @@ class InRoleCommand extends Command {
           description: 'The role that you want to display the members of.'
         }
       ],
-      options: {
-        usage: 'inrole [--guild=] [--online] <keyword>'
-      },
+      usage: 'inrole [--guild=] [--online] <keyword>',
       clientPermissions: ['EMBED_LINKS']
     })
 

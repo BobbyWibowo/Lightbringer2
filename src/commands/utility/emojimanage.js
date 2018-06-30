@@ -1,8 +1,8 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
 const EMOJI_REGEX = /<a?:[a-zA-Z0-9_]+:(\d+)>/
 
-class EmojiManageCommand extends Command {
+class EmojiManageCommand extends LCommand {
   constructor () {
     super('emojimanage', {
       aliases: ['emojimanage', 'emotemanage', 'emojim', 'emotem'],
@@ -30,14 +30,12 @@ class EmojiManageCommand extends Command {
           description: 'With add/create action, this must be the URL of the image that will be used as a new emoji. With rename action, this must be the new name.'
         }
       ],
-      options: {
-        usage: 'emojis <action> <resolvable> [extra]',
-        examples: [
-          'emojimanage add emojiname http://url/to/image',
-          'emojimanage delete emojiname',
-          'emojimanage rename emojiname newemojiname'
-        ]
-      }
+      usage: 'emojis <action> <resolvable> [extra]',
+      examples: [
+        'emojimanage add emojiname http://url/to/image',
+        'emojimanage delete emojiname',
+        'emojimanage rename emojiname newemojiname'
+      ]
     })
   }
 
@@ -47,7 +45,7 @@ class EmojiManageCommand extends Command {
     }
 
     if (!args.action || ((args.action === 1 || args.action === 3) && !args.extra)) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     if (args.action === 1) {

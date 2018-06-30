@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class BooruCacheCommand extends Command {
+class BooruCacheCommand extends LCommand {
   constructor () {
     super('boorucache', {
       aliases: ['boorucache', 'bcache', 'bc'],
@@ -13,9 +13,7 @@ class BooruCacheCommand extends Command {
           description: 'Clear the cache.'
         }
       ],
-      options: {
-        usage: 'boorucache [--clear]'
-      }
+      usage: 'boorucache [--clear]'
     })
   }
 

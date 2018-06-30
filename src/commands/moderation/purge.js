@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class PurgeCommand extends Command {
+class PurgeCommand extends LCommand {
   constructor () {
     super('purge', {
       aliases: ['purge'],
@@ -26,9 +26,7 @@ class PurgeCommand extends Command {
           description: 'An ID of the message which will be used as an anchor. If this is set, it will prune X messages before it, but not itself. By default, this will be set to the command message.'
         }
       ],
-      options: {
-        usage: 'purge [--reason=] [amount]'
-      }
+      usage: 'purge [--reason=] [amount] [--before=]'
     })
   }
 

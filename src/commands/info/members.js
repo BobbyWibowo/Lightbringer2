@@ -1,7 +1,7 @@
-const { Command } = require('discord-akairo')
 const { escapeMarkdown } = require('discord.js').Util
+const LCommand = require('./../../struct/LCommand')
 
-class MembersCommand extends Command {
+class MembersCommand extends LCommand {
   constructor () {
     super('members', {
       aliases: ['members', 'member'],
@@ -19,9 +19,7 @@ class MembersCommand extends Command {
           description: 'The guild that you want to list the members of.'
         }
       ],
-      options: {
-        usage: 'members [--online] [keyword]'
-      },
+      usage: 'members [--online] [keyword]',
       clientPermissions: ['EMBED_LINKS']
     })
 

@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
 const { escapeMarkdown } = require('discord.js').Util
 const { stripIndent } = require('common-tags')
+const LCommand = require('./../../struct/LCommand')
 
 const VERIFICATION_LEVELS = [
   'None',
@@ -23,7 +23,7 @@ const NOTIFICATIONS = {
   INHERIT: 'Inherit preference from parent'
 }
 
-class GuildInfoCommand extends Command {
+class GuildInfoCommand extends LCommand {
   constructor () {
     super('guildinfo', {
       aliases: ['guildinfo', 'ginfo', 'guild'],
@@ -41,9 +41,7 @@ class GuildInfoCommand extends Command {
           description: 'The guild that you want to display the information of.'
         }
       ],
-      options: {
-        usage: 'guildinfo [--refresh] [keyword]'
-      },
+      usage: 'guildinfo [--refresh] [keyword]',
       clientPermissions: ['EMBED_LINKS']
     })
   }

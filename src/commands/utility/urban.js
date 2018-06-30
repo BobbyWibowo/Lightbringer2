@@ -1,7 +1,7 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 const ud = require('urban-dictionary-es6')
 
-class UrbanCommand extends Command {
+class UrbanCommand extends LCommand {
   constructor () {
     super('urban', {
       aliases: ['urbandictionary', 'urban', 'u'],
@@ -19,10 +19,8 @@ class UrbanCommand extends Command {
           match: 'rest'
         }
       ],
-      options: {
-        usage: 'urban [--index=] keyword',
-        hidden: true
-      },
+      usage: 'urban [--index=] keyword',
+      hidden: true,
       clientPermissions: ['EMBED_LINKS']
     })
   }

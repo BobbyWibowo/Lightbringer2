@@ -1,7 +1,7 @@
-const { Command } = require('discord-akairo')
 const convert = require('color-convert')
+const LCommand = require('./../../struct/LCommand')
 
-class AverageColorCommand extends Command {
+class AverageColorCommand extends LCommand {
   constructor () {
     super('averagecolor', {
       aliases: ['averagecolors', 'averagecolor', 'avgcolor'],
@@ -13,15 +13,13 @@ class AverageColorCommand extends Command {
           description: 'URL of the image.'
         }
       ],
-      options: {
-        usage: 'averagecolor <url>'
-      }
+      usage: 'averagecolor <url>'
     })
   }
 
   async exec (message, args) {
     if (!args.url) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     const exec = /^<?(.+?)>?$/.exec(args.url)

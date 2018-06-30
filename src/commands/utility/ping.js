@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class PingCommand extends Command {
+class PingCommand extends LCommand {
   constructor () {
     super('ping', {
       aliases: ['ping', 'pong'],

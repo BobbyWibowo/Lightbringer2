@@ -1,13 +1,11 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class KissCommand extends Command {
+class KissCommand extends LCommand {
   constructor () {
     super('kiss', {
       aliases: ['kisses', 'kiss'],
       description: 'Kisses someone using random GIFs from nekos.life.',
-      options: {
-        usage: 'hug <@mention>'
-      },
+      usage: 'hug <@mention>',
       clientPermissions: ['EMBED_LINKS']
     })
   }

@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class GenerateCommand extends Command {
+class GenerateCommand extends LCommand {
   constructor () {
     super('generate', {
       aliases: ['generate', 'gen'],

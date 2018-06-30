@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class GuildsCommand extends Command {
+class GuildsCommand extends LCommand {
   constructor () {
     super('guilds', {
       aliases: ['guildlist', 'guilds'],
@@ -22,7 +22,7 @@ class GuildsCommand extends Command {
           id: 'brute',
           match: 'flag',
           flag: ['--brute'],
-          description: 'Brute mode, only usable if the specified user is a bot account. This will try to fetch member with the same ID from all of your guilds, which means this will make an API call for EVERY guild. The more guilds you have, the more time it will consume, and the more likely it is for you to be ratelimited. Please do not use this too often.'
+          description: 'Brute mode, only usable if the specified user is a bot account. This will try to fetch member with the same ID from all of your guilds, which means this will make an API call for ALMOST EVERY guilds you are a member of. The more guilds you have, the more time it will consume, and the more likely it is for you to be ratelimited. PLEASE DO NOT USE THIS TOO OFTEN. When this is not enabled, it will attempt to find the existence of the specified user from each guild\'s cached members, which may not be 100% accurate.'
         },
         {
           id: 'keyword',
@@ -30,9 +30,7 @@ class GuildsCommand extends Command {
           description: 'The user that you want to list your mutual guilds of.'
         }
       ],
-      options: {
-        usage: 'guilds [--brief] [keyword]'
-      },
+      usage: 'guilds [--brief] [--positionsort] [--brute] [keyword]',
       clientPermissions: ['EMBED_LINKS']
     })
   }

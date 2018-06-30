@@ -1,4 +1,4 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
 const ACTIVITY_TYPES = {
   PLAYING: /^p(lay(ing)?)?$/i,
@@ -7,7 +7,7 @@ const ACTIVITY_TYPES = {
   WATCHING: /^w(atch(ing)?)?$/i
 }
 
-class SetActivityCommand extends Command {
+class SetActivityCommand extends LCommand {
   constructor () {
     super('setactivity', {
       aliases: ['setactivity', 'setgame'],
@@ -44,9 +44,7 @@ class SetActivityCommand extends Command {
           description: 'Name of the activity that you would like to have.'
         }
       ],
-      options: {
-        usage: 'setactivity [ --list | --streaming= [name] | [--type=] name ]'
-      }
+      usage: 'setactivity [ --list | --streaming= [name] | [--type=] name ]'
     })
   }
 

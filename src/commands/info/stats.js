@@ -1,7 +1,7 @@
-const { Command } = require('discord-akairo')
 const { stripIndent } = require('common-tags')
+const LCommand = require('./../../struct/LCommand')
 
-class StatsCommand extends Command {
+class StatsCommand extends LCommand {
   constructor () {
     super('stats', {
       aliases: ['statistics', 'stats'],

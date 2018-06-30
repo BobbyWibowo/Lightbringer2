@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class ConfigCommand extends Command {
+class ConfigCommand extends LCommand {
   constructor () {
     super('config', {
       aliases: ['config'],
@@ -22,9 +22,7 @@ class ConfigCommand extends Command {
           description: 'The value that you would like to set for the specified key.'
         }
       ],
-      options: {
-        usage: 'config < --list | key [value] >'
-      }
+      usage: 'config < --list | key [value] >'
     })
   }
 
@@ -50,7 +48,7 @@ class ConfigCommand extends Command {
     }
 
     if (!args.key) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     if (!args.value) {

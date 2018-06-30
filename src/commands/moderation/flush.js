@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class FlushCommand extends Command {
+class FlushCommand extends LCommand {
   constructor () {
     super('flush', {
       aliases: ['flush'],
@@ -26,12 +26,8 @@ class FlushCommand extends Command {
           description: 'An ID of the message which will be used as an anchor. If this is set, it will prune X messages before it, but not itself. By default, this will be set to the command message.'
         }
       ],
-      options: {
-        usage: 'flush [--reason=] [amount]'
-      }
+      usage: 'flush [--reason=] [amount] [--before=]'
     })
-
-    this.timeout = undefined
   }
 
   async exec (message, args) {

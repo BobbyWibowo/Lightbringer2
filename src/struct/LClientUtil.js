@@ -299,6 +299,7 @@ class LClientUtil extends ClientUtil {
         continue
       }
       if (fetch) {
+        Logger.log(`Fetching ${userId} from ${guild.id}.`, { tag: 'LClientUtil/fetchMutualGuilds' })
         const fetchResult = await guild.members.fetch(userId).catch(() => false)
         if (fetchResult) {
           mutualGuilds.set(guild.id, guild)

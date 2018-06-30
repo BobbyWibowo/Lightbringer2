@@ -12,9 +12,7 @@ const Storage = require('./Storage')
 
 class LightbringerClient extends AkairoClient {
   constructor (configManager) {
-    super({
-      selfbot: true
-    }, {
+    super({}, {
       messageCacheMaxSize: 10,
       sync: true,
       disabledEvents: [
@@ -42,17 +40,20 @@ class LightbringerClient extends AkairoClient {
     this.commandHandler = new LCommandHandler(this, {
       allowMention: true,
       automateCategories: true,
+      blockClient: false,
       directory: path.join(__dirname, '..', 'commands'),
       prefix: configManager.get('prefix') || 'lb',
-      statusTimeout: 7500,
-      purgeCommandsTimeout: 2500
+      purgeCommandsTimeout: 2500,
+      statusTimeout: 7500
     })
 
     this.inhibitorHandler = new LInhibitorHandler(this, {
+      automateCategories: true,
       directory: path.join(__dirname, '..', 'inhibitors')
     })
 
     this.listenerHandler = new LListenerHandler(this, {
+      automateCategories: true,
       directory: path.join(__dirname, '..', 'listeners')
     })
 

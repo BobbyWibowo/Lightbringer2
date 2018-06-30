@@ -1,4 +1,4 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
 const CATEGORIES = {
   all: /^a(ll)?$/,
@@ -11,7 +11,7 @@ const CATEGORIES = {
   wisdom: /^w(isdom)?$/i
 }
 
-class FortuneCommand extends Command {
+class FortuneCommand extends LCommand {
   constructor () {
     super('fortune', {
       aliases: ['fortunecookie', 'fortune'],
@@ -35,9 +35,7 @@ class FortuneCommand extends Command {
           description: 'The type of fortune cookie (randomized when not specified).'
         }
       ],
-      options: {
-        usage: 'fortune [ --list | [type] ]'
-      }
+      usage: 'fortune [ --list | [type] ]'
     })
   }
 

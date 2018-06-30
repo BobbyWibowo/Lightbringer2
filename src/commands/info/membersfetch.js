@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class MembersFetchCommand extends Command {
+class MembersFetchCommand extends LCommand {
   constructor () {
     super('membersfetch', {
       aliases: ['membersfetch', 'memfetch', 'fetch'],
@@ -12,9 +12,7 @@ class MembersFetchCommand extends Command {
           description: 'The guild that you want to fetch the members of.'
         }
       ],
-      options: {
-        usage: 'membersfetch [keyword]'
-      }
+      usage: 'membersfetch [keyword]'
     })
   }
 

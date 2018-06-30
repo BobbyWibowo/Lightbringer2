@@ -1,9 +1,9 @@
-const { Command } = require('discord-akairo')
-const convert = require('color-convert')
 const { escapeMarkdown } = require('discord.js').Util
 const { stripIndent } = require('common-tags')
+const convert = require('color-convert')
+const LCommand = require('./../../struct/LCommand')
 
-class RoleInfoCommand extends Command {
+class RoleInfoCommand extends LCommand {
   constructor () {
     super('roleinfo', {
       aliases: ['roleinfo', 'rinfo', 'role'],
@@ -22,9 +22,7 @@ class RoleInfoCommand extends Command {
           description: 'The role that you want to display the information of.'
         }
       ],
-      options: {
-        usage: 'roleinfo [--guild=] <keyword>'
-      },
+      usage: 'roleinfo [--guild=] <keyword>',
       clientPermissions: ['EMBED_LINKS']
     })
   }

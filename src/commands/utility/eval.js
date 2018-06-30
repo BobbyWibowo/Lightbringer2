@@ -1,9 +1,9 @@
-const { Command } = require('discord-akairo')
 const { escapeMarkdown } = require('discord.js').Util
 const { inspect } = require('util')
+const LCommand = require('./../../struct/LCommand')
 const Logger = require('./../../util/Logger')
 
-class EvalCommand extends Command {
+class EvalCommand extends LCommand {
   constructor () {
     super('eval', {
       aliases: ['evaluate', 'eval'],
@@ -16,27 +16,25 @@ class EvalCommand extends Command {
           description: 'Silent mode.'
         },
         {
-          id: 'content',
+          id: 'codes',
           match: 'rest',
           description: 'Arbritrary JavaScript codes that you want to be evaluated.'
         }
       ],
-      options: {
-        usage: 'evaluate [--silent] <content>'
-      }
+      usage: 'evaluate [--silent] <codes>'
     })
   }
 
   async exec (message, args) {
-    if (!args.content) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+    if (!args.codes) {
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     const time = process.hrtime()
     let result, isError, type
     try {
       // eslint-disable-next-line no-eval
-      result = await eval(args.content)
+      result = await eval(args.codes)
     } catch (error) {
       result = error.stack || error.message
       isError = true
@@ -60,7 +58,7 @@ class EvalCommand extends Command {
 
     const string =
       '•  **JavaScript codes:**\n' +
-      `${this.client.util.formatCode(escapeMarkdown(args.content, true), 'js')}\n` +
+      `${this.client.util.formatCode(escapeMarkdown(args.codes, true), 'js')}\n` +
       `${isError ? '**Evaluation error:**' : '**Result:**'}\n` +
       `${this.client.util.formatCode(escapeMarkdown(result, true), 'js')}\n` +
       `•  ${type ? `Type: ${type} | ` : ''}Time taken: \`${this.client.util.formatTimeNs(diff[0] * 1e9 + diff[1])}\``

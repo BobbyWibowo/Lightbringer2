@@ -1,8 +1,8 @@
 const { CollegiateDictionary, WordNotFoundError } = require('mw-dict')
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 const Logger = require('./../../util/Logger')
 
-class DictionaryCommand extends Command {
+class DictionaryCommand extends LCommand {
   constructor () {
     super('dictionary', {
       aliases: ['dictionary', 'dict'],
@@ -38,9 +38,7 @@ class DictionaryCommand extends Command {
           description: 'Saves your Merriam-Webster\'s Collegiate® Dictionary API key to the storage file.'
         }
       ],
-      options: {
-        usage: 'dictionary < [--index=] [--more] <keyword> | --apikey= >'
-      },
+      usage: 'dictionary < [--index=] [--more] <keyword> | --apikey= >',
       clientPermissions: ['EMBED_LINKS']
     })
 

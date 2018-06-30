@@ -1,10 +1,10 @@
-const { Command } = require('discord-akairo')
 const { exec } = require('child_process')
+const LCommand = require('./../../struct/LCommand')
 const os = require('os')
 
 const USERNAME = true
 
-class ExecCommand extends Command {
+class ExecCommand extends LCommand {
   constructor () {
     super('exec', {
       aliases: ['exec', 'e', 'shell'],

@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class BirdsCommand extends Command {
+class BirdsCommand extends LCommand {
   constructor () {
     super('birds', {
       aliases: ['birds', 'bird'],
@@ -13,10 +13,8 @@ class BirdsCommand extends Command {
           description: 'Uploads the image as an attachment instead.'
         }
       ],
-      options: {
-        usage: 'birds [--upload]',
-        hidden: true
-      }
+      usage: 'birds [--upload]',
+      hidden: true
     })
   }
 

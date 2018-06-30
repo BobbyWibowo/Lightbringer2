@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class EightBallCommand extends Command {
+class EightBallCommand extends LCommand {
   constructor () {
     super('8ball', {
       aliases: ['8ball', '8b'],
@@ -12,9 +12,7 @@ class EightBallCommand extends Command {
           description: 'The question that you would like to ask to 8-ball.'
         }
       ],
-      options: {
-        usage: '8ball <question>'
-      }
+      usage: '8ball <question>'
     })
   }
 

@@ -1,9 +1,9 @@
-const AllowedImageSizes = Array.from({ length: 8 }, (e, i) => 2 ** (i + 4))
-const { Command } = require('discord-akairo')
 const { CommandHandlerEvents } = require('discord-akairo').Constants
 const { escapeMarkdown } = require('discord.js').Util
+const AllowedImageSizes = Array.from({ length: 8 }, (e, i) => 2 ** (i + 4))
+const LCommand = require('./../../struct/LCommand')
 
-class GuildIconCommand extends Command {
+class GuildIconCommand extends LCommand {
   constructor () {
     super('guildicon', {
       aliases: ['guildicon', 'gicon', 'icon'],
@@ -34,9 +34,7 @@ class GuildIconCommand extends Command {
           description: 'The guild that you want to display the icon of.'
         }
       ],
-      options: {
-        usage: 'guildicon [--direct] [--plain] [keyword]'
-      }
+      usage: 'guildicon [--direct] [--plain] [keyword]'
     })
   }
 

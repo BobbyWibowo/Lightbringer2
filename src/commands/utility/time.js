@@ -1,8 +1,8 @@
 const { Clocks } = require('./../../util/Constants')
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 const moment = require('moment')
 
-class TimeCommand extends Command {
+class TimeCommand extends LCommand {
   constructor () {
     super('time', {
       aliases: ['time'],
@@ -19,7 +19,7 @@ class TimeCommand extends Command {
 
   async exec (message, args) {
     if (!args.location) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     const result = await this.client.util.snek(`https://time.is/en/${args.location}`)

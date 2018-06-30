@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class ReverseCommand extends Command {
+class ReverseCommand extends LCommand {
   constructor () {
     super('reverse', {
       aliases: ['reverse'],
@@ -25,23 +25,21 @@ class ReverseCommand extends Command {
           flag: ['--delete', '-d'],
           description: 'Deletes the new message if using "--new" flag.'
           // If you want to use t!reverse command (Tatsumaki bot), you can
-          // do something like: "reverse --prefix=t!reverse -d reverse this text"
-          // just for fun - since Tatsumaki doesn't have public say command
+          // do something like: "reverse -p=t!reverse -d reverse this text"
+          // just for fun - since Tatsumaki doesn't have a public "say" command
         },
         {
           id: 'content',
           match: 'rest'
         }
       ],
-      options: {
-        usage: 'reverse [ < --new | --prefix= > [--delete] ] <content>'
-      }
+      usage: 'reverse [ < --new | --prefix= > [--delete] ] <content>'
     })
   }
 
   async exec (message, args) {
     if (!args.content) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     const content = args.content.split('').reverse().join('')

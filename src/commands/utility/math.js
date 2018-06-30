@@ -1,7 +1,7 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 const mathjs = require('mathjs')
 
-class MathCommand extends Command {
+class MathCommand extends LCommand {
   constructor () {
     super('math', {
       aliases: ['math', 'calculate', 'calc', 'solve'],
@@ -49,9 +49,7 @@ class MathCommand extends Command {
           description: 'Displays link to mathjs online documentation.'
         }
       ],
-      options: {
-        usage: 'math < --clearScope [expressions] | --localScope [--clearScope] <expressions> | expressions >'
-      }
+      usage: 'math < --clearScope [expressions] | --localScope [--clearScope] <expressions> | expressions >'
     })
 
     this.storage = null
@@ -74,7 +72,7 @@ class MathCommand extends Command {
     }
 
     if (!args.expressions) {
-      return message.status('error', `Usage: \`${this.options.usage}\`.`)
+      return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
     const scope = args.localScope ? {} : this.scope

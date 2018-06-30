@@ -1,15 +1,13 @@
-const { Command } = require('discord-akairo')
 const { Kills } = require('../../util/Constants')
+const LCommand = require('./../../struct/LCommand')
 
-class KillCommand extends Command {
+class KillCommand extends LCommand {
   constructor () {
     super('kill', {
       aliases: ['kills', 'kill'],
       description: 'Kills some users.',
-      options: {
-        credits: 'Santa illu™#8235 <286011141619187712>',
-        usage: 'kill @mention-1 [@mention-2] [...] [@mention-n]'
-      }
+      usage: 'kill @mention-1 [@mention-2] [...] [@mention-n]',
+      credits: 'illu <286011141619187712>'
     })
   }
 

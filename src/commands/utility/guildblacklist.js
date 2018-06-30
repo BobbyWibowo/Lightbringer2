@@ -1,9 +1,9 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 const LError = require('../../util/LError')
 
 const INHIBITOR_ID = 'guildBlacklist'
 
-class GuildBlacklistCommand extends Command {
+class GuildBlacklistCommand extends LCommand {
   constructor () {
     super('guildblacklist', {
       aliases: ['guildblacklist', 'gblacklist', 'gexclude'],
@@ -47,23 +47,19 @@ class GuildBlacklistCommand extends Command {
           description: 'ID of the inhibitor that will be called whenever a guild is being added to or removed from the blacklist (do not change this unless you know what you are doing).'
         }
       ],
-      options: {
-        usage: 'guildblacklist [ --list | --add= | --addID= | --remove= | --removeID= | --inhibitorID= ]',
-        examples: [
-          {
-            content: 'guildblacklist',
-            description: 'Blacklist the currently viewed guild.'
-          },
-          'guildblacklist --add="super guild"',
-          'guildblacklist --addID=123456789012345678',
-          'guildblacklist --inhibitorID=guildBlacklist'
-        ]
-      }
+      usage: 'guildblacklist [ --list | --add= | --addID= | --remove= | --removeID= | --inhibitorID= ]',
+      examples: [
+        {
+          content: 'guildblacklist',
+          description: 'Blacklist the currently viewed guild.'
+        },
+        'guildblacklist --add="super guild"',
+        'guildblacklist --addID=123456789012345678',
+        'guildblacklist --inhibitorID=guildBlacklist'
+      ]
     })
 
     this.storage = null
-
-    this.callback = null
 
     this.homeGuild = null
   }
@@ -173,8 +169,8 @@ class GuildBlacklistCommand extends Command {
   callInhibitor () {
     const inhibitorID = INHIBITOR_ID || this.storage.get('inhibitorID')
     const inhibitor = this.client.inhibitorHandler.modules.get(inhibitorID)
-    if (inhibitor && typeof inhibitor.callback === 'function') {
-      inhibitor.callback()
+    if (inhibitor && typeof inhibitor.update === 'function') {
+      inhibitor.update()
     }
   }
 

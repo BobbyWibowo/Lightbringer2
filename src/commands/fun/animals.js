@@ -1,4 +1,4 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
 const ANIMALS = {
   cat: {
@@ -30,7 +30,7 @@ const ANIMALS = {
 
 const MAX_RETRY = 3
 
-class AnimalsCommand extends Command {
+class AnimalsCommand extends LCommand {
   constructor () {
     super('animals', {
       aliases: ['animals', 'animal', 'a'],
@@ -66,9 +66,7 @@ class AnimalsCommand extends Command {
           description: 'The type of animal (randomized when not specified).'
         }
       ],
-      options: {
-        usage: 'animals [ --list | [--upload] [animal] ]'
-      }
+      usage: 'animals [ --list | [--upload] [animal] ]'
     })
   }
 

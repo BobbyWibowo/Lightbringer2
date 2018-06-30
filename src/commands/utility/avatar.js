@@ -1,9 +1,9 @@
-const AllowedImageSizes = Array.from({ length: 8 }, (e, i) => 2 ** (i + 4))
-const { Command } = require('discord-akairo')
 const { CommandHandlerEvents } = require('discord-akairo').Constants
 const { escapeMarkdown } = require('discord.js').Util
+const AllowedImageSizes = Array.from({ length: 8 }, (e, i) => 2 ** (i + 4))
+const LCommand = require('./../../struct/LCommand')
 
-class AvatarCommand extends Command {
+class AvatarCommand extends LCommand {
   constructor () {
     super('avatar', {
       aliases: ['avatar', 'ava', 'av'],
@@ -34,9 +34,7 @@ class AvatarCommand extends Command {
           description: 'The user that you want to display the avatar of.'
         }
       ],
-      options: {
-        usage: 'avatar [--direct] [--plain] [keyword]'
-      }
+      usage: 'avatar [--direct] [--plain] [keyword]'
     })
   }
 

@@ -1,6 +1,6 @@
-const { Command } = require('discord-akairo')
+const LCommand = require('./../../struct/LCommand')
 
-class RolesCommand extends Command {
+class RolesCommand extends LCommand {
   constructor () {
     super('roles', {
       aliases: ['rolelist', 'roles'],
@@ -18,9 +18,7 @@ class RolesCommand extends Command {
           description: 'The guild that you want to list the roles of.'
         }
       ],
-      options: {
-        usage: 'roles [--brief] [keyword]'
-      },
+      usage: 'roles [--brief] [keyword]',
       clientPermissions: ['EMBED_LINKS']
     })
   }
