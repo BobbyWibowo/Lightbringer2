@@ -84,10 +84,11 @@ class LightbringerClient extends AkairoClient {
   }
 
   async start (token) {
+    this.startTimestamp = Date.now()
+    this.startHrTime = process.hrtime()
+
     Logger.log('Logging in\u2026')
     await this.login(token)
-
-    this.startTimestamp = Date.now()
 
     this.commandHandler.readyAll()
     this.inhibitorHandler.readyAll()

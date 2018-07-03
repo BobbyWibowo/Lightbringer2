@@ -61,7 +61,7 @@ class EvalCommand extends LCommand {
       `${this.client.util.formatCode(escapeMarkdown(args.codes, true), 'js')}\n` +
       `${isError ? '**Evaluation error:**' : '**Result:**'}\n` +
       `${this.client.util.formatCode(escapeMarkdown(result, true), 'js')}\n` +
-      `•  ${type ? `Type: ${type} | ` : ''}Time taken: \`${this.client.util.formatTimeNs(diff[0] * 1e9 + diff[1])}\``
+      `•  ${type ? `Type: ${type} | ` : ''}Time taken: \`${this.client.util.formatHrTime(diff)}\``
 
     if (string.length > 2000) {
       return message.status('error', `Output is too long (+${string.length - 2000}).`)

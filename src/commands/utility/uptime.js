@@ -19,14 +19,22 @@ class UpTimeCommand extends LCommand {
           match: 'flag',
           flag: ['--short', '-s'],
           description: 'Uses short format.'
+        },
+        {
+          id: 'online',
+          match: 'flag',
+          flag: ['--online', '-o'],
+          description: 'Displays online time instead (an internal uptime of the API library, this resets when a connection drop occurs).'
         }
       ],
-      usage: 'uptime [--maxUnits=] [--short]'
+      usage: 'uptime [--maxUnits=] [--short] [--online]'
     })
   }
 
   async exec (message, args) {
-    await message.edit(`⏰\u2000${args.short ? 'Up' : 'Uptime'}: ${this.client.util.humanizeDuration(Date.now() - this.client.startTimestamp, args.maxUnits, args.short)}.`)
+    let timeMs = Date.now() - this.client.startTimestamp
+    if (args.online) { timeMs = this.client.uptime }
+    await message.edit(`⏰\u2000${args.short ? 'Up' : 'Uptime'}: ${this.client.util.humanizeDuration(timeMs, args.maxUnits, args.short)}.`)
   }
 }
 

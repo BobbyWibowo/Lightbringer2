@@ -398,28 +398,28 @@ class LClientUtil extends ClientUtil {
     return object
   }
 
-  humanizeDuration (ms, maxUnits, short, fraction = true) {
-    const round = ms > 0 ? Math.floor : Math.ceil
+  humanizeDuration (timeMs, maxUnits, short, fraction = true) {
+    const round = timeMs > 0 ? Math.floor : Math.ceil
     const parsed = [
       {
         name: 'week',
-        int: round(ms / 604800000)
+        int: round(timeMs / 604800000)
       },
       {
         name: 'day',
-        int: round(ms / 86400000) % 7
+        int: round(timeMs / 86400000) % 7
       },
       {
         name: 'hour',
-        int: round(ms / 3600000) % 24
+        int: round(timeMs / 3600000) % 24
       },
       {
         name: 'minute',
-        int: round(ms / 60000) % 60
+        int: round(timeMs / 60000) % 60
       },
       {
         name: 'second',
-        int: (round(ms / 1000) % 60) + (round(ms) % 1000 / 1000)
+        int: (round(timeMs / 1000) % 60) + (round(timeMs) % 1000 / 1000)
       }
     ]
 
@@ -466,14 +466,14 @@ class LClientUtil extends ClientUtil {
   fromNow (date) {
     if (!date) { return false }
 
-    const ms = new Date().getTime() - date.getTime()
+    const timeMs = new Date().getTime() - date.getTime()
 
-    if (ms >= 86400000) {
-      const days = Math.floor(ms / 86400000)
+    if (timeMs >= 86400000) {
+      const days = Math.floor(timeMs / 86400000)
       return `${days} day${days !== 1 ? 's' : ''} ago`
     }
 
-    return `${this.humanizeDuration(ms, 1, false, false)} ago`
+    return `${this.humanizeDuration(timeMs, 1, false, false)} ago`
   }
 
   formatFromNow (date) {
@@ -492,17 +492,29 @@ class LClientUtil extends ClientUtil {
     }
   }
 
-  formatTimeNs (timeNs) {
-    if (timeNs < 1e9) {
-      const timeMs = timeNs / 1e6
-      if (timeMs >= 100) {
-        return `${timeMs.toFixed(1)}ms`
-      } else {
-        return `${timeMs.toFixed(3)}ms`
-      }
-    } else {
-      return `${(timeNs / 1e9).toFixed(3)}s`
+  formatHrTime (timeHr) {
+    if (!(timeHr instanceof Array)) {
+      throw new Error('timeHr must be an instance of Array.')
     }
+
+    let prefix = ''
+    if (timeHr[0] > 0) {
+      prefix = this.humanizeDuration(timeHr[0] * 1000, null, true, false)
+    }
+
+    const timeMs = timeHr[1] / 1e6
+    if (timeMs === 0) {
+      return prefix
+    }
+
+    let suffix = ''
+    if (timeMs < 100) {
+      suffix = `${timeMs.toFixed(3)}ms`
+    } else {
+      suffix = `${timeMs.toFixed(1)}ms`
+    }
+
+    return `${prefix} ${suffix}`.trim()
   }
 
   capitalizeFirstLetter (input) {
@@ -679,12 +691,6 @@ class LClientUtil extends ClientUtil {
         content: first ? content : null,
         embed: this.embed(tempData)
       })
-
-      /*
-      Logger.log(`maxLength: ${maxLength}`)
-      Logger.log(`content.length: ${content.length}`)
-      Logger.log(`description.length: ${tempData.description.length}`)
-      */
     }
 
     for (let i = 0; i < splitDescs.length; i++) {

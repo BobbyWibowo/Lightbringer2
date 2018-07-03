@@ -22,7 +22,10 @@ class ReadyListener extends Listener {
     delete this.client.user.verified
     delete this.client.user.email
 
-    Logger.log('Successfully logged in.')
+    const elapsedHrTime = process.hrtime(this.client.startHrTime)
+    delete this.client.startHrTime
+
+    Logger.log(`Successfully logged in. That took ${this.client.util.formatHrTime(elapsedHrTime)}.`)
     Logger.log(stripIndent`
         Stats:
         – User: ${this.client.user.tag} (ID: ${this.client.user.id})

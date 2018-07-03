@@ -22,7 +22,7 @@ class GuildsCommand extends LCommand {
           id: 'brute',
           match: 'flag',
           flag: ['--brute'],
-          description: 'Brute mode, only usable if the specified user is a bot account. This will try to fetch member with the same ID from all of your guilds, which means this will make an API call for ALMOST EVERY guilds you are a member of. The more guilds you have, the more time it will consume, and the more likely it is for you to be ratelimited. PLEASE DO NOT USE THIS TOO OFTEN. When this is not enabled, it will attempt to find the existence of the specified user from each guild\'s cached members, which may not be 100% accurate.'
+          description: 'Brute mode. This will try to fetch member with matching ID from all of the guilds that you are a member of (which means this will make an API call for ALMOST EVERY guilds). The more guilds you have, the more time it will consume, and the more likely it is for you to be ratelimited. PLEASE DO NOT USE THIS TOO OFTEN. When this is not enabled, for bots, it will attempt to find their existence from every guild\'s cached members, which may not be accurate if they are offline (regular users will use the proper profile API instead).'
         },
         {
           id: 'keyword',
@@ -45,16 +45,14 @@ class GuildsCommand extends LCommand {
     let diff
     let guilds = this.client.guilds
     if (!self) {
-      if (user.bot) {
-        if (args.brute) {
-          await message.status('progress', 'Fetching user from all the guilds which you are a member of\u2026')
-          diff = process.hrtime()
-        }
-        // This is not 100% reliable when not using brute mode.
-        guilds = await this.client.util.fetchMutualGuilds(user.id, args.brute)
-        if (args.brute && diff) {
-          diff = process.hrtime(diff)
-        }
+      if (args.brute) {
+        await message.status('progress', 'Fetching user from all the guilds which you are a member of\u2026')
+        diff = process.hrtime()
+        guilds = await this.client.util.fetchMutualGuilds(user.id, true)
+        diff = process.hrtime(diff)
+      } else if (user.bot) {
+        // This may not be accurate without brute mode if the targeted user is offline.
+        guilds = await this.client.util.fetchMutualGuilds(user.id, false)
       } else {
         await message.status('progress', 'Fetching user\'s profile\u2026')
         const profile = await user.fetchProfile()
@@ -91,9 +89,9 @@ class GuildsCommand extends LCommand {
 
     if (user.bot) {
       if (args.brute) {
-        embed.footer = `Time taken with brute mode: ${this.client.util.formatTimeNs(diff[0] * 1e9 + diff[1])}.`
-      } else {
-        embed.footer = 'The specified user is a bot, so the result may not be reliable.'
+        embed.footer = `Time taken with brute mode: ${this.client.util.formatHrTime(diff)}.`
+      } else if (user.presence.status === 'offline') {
+        embed.footer = 'The specified user is an offline bot, so the result may not be accurate.'
       }
     }
 
