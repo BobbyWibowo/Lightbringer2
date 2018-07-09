@@ -87,7 +87,8 @@ class LightbringerClient extends AkairoClient {
     this.startTimestamp = Date.now()
     this.startHrTime = process.hrtime()
 
-    Logger.log('Logging in\u2026')
+    Logger.info('Logging in\u2026')
+    Logger.warn('Users with large amount of guilds may take a few minutes to login!')
     await this.login(token)
 
     this.commandHandler.readyAll()

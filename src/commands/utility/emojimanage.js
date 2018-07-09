@@ -10,18 +10,18 @@ class EmojiManageCommand extends LCommand {
       args: [
         {
           id: 'action',
-          match: 'word',
-          type: (word, message, args) => {
-            if (/^a(dd)?|c(reate)?$/.test(word)) { return 1 }
-            if (/^d(el(ete)?)?|r(em(ove)?)?$/.test(word)) { return 2 }
-            if (/^r(en(ame)?)?$/.test(word)) { return 3 }
+          match: 'phrase',
+          type: (phrase, message, args) => {
+            if (/^a(dd)?|c(reate)?$/.test(phrase)) { return 1 }
+            if (/^d(el(ete)?)?|r(em(ove)?)?$/.test(phrase)) { return 2 }
+            if (/^r(en(ame)?)?$/.test(phrase)) { return 3 }
             return null
           },
           description: 'Can be "add", "create", "delete", "remove" or "rename". Add/create action will create the emoji in the currently viewed guild, while delete/remove and rename actions will delete/rename the emoji globally unless the resolvable is only a name (instead of an ID or the emoji itself).'
         },
         {
           id: 'name',
-          match: 'word',
+          match: 'phrase',
           description: 'With add/create action, this must be the name that will be used as a new emoji. With delete/remove and rename actions, this can be an emoji resolvable (ID, name or the emoji itself). Using name (for delete/remove/rename actions) will make the command only search for emojis in the currently viewed guild. It is also not case-sensitive and do not have to be typed in full.'
         },
         {

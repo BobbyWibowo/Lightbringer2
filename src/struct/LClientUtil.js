@@ -504,7 +504,7 @@ class LClientUtil extends ClientUtil {
 
     const timeMs = timeHr[1] / 1e6
     if (timeMs === 0) {
-      return prefix
+      return prefix || '0.000ms'
     }
 
     let suffix = ''
