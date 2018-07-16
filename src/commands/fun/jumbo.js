@@ -34,7 +34,7 @@ class JumboCommand extends LCommand {
           if (emoji) {
             return {
               attachment: emoji.url,
-              name: path.basename(emoji.url)
+              name: `${emoji.name}${path.extname(emoji.url)}`
             }
           }
         }
