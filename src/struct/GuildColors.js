@@ -34,6 +34,14 @@ class GuildColors {
     }
 
     const color = await this.client.util.getAverageColor(snek.body)
+
+    // If the average color is pure black, add 1 to red (actually green and blue will do too).
+    // When the color is to be used for embed, pure black will instead become the embed's
+    // default color, which is generally grey.
+    if (color[0] === 0 && color[1] === 0 && color[2] === 0) {
+      color[0]++
+    }
+
     this.storage.set(guild.id, {
       icon: guild.icon,
       color

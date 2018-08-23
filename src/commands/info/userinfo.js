@@ -37,7 +37,7 @@ class UserInfoCommand extends LCommand {
     let profile
     if (!user.bot) {
       await message.status('progress', 'Fetching user\'s profile\u2026')
-      profile = await user.fetchProfile()
+      profile = await user.fetchProfile().catch(() => {})
     }
 
     // Check whether the keyword was a mention or not.

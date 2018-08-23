@@ -70,7 +70,7 @@ class LightbringerClient extends AkairoClient {
 
   setup () {
     this.commandHandler.useInhibitorHandler(this.inhibitorHandler)
-    this.commandHandler.useListenerHandler(this.inhibitorHandler)
+    this.commandHandler.useListenerHandler(this.listenerHandler)
 
     this.listenerHandler.setEmitters({
       commandHandler: this.commandHandler,

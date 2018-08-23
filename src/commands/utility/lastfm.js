@@ -173,12 +173,12 @@ class LastfmCommand extends LCommand {
           application: clientID,
           name: 'Last.fm',
           type: this.getActivityType(),
-          details: this.trackName,
-          state: this.artist,
+          details: `${this.trackName} by ${this.artist}`,
+          state: `${this.totalScrobbles.toLocaleString()} scrobbles`,
           assets: {
             largeImage: this.storage.get('largeImageID') || null,
             smallImage: this.storage.get('smallImageID') || null,
-            largeText: `${username} (${this.totalScrobbles.toLocaleString()})`,
+            largeText: `${username}`,
             smallText: 'Powered by Lightbringer2'
           },
           timestamps: {
