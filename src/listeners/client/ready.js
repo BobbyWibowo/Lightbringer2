@@ -23,14 +23,15 @@ class ReadyListener extends Listener {
 
     Logger.info(`Successfully logged in. That took ${this.client.util.formatHrTime(loginTime)}.`)
     Logger.log(stripIndent`
-        Stats:
-        – User: ${this.client.user.tag} (ID: ${this.client.user.id})
-        – Guilds: ${this.client.guilds.size.toLocaleString()}
-        – Channels: ${this.client.channels.size.toLocaleString()}
-        – Modules : ${this.client.commandHandler.modules.size.toLocaleString()}
-        – Prefix: ${this.client.commandHandler.prefix}
-      `)
+      Stats:
+      – User: ${this.client.user.tag} (ID: ${this.client.user.id})
+      – Guilds: ${this.client.guilds.size.toLocaleString()}
+      – Channels: ${this.client.channels.size.toLocaleString()}
+      – Modules : ${this.client.commandHandler.modules.size.toLocaleString()}
+      – Prefix: ${this.client.commandHandler.prefix}
+    `)
 
+    // These either do not work or d.js will re-add them after this
     delete this.client.user.verified
     delete this.client.user.email
 

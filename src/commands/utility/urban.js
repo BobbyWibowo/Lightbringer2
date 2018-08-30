@@ -1,5 +1,5 @@
 const LCommand = require('./../../struct/LCommand')
-const ud = require('urban-dictionary-es6')
+// const ud = require('urban-dictionary-es6')
 
 class UrbanCommand extends LCommand {
   constructor () {
@@ -34,10 +34,10 @@ class UrbanCommand extends LCommand {
     let result
     if (args.keyword) {
       await message.status('progress', `Searching for \`${args.keyword}\` on Urban Dictionary\u2026`)
-      result = await ud.term(args.keyword)
+      // result = await ud.term(args.keyword)
     } else {
       await message.status('progress', 'Looking up random definition on Urban Dictionary\u2026')
-      result = await ud.random()
+      // result = await ud.random()
     }
 
     if (!result) {

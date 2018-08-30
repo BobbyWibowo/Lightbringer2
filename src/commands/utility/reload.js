@@ -12,13 +12,13 @@ class ReloadCommand extends LCommand {
           id: 'all',
           match: 'flag',
           flag: ['--all', '-a'],
-          description: 'Reloads all commands, inhibitors and listeners.'
+          description: 'Reloads all modules (commands, inhibitors and listeners).'
         },
         {
           id: 'type',
           match: 'option',
           flag: ['--type=', '-t='],
-          description: 'Type of the modules. This will reload all modules of the type when being used with "all" flag.',
+          description: 'Type of the modules. With "all" flag, only modules of the specified type will be reloaded.',
           type: (word, message, args) => {
             args._type = Boolean(word.length)
             if (/^c(ommand(s)?)?$/i.test(word)) { return 0 }
@@ -56,7 +56,7 @@ class ReloadCommand extends LCommand {
             }
             return matches
           },
-          description: 'IDs of the modules (aliases can be used for command modules).'
+          description: 'IDs of the modules. Defaults to command modules when "type" flag is not specified. For command modules, their aliases can also be used.'
         }
       ],
       usage: 'reload < --all [--type=] | [--type=] module-1 [module-2] [...] [module-n] >'
