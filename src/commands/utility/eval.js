@@ -3,6 +3,11 @@ const { inspect } = require('util')
 const LCommand = require('./../../struct/LCommand')
 const Logger = require('./../../util/Logger')
 
+function _eval (message, args) {
+  // eslint-disable-next-line no-eval
+  return eval(args.codes)
+}
+
 class EvalCommand extends LCommand {
   constructor () {
     super('eval', {
@@ -33,8 +38,7 @@ class EvalCommand extends LCommand {
     const time = process.hrtime()
     let result, isError, type
     try {
-      // eslint-disable-next-line no-eval
-      result = await eval(args.codes)
+      result = await _eval.call(this, message, args)
     } catch (error) {
       result = error.stack || error.message
       isError = true
