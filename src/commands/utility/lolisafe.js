@@ -25,19 +25,25 @@ class LoliSafeCommand extends LCommand {
           id: 'site',
           match: 'option',
           flag: ['--site=', '-s='],
-          description: 'Full URL to the upload API of a lolisafe-based host. This will be saved to the storage.'
+          description: 'Full URL to the upload API of a lolisafe-based host. This will be saved.'
         },
         {
           id: 'token',
           match: 'option',
           flag: ['--token=', '-t='],
-          description: 'Token for the lolisafe-based host. This will be saved to the storage.'
+          description: 'Token for the lolisafe-based host. This will be saved.'
         },
         {
           id: 'album',
           match: 'option',
           flag: ['--album=', '-a='],
-          description: 'Album ID for the lolisafe-based host. This will be saved to the storage.'
+          description: 'Album ID for the lolisafe-based host. This will be saved.'
+        },
+        {
+          id: 'clearOption',
+          match: 'option',
+          flag: ['--clearOption=', '--clear=', '-c='],
+          description: 'ID of the option to clear.'
         }
       ],
       usage: 'lolisafe < url | --site= | --token= >'
@@ -67,31 +73,48 @@ class LoliSafeCommand extends LCommand {
         this.url = args.site
         return message.status('success', `Successfully updated site to <${this.url}>.`)
       }
-    } else if (args.token) {
+    }
+
+    if (args.token) {
       if (args.token === 'null') {
         this.storage.set('token')
         this.storage.save()
         this.token = null
-        return message.status('success', 'Successfully removed token from the storage file.')
+        return message.status('success', 'Successfully removed token.')
       } else {
         this.storage.set('token', args.token)
         this.storage.save()
         this.token = args.token
-        return message.status('success', 'Successfully saved token to the storage file.')
+        return message.status('success', 'Successfully saved token.')
       }
-    } else if (args.album) {
+    }
+
+    if (args.album) {
       if (args.album === 'null') {
         this.storage.set('token')
         this.storage.save()
         this.album = null
-        return message.status('success', 'Successfully removed album ID from the storage file.')
+        return message.status('success', 'Successfully removed album ID.')
       } else {
         this.storage.set('album', args.album)
         this.storage.save()
         this.album = args.album
-        return message.status('success', 'Successfully saved album ID to the storage file.')
+        return message.status('success', 'Successfully saved album ID.')
       }
-    } else if (!args.url) {
+    }
+
+    if (args.clearOption) {
+      const val = this.storage.get(args.clearOption)
+      if (val === undefined) {
+        return message.status('error', `Option with ID \`${args.clearOption}\` was not set.`)
+      } else {
+        this.storage.set(args.clearOption, null)
+        if (this.storage.get('enabled')) { await this.setPresenceFromStorage() }
+        return message.status('success', `Cleared option with ID \`${args.clearOption}\`.`)
+      }
+    }
+
+    if (!args.url) {
       return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 

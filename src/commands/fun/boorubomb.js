@@ -48,7 +48,7 @@ class BooruCommand extends LCommand {
           id: 'defaultSites',
           match: 'option',
           flag: ['--defaultSites=', '--default=', '-d='],
-          description: 'Changes the default set of booru sites used when not using "--sites" option. This will be saved to the storage.'
+          description: 'Changes the default set of booru sites when not using "--sites" option. This will be saved.'
         }
       ],
       usage: 'boorubomb [ --list | [--upload] [--sites=] tags | --defaultSites= ]'

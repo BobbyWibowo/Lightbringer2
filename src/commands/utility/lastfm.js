@@ -25,66 +25,73 @@ class LastfmCommand extends LCommand {
           id: 'toggle',
           match: 'flag',
           flag: ['--toggle', '-t'],
-          description: 'Toggle Last.fm polls. State will be saved to the configuration file.'
+          description: 'Toggle Last.fm polls. State will be saved.'
         },
         {
           id: 'toggleRich',
           match: 'flag',
           flag: ['--rich', '-r'],
-          description: 'Toggle Rich Presence. State will be saved to the configuration file.'
+          description: 'Toggle Rich Presence. State will be saved.'
         },
         {
           id: 'monitorMode',
           match: 'flag',
           flag: ['--monitorMode', '-m'],
-          description: 'When Monitor Mode is enabled, it will keep on polling Last.fm and posting status update to status channel, but it will not update the user\'s status message. This may be useful when you want to use Spotify client on Desktop.'
+          description: 'When Monitor Mode is enabled, it will keep on polling Last.fm and posting status update to status channel, but it will no longer update the user\'s status message. This may be useful when you want to temporarily use Spotify client on Desktop (usually the bot\'s activity message will override your own client\'s).'
         },
         {
           id: 'apiKey',
           match: 'option',
           flag: ['--apiKey=', '--api=', '--key='],
-          description: 'Saves your Last.fm Developer API key to the storage file.'
+          description: 'Saves your Last.fm Developer API key.'
         },
         {
           id: 'username',
           match: 'option',
           flag: ['--username=', '--user='],
-          description: 'Saves your Last.fm username to the storage file (required to use the API).'
+          description: 'Saves your Last.fm username (required to use the API).'
         },
         {
           id: 'clientID',
           match: 'option',
           flag: ['--clientID=', '--client='],
-          description: 'Saves the Client ID of your Discord API Application to the storage file (required to use Rich Presence).'
+          description: 'Saves the Client ID of your Discord API Application (Rich Presence).'
         },
         {
           id: 'largeImageID',
           match: 'option',
           flag: ['--largeImage=', '--large='],
-          description: 'Saves the ID of the "large image" that you want to use with your Rich Presence.'
+          description: 'Saves the ID of the "large image" (Rich Presence).'
         },
         {
           id: 'smallImageID',
           match: 'option',
           flag: ['--smallImage=', '--small='],
-          description: 'Saves the ID of the "small image" that you want to use with your Rich Presence.'
+          description: 'Saves the ID of the "small image" (Rich Presence).'
         },
         {
           id: 'type',
           match: 'option',
           flag: ['--type='],
-          description: 'Sets the type that will be used for activity. Try "setactivity --list" to see available types.',
+          description: 'Sets the activity type. Try "setactivity --list" to see available types.',
           type: (word, message, args) => {
             const keys = Object.keys(ACTIVITY_TYPES)
             for (const key of keys) {
               if (ACTIVITY_TYPES[key].test(word)) { return key }
             }
           }
+        },
+        {
+          id: 'clearOption',
+          match: 'option',
+          flag: ['--clearOption=', '--clear=', '-c='],
+          description: 'ID of the option to clear.'
         }
       ],
-      usage: 'lastfm [ --toggle | --rich | [--apikey=] [--username=] [--clientid=] [--largeimage=] [--smallimage=] ]'
+      usage: 'lastfm [ --toggle | --rich | [--apiKey=] [--username=] [--clientID=] [--largeImage=] [--smallImage=] [--type=] ]'
     })
 
+    // Multiple options may be set at a time
     this._storageKeys = ['apiKey', 'username', 'clientID', 'largeImageID', 'smallImageID', 'type']
 
     this.storage = null
@@ -105,6 +112,7 @@ class LastfmCommand extends LCommand {
   }
 
   async exec (message, args) {
+    // Can only toggle one option at a time
     const toggles = [
       { arg: 'toggle', key: 'enabled', string: 'Last fm status updater' },
       { arg: 'toggleRich', key: 'rich', string: 'Rich Presence', alwaysPoll: true },
@@ -118,17 +126,11 @@ class LastfmCommand extends LCommand {
         this.storage.save()
 
         this.clearRecentTrackTimeout()
-        await message.status('progress', `${!val ? 'Enabling' : 'Disabling'} ${toggle.string}\u2026`)
-
-        if (val && !toggle.alwaysPoll) {
-          // Clear activity if the mode was previously enabled
-          await this.client.user.setPresence({ activity: null })
-        } else {
-          // Poll Last.fm if the mode was previously disabled
-          // ... or if alwaysPoll is set to true
+        if (this.storage.get('enabled')) {
           await this.getRecentTrack()
+        } else {
+          await this.client.user.setPresence({ activity: null })
         }
-
         return message.status('success', `${!val ? 'Enabled' : 'Disabled'} ${toggle.string}.`)
       }
     }
@@ -143,7 +145,19 @@ class LastfmCommand extends LCommand {
 
     if (storageHit) {
       this.storage.save()
-      return message.status('success', 'Successfully saved new value(s) to storage file.')
+      if (this.storage.get('enabled')) { await this.getRecentTrack() }
+      return message.status('success', 'Successfully saved the new value(s).')
+    }
+
+    if (args.clearOption) {
+      const val = this.storage.get(args.clearOption)
+      if (val === undefined) {
+        return message.status('error', `Option with ID \`${args.clearOption}\` was not set.`)
+      } else {
+        this.storage.set(args.clearOption, null)
+        if (this.storage.get('enabled')) { await this.setPresenceFromStorage() }
+        return message.status('success', `Cleared option with ID \`${args.clearOption}\`.`)
+      }
     }
 
     await message.edit('🎵\u2000Last fm configuration preview:\n' + this.client.util.formatCode(stripIndent`
@@ -153,12 +167,14 @@ class LastfmCommand extends LCommand {
       Total scrobbles :: ${this.totalScrobbles}
       Enabled         :: ${String(this.storage.get('enabled'))}
       Rich Presence   :: ${String(this.storage.get('rich'))}
+      Large Image     :: ${String(this.storage.get('largeImageID'))}
+      Small Image     :: ${String(this.storage.get('smallImageID'))}
       Monitor Mode    :: ${String(this.storage.get('monitorMode'))}
       Activity Type   :: ${this.getActivityType()}
     `, 'asciidoc'))
   }
 
-  async setPresenceToTrack () {
+  setPresenceToTrack () {
     if (!this.artist || !this.trackName) {
       return
     }

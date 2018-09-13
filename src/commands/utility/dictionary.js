@@ -35,7 +35,7 @@ class DictionaryCommand extends LCommand {
           id: 'apiKey',
           match: 'option',
           flag: ['--apikey=', '--api=', '--key='],
-          description: 'Saves your Merriam-Webster\'s Collegiate® Dictionary API key to the storage file.'
+          description: 'Saves your Merriam-Webster\'s Collegiate® Dictionary API key.'
         }
       ],
       usage: 'dictionary < [--index=] [--more] <keyword> | --apikey= >',
@@ -55,11 +55,11 @@ class DictionaryCommand extends LCommand {
     if (args.apiKey) {
       this.storage.set('apiKey', args.apiKey)
       this.storage.save()
-      return message.status('success', 'Successfully saved API key to the storage file.')
+      return message.status('success', 'Successfully saved the API key.')
     }
 
     if (!this.storage.get('apiKey')) {
-      return message.status('error', 'Missing API key!\nGet your Merriam-Webster\'s Collegiate® Dictionary API key from **http://dictionaryapi.com/** then run `dict --key=<apiKey>` to save the API key to the storage file!', -1)
+      return message.status('error', 'Missing API key!\nGet your Merriam-Webster\'s Collegiate® Dictionary API key from **http://dictionaryapi.com/** then run `dict --key=<apiKey>` to save the API key!', -1)
     }
 
     if (!this.dictClient) {

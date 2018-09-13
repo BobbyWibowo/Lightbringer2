@@ -73,7 +73,7 @@ class ConfigCommand extends LCommand {
     } catch (error) {
       return message.status('error', error.toString())
     }
-    return message.status('success', 'Successfully saved value to the configuration file. Restart the bot in order for the changes to take effect.')
+    return message.status('success', 'Successfully saved new value. Restart the bot in order for changes to take effect.')
   }
 }
 

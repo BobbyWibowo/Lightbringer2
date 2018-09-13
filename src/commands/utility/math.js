@@ -5,7 +5,7 @@ class MathCommand extends LCommand {
   constructor () {
     super('math', {
       aliases: ['math', 'calculate', 'calc', 'solve'],
-      description: 'Calculate math expression with mathjs. Global scope (variables) will be saved to the storage file, but it will only be able to save regular values (numbers). Functions will be lost after a bot restart.',
+      description: 'Calculate math expression with mathjs. Global scope (variables) will be saved, but it will only be able to save regular values (numbers). Functions will be lost on the next bot launches.',
       args: [
         {
           id: 'expressions',
@@ -16,7 +16,7 @@ class MathCommand extends LCommand {
           id: 'localScope',
           match: 'flag',
           flag: ['--localScope', '--local', '-l'],
-          description: 'Turns on local scope. When this is enabled, previously saved variables will not be accessible from the expression (when this is not enabled, all variables will be stored in a global scope).'
+          description: 'Turns on local scope. When this is enabled, previously saved variables will not be accessible from the expression (otherwise, all variables will be stored in a global scope).'
         },
         {
           id: 'clearScope',

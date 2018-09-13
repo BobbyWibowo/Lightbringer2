@@ -11,7 +11,7 @@ class SetActivityCommand extends LCommand {
   constructor () {
     super('setactivity', {
       aliases: ['setactivity', 'setgame'],
-      description: 'Sets your activity message (can only be seen by other people).',
+      description: 'Sets your activity message (advanced version with Rich Presence support is available in "setrp" command).',
       split: 'sticky',
       args: [
         {
@@ -29,7 +29,7 @@ class SetActivityCommand extends LCommand {
           id: 'type',
           match: 'option',
           flag: ['--type='],
-          description: 'The type of the activity (can either be Playing, Streaming, Listening to, or Watching).',
+          description: 'The activity type (can either be Playing, Streaming, Listening to, or Watching).',
           type: (word, message, args) => {
             const keys = Object.keys(ACTIVITY_TYPES)
             if (!word.length) { return keys[0] }

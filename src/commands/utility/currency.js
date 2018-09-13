@@ -38,7 +38,7 @@ class CurrencyCommand extends LCommand {
           id: 'apiKey',
           match: 'option',
           flag: ['--apiKey=', '--api=', '--key='],
-          description: 'Saves your Fixer.io API key to the storage file.'
+          description: 'Saves your Fixer.io API key.'
         }
       ],
       usage: 'currency < input | --refresh | --source | --default= >',
@@ -79,12 +79,12 @@ class CurrencyCommand extends LCommand {
     if (args.apiKey) {
       this.storage.set('apiKey', args.apiKey)
       this.storage.save()
-      return message.status('success', 'Successfully saved API key to the storage file.')
+      return message.status('success', 'Successfully saved the API key.')
     }
 
     if (!this.data || args.refresh) {
       if (!this.storage.get('apiKey')) {
-        return message.status('error', 'Missing API key!\nGet your Fixer.io API key from **https://fixer.io** then run `currency --key=<apiKey>` to save the API key to the storage file!', -1)
+        return message.status('error', 'Missing API key!\nGet your Fixer.io API key from **https://fixer.io** then run `currency --key=<apiKey>` to save the API key!', -1)
       }
 
       await message.status('progress', 'Updating exchange rate\u2026')

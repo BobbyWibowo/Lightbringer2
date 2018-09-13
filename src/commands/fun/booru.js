@@ -50,7 +50,7 @@ class BooruCommand extends LCommand {
           id: 'defaultSite',
           match: 'option',
           flag: ['--defaultSite=', '--default=', '-d='],
-          description: 'Changes the default booru site used when not using "--site" option. This will be saved to the storage.'
+          description: 'Changes the default booru site when not using "--site" option. This will be saved.'
         },
         {
           id: 'liteMode',
