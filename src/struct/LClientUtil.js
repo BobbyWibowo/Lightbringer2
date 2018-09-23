@@ -7,7 +7,6 @@ const LError = require('./../util/LError')
 const Logger = require('./../util/Logger')
 const moment = require('moment')
 const pixelAverage = require('pixel-average')
-const snekfetch = require('snekfetch')
 
 const PATTERNS = {
   USERS: new RegExp(`^${MessageMentions.USERS_PATTERN.source}$`),
@@ -161,9 +160,16 @@ class LClientUtil extends ClientUtil {
     }
   }
 
-  async snek (url, options, logError = true) {
-    return snekfetch
-      .get(url, options)
+  async fetch (url, options, logError = true) {
+    return require('node-fetch')(url, options)
+      .then(async res => {
+        const isJson = res.headers.get('content-type').split(';').some(t => t === 'application/json')
+        return {
+          status: res.status,
+          headers: res.headers,
+          body: await (isJson ? res.json() : res.buffer())
+        }
+      })
       .catch(error => {
         if (logError) { Logger.error(error) }
         return {

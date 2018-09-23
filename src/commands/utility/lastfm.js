@@ -1,6 +1,7 @@
 const { stripIndent } = require('common-tags')
 const LCommand = require('./../../struct/LCommand')
 const Logger = require('./../../util/Logger')
+const querystring = require('querystring')
 
 // Timeout between each polls to Last.fm
 const POLL_TIMEOUT = 5000
@@ -217,18 +218,17 @@ class LastfmCommand extends LCommand {
       return
     }
 
-    const result = await this.client.util.snek('http://ws.audioscrobbler.com/2.0/', {
-      query: {
-        method: 'user.getrecenttracks',
-        format: 'json',
-        user: this.storage.get('username'),
-        api_key: this.storage.get('apiKey'),
-        limit: 1
-      }
-    }, false)
+    const _querystring = querystring.stringify({
+      method: 'user.getrecenttracks',
+      format: 'json',
+      user: this.storage.get('username'),
+      api_key: this.storage.get('apiKey'),
+      limit: 1
+    })
+    const result = await this.client.util.fetch(`http://ws.audioscrobbler.com/2.0/?${_querystring}`, undefined, false)
 
     if (result.status !== 200) {
-      Logger.error(result.text, { tag: this.id })
+      Logger.error(result.body.message || result.text, { tag: this.id })
       return this.setRecentTrackTimeout(true)
     }
 
@@ -293,6 +293,7 @@ class LastfmCommand extends LCommand {
 
       if (this._error >= 3) {
         this.clearRecentTrackTimeout()
+        Logger.error(`Stopped due to ${MAX_RETRY} consecutive errors.`, { tag: this.id })
         this.client.util.sendStatus(`🎵\u2000Last fm status updater stopped due to **${MAX_RETRY}** consecutive errors.`)
         this.storage.set('enabled', false)
         this.storage.save()

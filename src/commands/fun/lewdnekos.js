@@ -3,7 +3,7 @@ const LCommand = require('./../../struct/LCommand')
 class LewdNekosCommand extends LCommand {
   constructor () {
     super('lewdnekos', {
-      aliases: ['lewdnekos', 'lewdneko', 'lewdnyaa', 'lewd', 'nekol'],
+      aliases: ['lewdnekos', 'lewdneko', 'lewdnyaa', 'lewd', 'lneko', 'nekol'],
       description: 'An alias for "neko --lewd".',
       args: [
         {

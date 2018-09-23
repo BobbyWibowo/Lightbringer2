@@ -49,7 +49,7 @@ class FortuneCommand extends LCommand {
     }
 
     await message.edit('🔄\u2000Getting a fortune cookie\u2026')
-    const result = await this.client.util.snek(`http://yerkee.com/api/fortune/${args.type}`)
+    const result = await this.client.util.fetch(`http://yerkee.com/api/fortune/${args.type}`)
 
     if (result.status !== 200) {
       return message.status('error', 'Could not retrieve fortune.')

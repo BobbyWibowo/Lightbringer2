@@ -55,7 +55,7 @@ class EmojiManageCommand extends LCommand {
       }
       args.extra = exec[1].trim()
 
-      const result = await this.client.util.snek(args.extra)
+      const result = await this.client.util.fetch(args.extra)
       if (result.status !== 200) {
         return message.status('error', result.text)
       }

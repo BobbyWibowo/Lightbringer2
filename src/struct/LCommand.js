@@ -6,7 +6,7 @@ class LCommand extends Command {
 
     const {
       credits = null,
-      examples = {},
+      examples = [],
       hidden = false,
       usage = null
     } = options

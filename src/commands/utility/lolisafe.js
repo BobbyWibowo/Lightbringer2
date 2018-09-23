@@ -1,6 +1,7 @@
 const LCommand = require('./../../struct/LCommand')
 const path = require('path')
-const snekfetch = require('snekfetch')
+const fetch = require('node-fetch')
+const FormData = require('form-data')
 
 const DEFAULT_URL = 'https://safe.fiery.me/api/upload'
 
@@ -127,7 +128,7 @@ class LoliSafeCommand extends LCommand {
     await message.status('progress', `Uploading to \`${this.client.util.getHostName(this.url)}\`\u2026`)
 
     const options = this.patch(args.url)
-    const download = await this.client.util.snek(args.url, options)
+    const download = await this.client.util.fetch(args.url, options)
     if (download.status !== 200) {
       return message.status('error', download.text)
     }
@@ -139,24 +140,32 @@ class LoliSafeCommand extends LCommand {
     const parsed = path.parse(args.url)
     const extname = parsed.ext.split(/[?#]/)[0]
     const filename = `${parsed.name || 'tmp'}${args.ext || extname}`
-    const result = await snekfetch
-      .post(this.url)
-      .set('Content-Type', 'multipart/form-data')
-      .set({
+
+    const form = new FormData()
+    form.append('files[]', download.body, {
+      filename
+    })
+
+    const fetchPost = await fetch(this.url, {
+      method: 'POST',
+      headers: {
         token: this.token,
         albumid: this.album
-      })
-      .attach('files[]', download.body, filename)
+      },
+      body: form
+    })
 
-    if (result.status !== 200) {
-      return message.status('error', result.text)
+    if (fetchPost.status !== 200) {
+      return message.status('error', `${fetchPost.status} ${fetchPost.statusText}`)
     }
 
-    if (!result.body.success) {
+    const result = await fetchPost.json()
+    if (!result.success) {
       return message.status('error', `Failed to upload <${this.url}>: \`${result.body.description.code}\`.`)
     }
 
-    return message.edit(result.body.files[0].url)
+    console.log(require('util').inspect(result))
+    return message.edit(result.files[0].url)
   }
 
   patch (url, options) {

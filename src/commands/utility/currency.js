@@ -2,6 +2,7 @@ const LCommand = require('./../../struct/LCommand')
 const Logger = require('./../../util/Logger')
 const mathjs = require('mathjs')
 const moment = require('moment')
+const querystring = require('querystring')
 
 class CurrencyCommand extends LCommand {
   constructor () {
@@ -166,11 +167,8 @@ class CurrencyCommand extends LCommand {
 
     this._updatingRates = true
 
-    const result = await this.client.util.snek('http://data.fixer.io/api/latest', {
-      query: {
-        access_key: this.storage.get('apiKey')
-      }
-    })
+    const _querystring = querystring.stringify({ access_key: this.storage.get('apiKey') })
+    const result = await this.client.util.fetch(`http://data.fixer.io/api/latest?${_querystring}`)
 
     if (result.status !== 200) {
       throw new Error(result.text)

@@ -3,7 +3,7 @@ const LCommand = require('./../../struct/LCommand')
 class DogsCommand extends LCommand {
   constructor () {
     super('dogs', {
-      aliases: ['dogs', 'dog'],
+      aliases: ['dogs', 'doggo', 'dog', 'woof'],
       description: 'An alias for "animals dog".',
       args: [
         {

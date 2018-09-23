@@ -15,7 +15,7 @@ class PatCommand extends LCommand {
       return message.status('error', '@mention someone to pat.')
     }
 
-    const result = await this.client.util.snek('https://nekos.life/api/v2/img/pat')
+    const result = await this.client.util.fetch('https://nekos.life/api/v2/img/pat')
 
     await message.edit(`*pats ${message.mentions.users.first()}*`, {
       embed: this.client.util.embed({

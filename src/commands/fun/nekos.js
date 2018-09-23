@@ -3,7 +3,7 @@ const LCommand = require('./../../struct/LCommand')
 class NekosCommand extends LCommand {
   constructor () {
     super('nekos', {
-      aliases: ['nekos', 'neko', 'nyaa'],
+      aliases: ['nekos', 'neko', 'nyaa', 'nya'],
       description: 'Shows you random neko pictures from nekos.life.',
       args: [
         {
@@ -28,7 +28,7 @@ class NekosCommand extends LCommand {
 
     await message.status('progress', `Fetching a random ${isLewd ? 'lewd ' : ''}nekos image\u2026`)
 
-    const result = await this.client.util.snek(`https://nekos.life/api/v2/img/${isLewd ? 'lewd' : 'neko'}`)
+    const result = await this.client.util.fetch(`https://nekos.life/api/v2/img/${isLewd ? 'lewd' : 'neko'}`)
 
     if (result.status !== 200) {
       return message.status('error', 'Failed to fetch image.')

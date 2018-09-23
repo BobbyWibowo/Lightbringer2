@@ -22,7 +22,7 @@ class TimeCommand extends LCommand {
       return message.status('error', `Usage: \`${this.usage}\`.`)
     }
 
-    const result = await this.client.util.snek(`https://time.is/en/${args.location}`)
+    const result = await this.client.util.fetch(`https://time.is/en/${args.location}`)
     if (result.status !== 200) {
       return message.status('error', 'Failed to fetch time info of the specified location.')
     }

@@ -22,7 +22,7 @@ class EightBallCommand extends LCommand {
     }
 
     await message.status('progress', 'Asking the question to 8-ball\u2026')
-    const result = await this.client.util.snek(`https://8ball.delegator.com/magic/JSON/${args.question}`)
+    const result = await this.client.util.fetch(`https://8ball.delegator.com/magic/JSON/${args.question}`)
 
     if (result.status !== 200) {
       return message.status('error', 'Could not retrieve answer from 8-ball.')

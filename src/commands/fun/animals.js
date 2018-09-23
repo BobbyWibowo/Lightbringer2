@@ -88,7 +88,7 @@ class AnimalsCommand extends LCommand {
     while (!image && attempts <= 3) {
       attempts++
 
-      const result = await this.client.util.snek(animal.api)
+      const result = await this.client.util.fetch(animal.api)
       if (result.status !== 200) {
         continue
       }

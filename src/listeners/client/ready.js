@@ -50,7 +50,7 @@ class ReadyListener extends Listener {
         // eslint-disable-next-line no-eval
         process.stdout.write(`${inspect(eval(line), { depth: 0 })}\n`)
       } catch (error) {
-        Logger.error(error.stack || error, { tag: 'readline' })
+        Logger.error(error.toString(), { tag: 'readline' })
       }
     }).on('SIGINT', () => {
       process.exit(0)

@@ -31,7 +31,7 @@ class AverageColorCommand extends LCommand {
     // This will only prepend a progress icon to the message.
     await message.status('progress', message.content)
 
-    const result = await this.client.util.snek(exec[1])
+    const result = await this.client.util.fetch(exec[1])
     if (result.status !== 200) {
       return message.status('error', result.text)
     }

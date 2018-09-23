@@ -45,7 +45,7 @@ class UploadCommand extends LCommand {
     await message.status('progress', 'Uploading\u2026')
 
     const options = this.patch(args.url)
-    const result = await this.client.util.snek(args.url, options)
+    const result = await this.client.util.fetch(args.url, options)
     if (result.status !== 200) {
       return message.status('error', result.text)
     }
