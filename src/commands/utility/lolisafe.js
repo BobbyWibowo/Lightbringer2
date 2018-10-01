@@ -164,8 +164,16 @@ class LoliSafeCommand extends LCommand {
       return message.status('error', `Failed to upload <${this.url}>: \`${result.body.description.code}\`.`)
     }
 
-    console.log(require('util').inspect(result))
-    return message.edit(result.files[0].url)
+    let _url = result.files[0].url
+
+    // Fun patch for safe.fiery.me (use will-always-want.me domain)
+    if (this.url === DEFAULT_URL) {
+      let subdomain = 'lolis'
+      if (args.url.includes('neko')) { subdomain = 'nekos' }
+      _url = _url.replace(/i\.fiery\.me/g, `${subdomain}.will-always-want.me`)
+    }
+
+    return message.edit(_url)
   }
 
   patch (url, options) {

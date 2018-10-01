@@ -76,8 +76,12 @@ class ReadyListener extends Listener {
     const autoReboot = this.client.configManager.get('autoReboot')
     if (autoReboot) {
       if (autoReboot > 0) {
-        this.client.setTimeout(() => {
-          Logger.info('Shutting down bot due to auto-reboot feature.')
+        this.client.setTimeout(async () => {
+          const shutdownMessage = 'Shutting down bot due to auto-reboot feature.'
+          if (this.client._statusChannel) {
+            await this.client._statusChannel.send(`👋\u2000${shutdownMessage}`)
+          }
+          Logger.info(shutdownMessage)
           process.exit(0)
         }, autoReboot * 1000)
         Logger.info(`Bot will shutdown in ${autoReboot} second(s) due to auto-reboot feature.`)

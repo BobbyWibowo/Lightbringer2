@@ -228,7 +228,7 @@ class LastfmCommand extends LCommand {
     const result = await this.client.util.fetch(`http://ws.audioscrobbler.com/2.0/?${_querystring}`, undefined, false)
 
     if (result.status !== 200) {
-      Logger.error(result.body.message || result.text, { tag: this.id })
+      Logger.error(result.message || result.text, { tag: this.id })
       return this.setRecentTrackTimeout(true)
     }
 

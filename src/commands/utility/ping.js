@@ -9,12 +9,10 @@ class PingCommand extends LCommand {
   }
 
   async exec (message) {
-    // Start time
-    const timestamp = new Date().getTime()
     message = await message.edit('🏓\u2000Pong.')
 
     // Elapsed time
-    const elapsed = new Date().getTime() - timestamp
+    const elapsed = message.editedTimestamp - message.createdTimestamp
     await message.edit(`${message.content} \`${elapsed}ms\` – Heartbeat: \`${this.client.ping.toFixed(0)}ms\``)
   }
 }

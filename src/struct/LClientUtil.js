@@ -14,6 +14,8 @@ const PATTERNS = {
   CHANNELS: new RegExp(`^${MessageMentions.CHANNELS_PATTERN.source}$`)
 }
 
+const units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
 class LClientUtil extends ClientUtil {
   constructor (client, {
     matchesListTimeout = -1,
@@ -789,6 +791,22 @@ class LClientUtil extends ClientUtil {
         return resolve([Math.round(averages.red), Math.round(averages.green), Math.round(averages.blue)])
       })
     })
+  }
+
+  getPrettyBytes (num) {
+    // MIT License
+    // Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
+    if (!Number.isFinite(num)) { return num }
+
+    const neg = num < 0
+    if (neg) { num = -num }
+    if (num < 1) { return (neg ? '-' : '') + num + ' B' }
+
+    const exponent = Math.min(Math.floor(Math.log10(num) / 3), units.length - 1)
+    const numStr = Number((num / Math.pow(1000, exponent)).toPrecision(3))
+    const unit = units[exponent]
+
+    return (neg ? '-' : '') + numStr + ' ' + unit
   }
 }
 

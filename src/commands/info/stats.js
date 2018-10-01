@@ -1,5 +1,6 @@
 const { stripIndent } = require('common-tags')
 const LCommand = require('./../../struct/LCommand')
+const os = require('os')
 
 class StatsCommand extends LCommand {
   constructor () {
@@ -25,9 +26,10 @@ class StatsCommand extends LCommand {
           name: 'System',
           value: stripIndent`
             •  **Node.js:** [${process.versions.node}](${process.release.sourceUrl})
-            •  **Heap:** ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB
+            •  **Heap:** ${this.client.util.getPrettyBytes(process.memoryUsage().heapUsed)}
             •  **Heartbeat:** \`${this.client.ping.toFixed(0)}ms\`
             •  **Uptime:** ${this.client.util.humanizeDuration(Date.now() - this.client.startTimestamp, 2, true)}
+            •  **Platform:** ${os.platform()}-${os.arch()}
           `
         },
         {
@@ -58,6 +60,13 @@ class StatsCommand extends LCommand {
       },
       color: '#ff0000',
       footer: `Currently caching ${this.client.users.size.toLocaleString()} users.`
+    }
+
+    if (os.platform() !== 'win32') {
+      embed.fields[0].value += '\n'
+      embed.fields[0].value += stripIndent`
+        •  **Load:** ${os.loadavg().map(load => load.toFixed(1)).join(', ')}
+      `
     }
 
     if (this.git !== null) {

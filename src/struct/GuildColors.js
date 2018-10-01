@@ -24,7 +24,7 @@ class GuildColors {
     }
 
     Logger.log('Icon mismatched, fetching\u2026', { tag })
-    const snek = await this.client.util.snek(guild.iconURL({
+    const snek = await this.client.util.fetch(guild.iconURL({
       size: 128,
       format: 'png'
     }))
