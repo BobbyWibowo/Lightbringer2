@@ -1,3 +1,4 @@
+const { stripIndent } = require('common-tags')
 const Canvas = require('canvas')
 const colors = require('color-name')
 const convert = require('color-convert')
@@ -21,49 +22,74 @@ class ColorCommand extends LCommand {
           id: 'width',
           match: 'option',
           flag: ['--width=', '-w='],
-          description: `Specify a width in pixels (defaults to ${WIDTH}).`
+          description: `Specify a width in pixels (defaults to ${WIDTH}). When used without a color, saves value.`
         },
         {
           id: 'height',
           match: 'option',
           flag: ['--height=', '-h='],
-          description: `Specify a height in pixels (defaults to ${HEIGHT}).`
+          description: `Specify a height in pixels (defaults to ${HEIGHT}). When used without a color, saves value.`
         },
         {
           id: 'dimension',
           match: 'option',
           flag: ['--dimension=', '--dim=', '-d=', '--size=', '-s='],
-          description: 'Specify a square dimension in pixels (will ignore "width" and "height" options when used).'
+          description: 'Specify a square dimension in pixels (will ignore "width" and "height" options). When used without a color, saves value.'
+        },
+        {
+          id: 'list',
+          match: 'flag',
+          flag: ['--list', '-l'],
+          description: 'Lists saved values (width, height and dimension).'
         }
       ],
-      usage: 'color <input>',
+      usage: 'color < --list | {options} | [{options}] input >',
       examples: [
+        'color #ffffff',
+        'color rgb(0, 0, 0)',
+        'color hsl(0, 100%, 50%)',
+        'color cmyk(100%, 100%, 100%, 100%)',
+        'color blue',
         {
-          content: 'color #ffffff',
-          description: 'Displays and converts the color white.'
+          content: 'color --width=200',
+          description: 'Saves width of 200 pixels into storage. Next time the command will keep on using this width for preview image.'
         },
         {
-          content: 'color rgb(0, 0, 0)',
-          description: 'Displays and converts the color black.'
+          content: 'color --width=100 blue',
+          description: 'Displays and converts the color blue, also uses width of 200 pixels for preview image, but only this once.'
         },
         {
-          content: 'color hsl(0, 100%, 50%)',
-          description: 'Displays and converts the color red.'
-        },
-        {
-          content: 'color cmyk(100%, 100%, 100%, 100%)',
-          description: 'Displays and converts the color black.'
-        },
-        {
-          content: 'color blue',
-          description: 'Displays and converts the color blue.'
+          content: 'color --width=null',
+          description: 'Removes saved width value from storage.'
         }
       ]
     })
+
+    this.storage = null
   }
 
   async exec (message, args) {
+    if (args.list) {
+      return message.edit('🖌\u2000Color configuration preview:\n' + this.client.util.formatCode(stripIndent`
+        Width     :: ${String(this.storage.get('width'))}
+        Height    :: ${String(this.storage.get('height'))}
+        Dimension :: ${String(this.storage.get('dimension'))}
+      `, 'asciidoc'))
+    }
+
     if (!args.input) {
+      const keys = ['width', 'height', 'dimension']
+      const saved = []
+      for (const key of keys) {
+        if (!args[key]) { continue }
+        const value = args[key] === 'null' ? undefined : Number(args[key])
+        this.storage.set(key, value)
+        saved.push(key)
+      }
+      if (saved.length) {
+        const content = saved.map(key => `\`${key}\` = \`${this.storage.get(key)}\``).join('\n')
+        return message.status('success', `Successfully saved these new values:\n${content}`)
+      }
       return message.status('error', 'You must specify a color input.')
     }
 
@@ -72,8 +98,12 @@ class ColorCommand extends LCommand {
       return message.status('error', 'Could not parse the input color.')
     }
 
-    const width = Number(args.dimension) || Number(args.width) || WIDTH
-    const height = Number(args.dimension) || Number(args.height) || HEIGHT
+    const width = Number(args.dimension) || Number(args.width) ||
+      this.storage.get('dimension') || this.storage.get('width') ||
+      WIDTH
+    const height = Number(args.dimension) || Number(args.height) ||
+      this.storage.get('dimension') || this.storage.get('height') ||
+      HEIGHT
 
     const canvas = new Canvas(width, height)
     const context = canvas.getContext('2d')
@@ -182,6 +212,18 @@ class ColorCommand extends LCommand {
     temps.push(['CSS', temp])
 
     return `🖌\u2000**${input}:**\n\n` + temps.map(c => `**${c[0]}:** ${c[1]}`).join('\n')
+  }
+
+  onReady () {
+    this.storage = this.client.storage('color')
+  }
+
+  onReload () {
+    this.onRemove()
+  }
+
+  onRemove () {
+    this.storage.save()
   }
 }
 
