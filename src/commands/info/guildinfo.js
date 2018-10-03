@@ -108,7 +108,7 @@ class GuildInfoCommand extends LCommand {
         }
       ],
       thumbnail: iconURL,
-      footer: 'Consider running "membersfetch" command if members count seem incorrect.',
+      footer: 'Members count is based on cache, use "membersfetch" to refresh.',
       color
     }
 

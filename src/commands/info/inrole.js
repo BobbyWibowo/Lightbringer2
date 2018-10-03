@@ -74,7 +74,7 @@ class InRoleCommand extends LCommand {
       title: `${role.name} [${memberCount}]`,
       description: members.map(m => escapeMarkdown(m.user.tag, true)).join(', '),
       color: role.color !== 0 ? role.hexColor : null,
-      footer: 'Consider running "membersfetch" command if members list seem incomplete.'
+      footer: 'Members count is based on cache, use "membersfetch" to refresh.'
     }
 
     let content = `${args.online ? 'Online members' : 'Members'} of the role matching keyword \`${args.keyword}\`:`
@@ -85,7 +85,7 @@ class InRoleCommand extends LCommand {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      flag: `**Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})\n` +
+      prefix: `**Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})\n` +
         (displayCapped ? `Displaying the first ${this.maxUsersListing} members alphabetically\u2026` : ''),
       code: 'css',
       char: ', '

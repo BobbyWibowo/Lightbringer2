@@ -46,7 +46,7 @@ class DiscriminatorCommand extends LCommand {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content: `Users with discriminator \`#${args.discriminator}\`:`,
-      flag: displayCapped ? `Displaying the first ${this.maxUsersListing} users\u2026` : '',
+      prefix: displayCapped ? `Displaying the first ${this.maxUsersListing} users\u2026` : '',
       code: 'css',
       char: ', '
     })

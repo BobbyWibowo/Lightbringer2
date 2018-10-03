@@ -47,11 +47,11 @@ class UserRolesCommand extends LCommand {
 
     const roles = member.roles
       .array() // Get an array instance of the Collection.
-      .slice(1) // Slice @everyone role.
+      .slice(0, -1) // Slice @everyone role.
       .sort((a, b) => b.position - a.position) // Sort by their positions in the Guild.
       .map(role => escapeMarkdown(role.name)) // Escape markdown from their names.
 
-    const char = ', '
+    const char = '\n'
 
     // Options for the embed.
     const embed = {
@@ -59,7 +59,7 @@ class UserRolesCommand extends LCommand {
       thumbnail,
       color: (member && member.displayColor !== 0) ? member.displayColor : null,
       author: {
-        name: member.user.tag,
+        name: `${member.user.tag} [${roles.length}]`,
         icon: thumbnail
       }
     }
@@ -75,8 +75,7 @@ class UserRolesCommand extends LCommand {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      flag: `**Guild:** ${escapeMarkdown(guild.name)} (ID: ${guild.id})\n\n`,
-      code: args.brief ? '' : null,
+      prefix: `**Guild:** ${escapeMarkdown(guild.name)} (ID: ${guild.id})\n\n`,
       char
     })
   }

@@ -37,28 +37,28 @@ class RolesCommand extends LCommand {
 
     const color = await this.client.guildColors.get(guild)
 
-    // Sort roles by their position descendingly.
-    const roles = guild.roles.sort((a, b) => b.position - a.position)
+    const roles = guild.roles.array() // Get an array instance of the Collection.
+      // .slice(1) // Slice @everyone role.
+      .sort((a, b) => b.position - a.position) // Sort by their positions in the Guild.
 
     const embed = {
-      title: `${guild.name} [${roles.size}]`,
+      title: `${guild.name} [${roles.length}]`,
       color
     }
 
-    let char
+    const char = '\n'
     if (args.brief) {
-      char = ', '
-      embed.description = roles.map(r => r.name).join(char)
+      embed.description = roles
+        .map(r => `${r.position === 0 ? '\\' : ''}${r.name}`)
+        .join(char)
     } else {
-      char = '\n'
-      embed.description = roles.map(r => {
-        if (r.position === 0) {
-          return `•  \\${r.name}`
-        } else {
-          return `•  ${r.name} – ${r.members.size} member${r.members.size === 1 ? '' : 's'}`
-        }
-      }).join(char)
-      embed.footer = 'Consider running "membersfetch" command if members count seem incorrect.'
+      embed.description = roles
+        .map(r => {
+          if (r.position === 0) { return `\\${r.name}` }
+          return `${r.name} – ${r.members.size} member${r.members.size === 1 ? '' : 's'}`
+        })
+        .join(char)
+      embed.footer = 'Members count is based on cache, use "membersfetch" to refresh.'
     }
 
     let content = 'Roles of the currently viewed guild:'
@@ -69,8 +69,7 @@ class RolesCommand extends LCommand {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      flag: `**Guild ID:** ${guild.id}\n${args.brief ? '' : '\n'}`,
-      code: args.brief ? '' : null,
+      prefix: `**Guild ID:** ${guild.id}\n${args.brief ? '' : '\n'}`,
       char
     })
   }

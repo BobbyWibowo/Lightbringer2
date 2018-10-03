@@ -96,9 +96,8 @@ class UserInfoCommand extends LCommand {
         }
       )
 
-      const roles = member.roles
-        .array() // Get an array instance of the Collection.
-        .slice(1) // Slice @everyone role.
+      const roles = member.roles.array() // Get an array instance of the Collection.
+        .slice(0, -1) // Slice @everyone role.
         .sort((a, b) => b.position - a.position) // Sort by their positions in the Guild.
         .map(role => escapeMarkdown(role.name)) // Escape markdown from their names.
 

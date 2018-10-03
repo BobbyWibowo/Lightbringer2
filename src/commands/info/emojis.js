@@ -67,7 +67,7 @@ class EmojisCommand extends LCommand {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      flag: `**Guild ID:** ${guild.id}\n`,
+      prefix: `**Guild ID:** ${guild.id}\n\n`,
       char
     })
   }

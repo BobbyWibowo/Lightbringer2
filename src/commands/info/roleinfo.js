@@ -70,7 +70,7 @@ class RoleInfoCommand extends LCommand {
         }
       ],
       color: role.color !== 0 ? role.hexColor : null,
-      footer: 'Consider running "membersfetch" command if members count seem incorrect.'
+      footer: 'Members count is based on cache, use "membersfetch" to refresh.'
     }
 
     // Message content (the thing being displayed above the embed).

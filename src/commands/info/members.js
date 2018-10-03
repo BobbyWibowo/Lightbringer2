@@ -64,7 +64,7 @@ class MembersCommand extends LCommand {
     const embed = {
       title: `${guild.name} [${memberCount}]`,
       description: members.map(m => escapeMarkdown(m.user.tag, true)).join(', '),
-      footer: 'Consider running "membersfetch" command if members list seem incomplete.',
+      footer: 'Members count is based on cache, use "membersfetch" to refresh.',
       color
     }
 
@@ -76,7 +76,7 @@ class MembersCommand extends LCommand {
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      flag: `**Guild ID:** ${guild.id}\n` +
+      prefix: `**Guild ID:** ${guild.id}\n` +
         (displayCapped ? `Displaying the first ${this.maxUsersListing} active members\u2026` : ''),
       code: 'css',
       char: ', '

@@ -76,15 +76,17 @@ class GuildsCommand extends LCommand {
       title: `${user.tag} [${guilds.size}]`
     }
 
-    let char
+    const char = '\n'
     if (args.brief) {
-      char = ', '
-      embed.description = guilds.map(g => g.name).join(char)
+      embed.description = guilds
+        .map(g => g.name)
+        .join(char)
     } else {
-      char = '\n'
-      embed.description = guilds.map(g => {
-        return `•  ${g.name} – ${g.members.size} member${g.members.size === 1 ? '' : 's'}`
-      }).join(char)
+      embed.description = guilds
+        .map(g => {
+          return `${g.name} – ${g.members.size} member${g.members.size === 1 ? '' : 's'}`
+        })
+        .join(char)
     }
 
     if (user.bot) {
@@ -95,18 +97,18 @@ class GuildsCommand extends LCommand {
       }
     }
 
-    let content = 'My guilds:'
+    const sort = `(${args.positionsort ? 'client position' : 'members count'} sort)`
+    let content = `My guilds ${sort}:`
     if (mention) {
-      content = `Mutual guilds with ${user.toString()}:`
+      content = `Mutual guilds with ${user.toString()} ${sort}:`
     } else if (args.keyword) {
-      content = `Mutual guilds with user matching keyword \`${args.keyword}\`:`
+      content = `Mutual guilds with user matching keyword \`${args.keyword}\` ${sort}:`
     }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      flag: `**User ID:** ${user.id}\n${args.brief ? '' : '\n'}`,
-      code: args.brief ? '' : null,
+      prefix: `**User ID:** ${user.id}\n${args.brief ? '' : '\n'}`,
       char
     })
   }
