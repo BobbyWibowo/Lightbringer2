@@ -24,15 +24,17 @@ class PruneCommand extends LCommand {
   }
 
   async exec (message, args) {
+    const limit = Math.min(args.amount, 100)
+    await message.status('progress', `Fetching the last ${limit} messages\u2026`)
     let messages = await message.channel.messages.fetch({
-      limit: Math.min(args.amount, 100),
+      limit,
       before: args.before || message.id
     })
 
     messages = messages.filter(m => m.author.id === this.client.user.id)
 
     if (!messages.size) {
-      return message.status('error', 'There are no messages that you can prune.')
+      return message.status('error', 'There were no messages that you could prune.')
     }
 
     await message.status('progress', `Pruning ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)

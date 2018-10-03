@@ -35,8 +35,10 @@ class FlushCommand extends LCommand {
       return message.status('error', 'You do not have permission to delete messages sent by someone else.')
     }
 
+    const limit = Math.min(args.amount, 100)
+    await message.status('progress', `Fetching the last ${limit} messages\u2026`)
     let messages = await message.channel.messages.fetch({
-      limit: Math.min(args.amount, 100),
+      limit,
       before: args.before || message.id
     })
 

@@ -16,6 +16,7 @@ class ReadyListener extends Listener {
   async exec () {
     if (this.client.stats.get('initiated')) {
       Logger.info('Connection resumed.')
+      this.initAutoRebootTimeout()
       return this.client.util.sendStatus('🔄\u2000Connection resumed.')
     }
 
@@ -73,29 +74,30 @@ class ReadyListener extends Listener {
         .catch(Logger.error)
     }
 
-    const autoReboot = this.client.configManager.get('autoReboot')
-    if (autoReboot) {
-      if (autoReboot > 0) {
-        this.client.setTimeout(async () => {
-          const shutdownMessage = 'Shutting down bot due to auto-reboot feature.'
-          if (this.client._statusChannel) {
-            await this.client._statusChannel.send(`👋\u2000${shutdownMessage}`)
-          }
-          Logger.info(shutdownMessage)
-          process.exit(0)
-        }, autoReboot * 1000)
-        Logger.info(`Bot will shutdown in ${autoReboot} second(s) due to auto-reboot feature.`)
-      }
-    }
+    this.initAutoRebootTimeout()
 
     const overallTime = process.hrtime(this.client.startHrTime)
     delete this.client.startHrTime
 
-    const readyMessage = `Bot is ready (login & preparation took ${this.client.util.formatHrTime(overallTime)}).`
+    const readyMessage = `Bot is ready - ${this.client.util.formatHrTime(overallTime)}.`
     Logger.info(readyMessage)
     await this.client.util.sendStatus(`✅\u2000${readyMessage}`)
 
     this.client.stats.set('initiated', true)
+  }
+
+  initAutoRebootTimeout () {
+    const autoReboot = this.client.configManager.get('autoReboot')
+    if (!autoReboot) { return }
+    this.client.setTimeout(async () => {
+      const shutdownMessage = 'Shutting down bot due to auto-reboot feature.'
+      if (this.client._statusChannel) {
+        await this.client._statusChannel.send(`👋\u2000${shutdownMessage}`)
+      }
+      Logger.info(shutdownMessage)
+      process.exit(0)
+    }, autoReboot * 1000)
+    Logger.info(`Bot will shutdown in ${autoReboot} second(s) due to auto-reboot feature.`)
   }
 }
 
