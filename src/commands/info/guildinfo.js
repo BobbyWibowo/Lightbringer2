@@ -95,8 +95,9 @@ class GuildInfoCommand extends LCommand {
           value: stripIndent`
               •  **Channels:** ${guild.channels.size} – ${categories.size} categor${categories.size === 1 ? 'y' : 'ies'}, ${text.size} text and ${voice.size} voice
               •  **Members:** ${guild.memberCount} – ${online.size} online
-              •  **Roles:** ${guild.roles.size} – ${guild.me.roles.size} taken
+              •  **Roles:** ${guild.roles.size} – ${guild.me.roles.size - 1} taken
           `
+          // NOTE: ${guild.me.roles.size - 1} = count out @everyone role
         },
         {
           name: 'Miscellaneous',
