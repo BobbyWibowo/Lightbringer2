@@ -61,11 +61,11 @@ class EvalCommand extends LCommand {
     result = result.replace(tokenRegex, '[TOKEN]')
 
     const string =
-      '•  **JavaScript codes:**\n' +
-      `${this.client.util.formatCode(escapeMarkdown(args.codes, true), 'js')}\n` +
-      `${isError ? '**Evaluation error:**' : '**Result:**'}\n` +
-      `${this.client.util.formatCode(escapeMarkdown(result, true), 'js')}\n` +
-      `•  ${type ? `Type: ${type} | ` : ''}Time taken: \`${this.client.util.formatHrTime(diff)}\``
+      '**JavaScript:**\n' +
+      `${this.client.util.formatCode(escapeMarkdown(args.codes, true), 'js')}` +
+      `${isError ? '**Error:**' : '**Result:**'}\n` +
+      `${this.client.util.formatCode(escapeMarkdown(result, true), 'js')}` +
+      `${type ? `Type: ${type} | ` : ''}Time taken: \`${this.client.util.formatHrTime(diff)}\``
 
     if (string.length > 2000) {
       return message.status('error', `Output is too long (+${string.length - 2000}).`)

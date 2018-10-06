@@ -290,7 +290,7 @@ class LClientUtil extends ClientUtil {
     }
 
     if (result.user === undefined) {
-      // This shall not ever be triggered as "this.assertUser" will
+      // This should not ever be triggered as "this.assertUser" will
       // throw an Error when it can not find any matches.
       throw new LError('Could not find any members or users matching the keyword.')
     }

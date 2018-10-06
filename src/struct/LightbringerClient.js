@@ -44,7 +44,7 @@ class LightbringerClient extends AkairoClient {
       directory: path.join(__dirname, '..', 'commands'),
       prefix: configManager.get('prefix') || 'lb',
       purgeCommandsTimeout: 2500,
-      statusTimeout: 7500
+      statusTimeout: 5000
     })
 
     this.inhibitorHandler = new LInhibitorHandler(this, {
