@@ -65,24 +65,6 @@ If you simply want to run the bot in background, you can try [screen](https://ww
 >
 > Run the bot once with `yarn start` so that the bot can create the configuration template file!
 
-### Getting your user-token
-
-1. Hit `CTRL+SHIFT+I` (`CMD+ALT+I` on macOS) to bring up the Developers Console
-2. If you can't see `Application` tab, at the top click on the arrow pointing to the right
-3. Click `Application` tab
-4. Go to `Local Storage` under the `Storage` section
-5. Click on `https://discordapp.com`
-6. At the bottom of the list, the last key should be `token`
-7. Copy the value on the right side (omitting the quotes)
-
-![Getting your user-token](https://i.fiery.me/ETRI.png)
-
-## Contact
-
-If you want to ask me anything, you will probably be able to get faster responses by contacting me directly on Discord.
-
-My Discord is `Bobby#0001`. My DMs should be open to everyone.
-
 ## Credits
 
 Icon made by [Freepik](http://www.freepik.com/) from [www.flaticon.com](http://www.flaticon.com/), with slight color modification.
