@@ -89,7 +89,7 @@ class UserInfoCommand extends LCommand {
         {
           name: 'Guild Membership',
           value: stripIndent`
-              •  **Guild:** ${escapeMarkdown(member.guild.name)} (${member.guild.id})
+              •  **Guild:** ${escapeMarkdown(member.guild.name)} (ID: ${member.guild.id})
               •  **Nickname:** ${member.nickname ? escapeMarkdown(member.nickname) : 'N/A'}
               •  **Joined on:** ${this.client.util.formatFromNow(member.joinedAt)}
             `
