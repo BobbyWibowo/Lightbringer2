@@ -18,11 +18,11 @@ class CommandErrorListener extends Listener {
       return message.status('error', error.message, error.timeout)
     }
 
-    Logger.error(error.stack || error, { tag: command ? command.id : 'unknownContext' })
+    Logger.error(error, { tag: command ? command.id : undefined })
     return message.status('error',
-      'An unexpected error occurred (this message will self-destruct in 30 seconds):\n' +
-        this.client.util.formatCode(error.stack || error, 'js'),
-      30000
+      'An unexpected error occurred (this message will self-destruct in 15 seconds):\n' +
+        this.client.util.formatCode(error, 'js'),
+      15000
     )
   }
 }

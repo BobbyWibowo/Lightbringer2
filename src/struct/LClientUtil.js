@@ -391,7 +391,7 @@ class LClientUtil extends ClientUtil {
       } else {
         props = [props]
       }
-    } else if (!(props instanceof Array)) {
+    } else if (!Array.isArray(props)) {
       return object
     }
 
@@ -501,7 +501,7 @@ class LClientUtil extends ClientUtil {
   }
 
   formatHrTime (timeHr) {
-    if (!(timeHr instanceof Array)) {
+    if (!Array.isArray(timeHr)) {
       throw new Error('timeHr must be an instance of Array.')
     }
 
@@ -592,7 +592,7 @@ class LClientUtil extends ClientUtil {
 
     let messages = splitMessage(text, { maxLength, char })
 
-    if (!(messages instanceof Array)) {
+    if (!Array.isArray(messages)) {
       messages = [messages]
     }
 
@@ -726,15 +726,18 @@ class LClientUtil extends ClientUtil {
       }
     }
 
+    const msgs = []
     for (let i = 0; i < messages.length; i++) {
       const t = [messages[i].content, { embed: messages[i].embed }]
       if (firstMessage instanceof Message && i === 0) {
         await firstMessage.edit(...t)
+        msgs.push(firstMessage)
       } else {
-        await channel.send(...t)
+        const msg = await channel.send(...t)
+        msgs.push(msg)
       }
     }
-    return true
+    return msgs
   }
 
   truncate (string, max, append = '') {

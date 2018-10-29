@@ -7,6 +7,7 @@ class StatsCommand extends LCommand {
     super('stats', {
       aliases: ['statistics', 'stats'],
       description: 'Shows you stats about Lightbringer.',
+      selfdestruct: 30,
       clientPermissions: ['EMBED_LINKS']
     })
 
@@ -59,7 +60,7 @@ class StatsCommand extends LCommand {
         icon: 'https://i.fiery.me/Ec8h.png'
       },
       color: '#ff0000',
-      footer: `Currently caching ${this.client.users.size.toLocaleString()} users.`
+      footer: `Currently caching ${this.client.users.size.toLocaleString()} users | ${this.selfdestruct(true)}`
     }
 
     if (os.platform() !== 'win32') {

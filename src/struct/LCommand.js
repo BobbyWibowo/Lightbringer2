@@ -8,13 +8,22 @@ class LCommand extends Command {
       credits = null,
       examples = [],
       hidden = false,
-      usage = null
+      usage = null,
+      selfdestruct = null // in seconds
     } = options
 
     this.credits = credits
     this.examples = examples
     this.hidden = hidden
     this.usage = usage
+    this._selfdestruct = selfdestruct
+  }
+
+  selfdestruct (short) {
+    if (!this._selfdestruct) { return null }
+    const unit = `second${this._selfdestruct === 1 ? '' : 's'}`
+    if (short) { return `Self-destruct in ${this._selfdestruct}s` }
+    return `*This message will self-destruct in ${this._selfdestruct} ${unit}.*`
   }
 }
 

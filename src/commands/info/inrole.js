@@ -27,6 +27,7 @@ class InRoleCommand extends LCommand {
         }
       ],
       usage: 'inrole [--guild=] [--online] <keyword>',
+      selfdestruct: 60,
       clientPermissions: ['EMBED_LINKS']
     })
 
@@ -74,7 +75,7 @@ class InRoleCommand extends LCommand {
       title: `${role.name} [${memberCount}]`,
       description: members.map(m => escapeMarkdown(m.user.tag, true)).join(', '),
       color: role.color !== 0 ? role.hexColor : null,
-      footer: 'Members count is based on cache, use "membersfetch" to refresh.'
+      footer: `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`
     }
 
     let content = `${args.online ? 'Online members' : 'Members'} of the role matching keyword \`${args.keyword}\`:`

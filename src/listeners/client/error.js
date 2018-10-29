@@ -10,7 +10,7 @@ class ErrorListener extends Listener {
   }
 
   async exec (error) {
-    Logger.error(error.stack || error)
+    Logger.error(error)
   }
 }
 

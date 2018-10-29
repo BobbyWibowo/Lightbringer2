@@ -48,7 +48,7 @@ class LCommandHandler extends CommandHandler {
     }
 
     if (timeout >= 0) {
-      return this.delete({ timeout })
+      return this.delete({ timeout }).catch(() => {})
     }
   }
 

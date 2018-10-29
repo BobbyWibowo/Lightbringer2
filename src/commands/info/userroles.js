@@ -20,6 +20,7 @@ class UserRolesCommand extends LCommand {
         }
       ],
       usage: 'userroles [--guild=] [keyword]',
+      selfdestruct: 60,
       clientPermissions: ['EMBED_LINKS']
     })
   }
@@ -76,6 +77,7 @@ class UserRolesCommand extends LCommand {
       firstMessage: message,
       content,
       prefix: `**Guild:** ${escapeMarkdown(guild.name)} (ID: ${guild.id})\n\n`,
+      footer: this.selfdestruct(true),
       char
     })
   }

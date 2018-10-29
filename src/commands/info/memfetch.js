@@ -2,7 +2,7 @@ const LCommand = require('./../../struct/LCommand')
 
 class MembersFetchCommand extends LCommand {
   constructor () {
-    super('membersfetch', {
+    super('memfetch', {
       aliases: ['membersfetch', 'memfetch', 'fetch'],
       description: 'Fetches members of the currently viewed or a specific guild. This will update "member store" of the specified guild, which may help when listing members of a role or something similar. Do NOT run this command too often as it may trigger API ratelimits.',
       args: [
@@ -12,7 +12,7 @@ class MembersFetchCommand extends LCommand {
           description: 'The guild that you want to fetch the members of.'
         }
       ],
-      usage: 'membersfetch [keyword]'
+      usage: 'memfetch [keyword]'
     })
   }
 

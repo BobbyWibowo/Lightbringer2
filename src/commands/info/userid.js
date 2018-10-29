@@ -12,7 +12,8 @@ class UserIdCommand extends LCommand {
           description: 'The user that you want to display the ID of.'
         }
       ],
-      usage: 'userid [keyword]'
+      usage: 'userid [keyword]',
+      selfdestruct: 15
     })
   }
 

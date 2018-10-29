@@ -23,7 +23,7 @@ class BooruCache {
       throw new Error('You must specify a booru site.')
     }
 
-    if (!(sites instanceof Array)) { sites = [sites] }
+    if (!Array.isArray(sites)) { sites = [sites] }
 
     const stringTags = tags.join(' ')
     let matchingKey = this.storage.keys.find(key => {

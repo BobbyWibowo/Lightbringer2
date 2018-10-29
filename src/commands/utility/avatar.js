@@ -34,7 +34,8 @@ class AvatarCommand extends LCommand {
           description: 'The user that you want to display the avatar of.'
         }
       ],
-      usage: 'avatar [--direct] [--plain] [keyword]'
+      usage: 'avatar [--direct] [--plain] [keyword]',
+      selfdestruct: 30
     })
   }
 
@@ -82,7 +83,7 @@ class AvatarCommand extends LCommand {
 
     // Send a plain message when "--plain" flag is used.
     if (args.plain) {
-      return message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s avatar:\n${avatarURL}`)
+      return message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s avatar:\n${avatarURL}\n${this.selfdestruct()}`)
     }
 
     // Otherwise, build embed then send it.
@@ -98,10 +99,10 @@ class AvatarCommand extends LCommand {
       description: `[Click here to view in a browser](${avatarURL})`,
       color: (member && member.displayColor !== 0) ? member.displayColor : null,
       image: avatarURL,
-      footer: args.size ? `Specified size: ${args.size}` : null
+      footer: (args.size ? `Specified size: ${args.size} | ` : '') + this.selfdestruct(true)
     }
 
-    await message.edit(content, {
+    return message.edit(content, {
       embed: this.client.util.embed(embed)
     })
   }

@@ -110,7 +110,7 @@ class SetActivityCommand extends LCommand {
 
     if (this.storage.get('name')) {
       this.setPresenceFromStorage().then(activity => {
-        Logger.info(`Enabled activity: ${this.client.util.formatActivityType(activity.type, true)} ${activity.name}}.`, { tag: this.id })
+        Logger.info(`Enabled activity: ${this.client.util.formatActivityType(activity.type, true)} ${activity.name}.`, { tag: this.id })
       }).catch(error => {
         Logger.error(error.message, { tag: this.id })
       })

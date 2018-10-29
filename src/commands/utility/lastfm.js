@@ -161,7 +161,7 @@ class LastfmCommand extends LCommand {
       }
     }
 
-    await message.edit('🎵\u2000Last fm configuration preview:\n' + this.client.util.formatCode(stripIndent`
+    return message.edit('🎵\u2000Last fm configuration preview:\n' + this.client.util.formatCode(stripIndent`
       Artist          :: ${this.artist}
       Track name      :: ${this.trackName}
       Username        :: ${this.storage.get('username')}

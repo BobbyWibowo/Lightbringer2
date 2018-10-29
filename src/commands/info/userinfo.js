@@ -22,6 +22,7 @@ class UserInfoCommand extends LCommand {
         }
       ],
       usage: 'userinfo [--guild=] [keyword]',
+      selfdestruct: 60,
       clientPermissions: ['EMBED_LINKS']
     })
   }
@@ -132,6 +133,7 @@ class UserInfoCommand extends LCommand {
       name: user.tag,
       icon: thumbnail
     }
+    embed.footer = this.selfdestruct(true)
 
     await message.edit(content, {
       embed: this.client.util.embed(embed)

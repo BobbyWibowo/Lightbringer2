@@ -33,7 +33,7 @@ class GuildInfoCommand extends LCommand {
           id: 'refresh',
           match: 'flag',
           flag: ['--refresh'],
-          description: 'Refresh guild members (should be used in large guilds). This works the same as "membersfetch" command, so you should have no need to use this flag IF you had already used "membersfetch" not too long ago.'
+          description: 'Refresh guild members (should be used in large guilds). This works the same as "memfetch" command, so you should have no need to use this flag IF you had already used "memfetch" not too long ago.'
         },
         {
           id: 'keyword',
@@ -42,6 +42,7 @@ class GuildInfoCommand extends LCommand {
         }
       ],
       usage: 'guildinfo [--refresh] [keyword]',
+      selfdestruct: 60,
       clientPermissions: ['EMBED_LINKS']
     })
   }
@@ -109,7 +110,7 @@ class GuildInfoCommand extends LCommand {
         }
       ],
       thumbnail: iconURL,
-      footer: 'Members count is based on cache, use "membersfetch" to refresh.',
+      footer: `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`,
       color
     }
 

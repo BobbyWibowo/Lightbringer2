@@ -3,10 +3,10 @@ const LightbringerClient = require('./src/struct/LightbringerClient')
 const Logger = require('./src/util/Logger')
 
 process.on('unhandledRejection', error => {
-  Logger.error(error.stack || error, { tag: 'unhandledRejection' })
+  Logger.error(error, { tag: 'unhandledRejection' })
 })
 process.on('uncaughtException', error => {
-  Logger.error(error.stack || error, { tag: 'unhandledRejection' })
+  Logger.error(error, { tag: 'unhandledRejection' })
 })
 
 const configManager = new ConfigManager('./config.json')

@@ -37,7 +37,7 @@ class ConfigCommand extends LCommand {
           const right = Object.keys(configKeys[key])
             .map(_key => {
               let _value = configKeys[key][_key]
-              if (_value instanceof Array) { _value = _value.join(', ') }
+              if (Array.isArray(_value)) { _value = _value.join(', ') }
               return `${_key}: ${_value}`
             })
             .join('; ')

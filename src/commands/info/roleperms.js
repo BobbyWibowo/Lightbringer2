@@ -59,6 +59,7 @@ class RolePermsCommand extends LCommand {
         }
       ],
       usage: 'roleperms [--guild=] <keyword>',
+      selfdestruct: 60,
       clientPermissions: ['EMBED_LINKS']
     })
   }
@@ -86,6 +87,7 @@ class RolePermsCommand extends LCommand {
         **Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})
       `,
       fields: [],
+      footer: this.selfdestruct(true),
       color: role.hexColor
     }
 

@@ -168,7 +168,7 @@ class LoliSafeCommand extends LCommand {
 
     // Fun patch for safe.fiery.me (use will-always-want.me domain)
     if (this.url === DEFAULT_URL) {
-      let subdomain = 'even-non-lolis'
+      let subdomain = 'everyone'
       if (/neko/i.test(args.url)) { subdomain = 'nekos' }
       if (/(azur|lane)/i.test(args.url)) { subdomain = 'ship-girls' }
       if (/loli/i.test(args.url)) { subdomain = 'lolis' }

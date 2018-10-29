@@ -20,6 +20,7 @@ class MembersCommand extends LCommand {
         }
       ],
       usage: 'members [--online] [keyword]',
+      selfdestruct: 60,
       clientPermissions: ['EMBED_LINKS']
     })
 
@@ -64,7 +65,7 @@ class MembersCommand extends LCommand {
     const embed = {
       title: `${guild.name} [${memberCount}]`,
       description: members.map(m => escapeMarkdown(m.user.tag, true)).join(', '),
-      footer: 'Members count is based on cache, use "membersfetch" to refresh.',
+      footer: `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`,
       color
     }
 

@@ -4,7 +4,8 @@ class PingCommand extends LCommand {
   constructor () {
     super('ping', {
       aliases: ['ping', 'pong'],
-      description: 'Pings the bot!'
+      description: 'Pings the bot!',
+      selfdestruct: 15
     })
   }
 
@@ -13,7 +14,7 @@ class PingCommand extends LCommand {
 
     // Elapsed time
     const elapsed = message.editedTimestamp - message.createdTimestamp
-    await message.edit(`${message.content} \`${elapsed}ms\` – Heartbeat: \`${this.client.ping.toFixed(0)}ms\``)
+    await message.edit(`${message.content} \`${elapsed}ms\` – Heartbeat: \`${this.client.ping.toFixed(0)}ms\` | ${this.selfdestruct(true)}`)
   }
 }
 

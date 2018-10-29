@@ -23,6 +23,7 @@ class RoleInfoCommand extends LCommand {
         }
       ],
       usage: 'roleinfo [--guild=] <keyword>',
+      selfdestruct: 60,
       clientPermissions: ['EMBED_LINKS']
     })
   }
@@ -70,7 +71,7 @@ class RoleInfoCommand extends LCommand {
         }
       ],
       color: role.color !== 0 ? role.hexColor : null,
-      footer: 'Members count is based on cache, use "membersfetch" to refresh.'
+      footer: `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`
     }
 
     // Message content (the thing being displayed above the embed).

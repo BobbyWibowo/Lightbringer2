@@ -56,7 +56,7 @@ class ConfigManager {
       this._config = fse.readJSONSync(this._path)
       return true
     } catch (error) {
-      Logger.error(error.stack || error)
+      Logger.error(error)
       return process.exit(1)
     }
   }
@@ -83,7 +83,7 @@ class ConfigManager {
       fse.outputJsonSync(this._path, this._config, { spaces: 2 })
       fse.removeSync(backupPath)
     } catch (error) {
-      Logger.error(error.stack || error)
+      Logger.error(error)
       throw new Error('Failed to save configuration file. Check your console.')
     }
   }

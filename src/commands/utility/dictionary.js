@@ -39,6 +39,7 @@ class DictionaryCommand extends LCommand {
         }
       ],
       usage: 'dictionary < [--index=] [--more] <keyword> | --apikey= >',
+      selfdestruct: 60,
       clientPermissions: ['EMBED_LINKS']
     })
 
@@ -131,7 +132,7 @@ class DictionaryCommand extends LCommand {
         }
       ],
       footer: {
-        text: 'Merriam-Webster\'s Collegiate® Dictionary',
+        text: `Merriam-Webster's Collegiate® Dictionary | ${this.selfdestruct(true)}`,
         icon: 'https://i.fiery.me/ucGj.png'
       },
       color: '#2d5f7c'

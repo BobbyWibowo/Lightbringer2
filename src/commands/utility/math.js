@@ -49,7 +49,8 @@ class MathCommand extends LCommand {
           description: 'Displays link to mathjs online documentation.'
         }
       ],
-      usage: 'math < --clearScope [expressions] | --localScope [--clearScope] <expressions> | expressions >'
+      usage: 'math < --clearScope [expressions] | --localScope [--clearScope] <expressions> | expressions >',
+      selfdestruct: 60
     })
 
     this.storage = null
@@ -115,10 +116,11 @@ class MathCommand extends LCommand {
       strResults = results.map((v, i) => `${rln ? `${i} :: ` : ''}${v === null ? '\u2026' : v}`).join('\n')
     }
 
-    const strs = `•  **Math expression${expressions.length > 1 ? 's' : ''}:**\n` +
+    const strs = `**Math expression${expressions.length > 1 ? 's' : ''}:**\n` +
       this.client.util.formatCode(strExpressions, eln ? 'asciidoc' : 'js') + '\n' +
-      `•  **Result${results.length > 1 ? 's' : ''}:**\n` +
-      this.client.util.formatCode(strResults, rln ? 'asciidoc' : 'js') + '\n'
+      `**Result${results.length > 1 ? 's' : ''}:**\n` +
+      this.client.util.formatCode(strResults, rln ? 'asciidoc' : 'js') + '\n' +
+      this.selfdestruct(true)
 
     return message.edit(strs)
   }

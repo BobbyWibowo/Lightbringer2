@@ -33,7 +33,7 @@ class Logger {
 
   static clean (item) {
     if (typeof item === 'string') { return item }
-    const cleaned = inspect(item, { depth: Infinity })
+    const cleaned = inspect(item, { depth: 2 })
     return cleaned
   }
 }

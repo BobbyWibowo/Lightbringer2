@@ -31,7 +31,7 @@ class StorageAdapter {
       this.data = fse.readJSONSync(this.storageFile)
     } catch (error) {
       Logger.error(`Failed to load ${this.storageFile}.`)
-      Logger.error(error.stack || error)
+      Logger.error(error)
       this.data = null
     }
   }
@@ -45,7 +45,7 @@ class StorageAdapter {
       fse.writeJSONSync(this.storageFile, this.data, { spaces: 2 })
     } catch (error) {
       Logger.error(`Failed to save data to ${this.storageFile}.`)
-      Logger.error(error.stack || error)
+      Logger.error(error)
     }
   }
 

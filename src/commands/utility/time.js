@@ -13,7 +13,9 @@ class TimeCommand extends LCommand {
           match: 'rest',
           description: 'The location that you want to display the time of.'
         }
-      ]
+      ],
+      usage: 'time <location>',
+      selfdestruct: 15
     })
   }
 
@@ -43,7 +45,7 @@ class TimeCommand extends LCommand {
     const formattedTime = moment(`${parsedDate} ${parsedTime}`, 'dddd, MMMM D, YYYY HH:mm:ss A')
       .format('dddd, MMMM Do YYYY @ h:mm:ss a')
 
-    await message.edit(`${clockEmoji} The time in '${parsedPlace}' is ${formattedTime}.`)
+    return message.edit(`${clockEmoji} The time in '${parsedPlace}' is ${formattedTime} | ${this.selfdestruct(true)}`)
   }
 }
 

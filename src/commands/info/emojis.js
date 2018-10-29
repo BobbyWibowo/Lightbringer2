@@ -19,6 +19,7 @@ class EmojisCommand extends LCommand {
         }
       ],
       usage: 'emojis [--newline] [keyword]',
+      selfdestruct: 120,
       clientPermissions: ['EMBED_LINKS']
     })
   }
@@ -56,6 +57,7 @@ class EmojisCommand extends LCommand {
     const embed = {
       title: `${guild.name} [${emojis.size}]`,
       description: emojis.map(e => this.formatEmoji(e)).join(char),
+      footer: this.selfdestruct(true),
       color
     }
 

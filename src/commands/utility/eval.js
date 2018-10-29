@@ -26,7 +26,8 @@ class EvalCommand extends LCommand {
           description: 'Arbritrary JavaScript codes that you want to be evaluated.'
         }
       ],
-      usage: 'evaluate [--silent] <codes>'
+      usage: 'evaluate [--silent] <codes>',
+      selfdestruct: 60
     })
   }
 
@@ -40,7 +41,7 @@ class EvalCommand extends LCommand {
     try {
       result = await _eval.call(this, message, args)
     } catch (error) {
-      result = error.stack || error.message
+      result = error
       isError = true
     }
     const diff = process.hrtime(time)
@@ -65,7 +66,7 @@ class EvalCommand extends LCommand {
       `${this.client.util.formatCode(escapeMarkdown(args.codes, true), 'js')}` +
       `${isError ? '**Error:**' : '**Result:**'}\n` +
       `${this.client.util.formatCode(escapeMarkdown(result, true), 'js')}` +
-      `${type ? `Type: ${type} | ` : ''}Time taken: \`${this.client.util.formatHrTime(diff)}\``
+      `${type ? `Type: ${type} | ` : ''}Time taken: \`${this.client.util.formatHrTime(diff)}\` | ${this.selfdestruct(true)}`
 
     if (string.length > 2000) {
       return message.status('error', `Output is too long (+${string.length - 2000}).`)

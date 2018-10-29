@@ -116,7 +116,7 @@ class HelpCommand extends LCommand {
         }
       }
 
-      if (args.command.examples instanceof Array) {
+      if (Array.isArray(args.command.examples)) {
         const _expls = args.command.examples
           .map(e => (typeof e === 'string') ? { content: e } : e)
 

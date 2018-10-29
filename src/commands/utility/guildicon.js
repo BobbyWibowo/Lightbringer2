@@ -34,7 +34,8 @@ class GuildIconCommand extends LCommand {
           description: 'The guild that you want to display the icon of.'
         }
       ],
-      usage: 'guildicon [--direct] [--plain] [keyword]'
+      usage: 'guildicon [--direct] [--plain] [keyword]',
+      selfdestruct: 30
     })
   }
 
@@ -77,7 +78,7 @@ class GuildIconCommand extends LCommand {
 
     // Send a plain message when "--plain" flag is used.
     if (args.plain) {
-      return message.edit(`${escapeMarkdown(guild.name)}\n${iconURL}`)
+      return message.edit(`${escapeMarkdown(guild.name)}\n${iconURL}\n${this.selfdestruct()}`)
     }
 
     // Otherwise, build embed then send it.
@@ -91,10 +92,10 @@ class GuildIconCommand extends LCommand {
       description: `ID: ${guild.id}\n[Click here to view in a browser](${iconURL})`,
       color,
       image: iconURL,
-      footer: args.size ? `Specified size: ${args.size}` : null
+      footer: (args.size ? `Specified size: ${args.size} | ` : '') + this.selfdestruct(true)
     }
 
-    await message.edit(content, {
+    return message.edit(content, {
       embed: this.client.util.embed(embed)
     })
   }

@@ -19,6 +19,7 @@ class RolesCommand extends LCommand {
         }
       ],
       usage: 'roles [--brief] [keyword]',
+      selfdestruct: 60,
       clientPermissions: ['EMBED_LINKS']
     })
   }
@@ -58,7 +59,7 @@ class RolesCommand extends LCommand {
           return `${r.name} – ${r.members.size} member${r.members.size === 1 ? '' : 's'}`
         })
         .join(char)
-      embed.footer = 'Members count is based on cache, use "membersfetch" to refresh.'
+      embed.footer = `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`
     }
 
     let content = 'Roles of the currently viewed guild:'
