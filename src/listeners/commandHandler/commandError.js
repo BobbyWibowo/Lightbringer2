@@ -15,7 +15,7 @@ class CommandErrorListener extends Listener {
     if (error instanceof DiscordAPIError || error instanceof AkairoError) {
       return message.status('error', error.toString())
     } else if (error instanceof LError) {
-      return message.status('error', error.message, error.timeout)
+      return message.status('error', error.toString(), error.timeout)
     }
 
     Logger.error(error, { tag: command ? command.id : undefined })

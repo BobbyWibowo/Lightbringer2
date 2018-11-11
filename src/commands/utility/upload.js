@@ -1,4 +1,5 @@
 const LCommand = require('./../../struct/LCommand')
+const LError = require('./../../util/LError.js')
 const path = require('path')
 
 class UploadCommand extends LCommand {
@@ -62,6 +63,10 @@ class UploadCommand extends LCommand {
   }
 
   patch (url, options = {}) {
+    if (/^https?:\/\/i\.pximg\.net\/img-master\//i.test(url)) {
+      throw new LError('Pixiv URLs can not contain "img-master".')
+    }
+
     if (options.headers === undefined) {
       options.headers = {}
     }
