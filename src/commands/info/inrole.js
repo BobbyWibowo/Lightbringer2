@@ -1,4 +1,6 @@
+const { CommandHandlerEvents } = require('discord-akairo').Constants
 const { escapeMarkdown } = require('discord.js').Util
+const { stripIndents } = require('common-tags')
 const LCommand = require('./../../struct/LCommand')
 
 class InRoleCommand extends LCommand {
@@ -21,20 +23,30 @@ class InRoleCommand extends LCommand {
           description: 'Lists online members only.'
         },
         {
+          id: 'plain',
+          match: 'flag',
+          flag: ['--plain', '-p'],
+          description: 'Uses plain message (no embed).'
+        },
+        {
           id: 'keyword',
           match: 'rest',
           description: 'The role that you want to display the members of.'
         }
       ],
       usage: 'inrole [--guild=] [--online] <keyword>',
-      selfdestruct: 60,
-      clientPermissions: ['EMBED_LINKS']
+      selfdestruct: 60
     })
 
     this.maxUsersListing = 20
   }
 
   async exec (message, args) {
+    // When "--plain" flag is not used in channels where user have no permission to use embeds.
+    if (!args.plain && !this.client.util.hasPermissions(message.channel, ['EMBED_LINKS'])) {
+      return this.handler.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, this, 'client', ['EMBED_LINKS'])
+    }
+
     if (!args.keyword) {
       return message.status('error', 'You must specify a role name.')
     }
@@ -71,25 +83,45 @@ class InRoleCommand extends LCommand {
       members.length = this.maxUsersListing
     }
 
-    const embed = {
-      title: `${role.name} [${memberCount}]`,
-      description: members.map(m => escapeMarkdown(m.user.tag, true)).join(', '),
-      color: role.color !== 0 ? role.hexColor : null,
-      footer: `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`
-    }
-
     let content = `${args.online ? 'Online members' : 'Members'} of the role matching keyword \`${args.keyword}\`:`
     if (mention) {
       content = `${role}'s ${args.online ? 'online ' : ''}members:`
     }
 
+    const prefix = `**Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})` +
+      (displayCapped ? `\nDisplaying the first ${this.maxUsersListing} members alphabetically.` : '')
+    const description = members.map(m => escapeMarkdown(m.user.tag, true)).join(', ')
+    const code = 'css'
+    const char = ', '
+
+    if (args.plain) {
+      return this.client.util.multiSend(
+        message.channel,
+        stripIndents`/* ${content.replace(/`/g, '"')} */
+        /* ${prefix.replace(/\*\*/g, '').replace(/\n/g, ' */\n/* ')} */
+
+        ${description}`,
+        {
+          firstMessage: message,
+          code,
+          char
+        }
+      )
+    }
+
+    const embed = {
+      title: `${role.name} [${memberCount}]`,
+      description,
+      color: role.color !== 0 ? role.hexColor : null,
+      footer: `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`
+    }
+
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
       content,
-      prefix: `**Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})\n` +
-        (displayCapped ? `Displaying the first ${this.maxUsersListing} members alphabetically\u2026` : ''),
-      code: 'css',
-      char: ', '
+      prefix,
+      code,
+      char
     })
   }
 

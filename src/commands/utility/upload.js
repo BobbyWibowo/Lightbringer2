@@ -52,7 +52,11 @@ class UploadCommand extends LCommand {
     }
 
     const parsed = path.parse(args.url)
-    const extname = parsed.ext.split(/[?#]/)[0]
+    let extname = parsed.ext.split(/[?#]/)[0]
+    // Built-in patch for Twitter's file extension
+    if (extname.endsWith(':large')) {
+      extname = extname.slice(0, -6)
+    }
     await message.channel.send(args.plain ? null : `<${args.url}>`, {
       files: [{
         attachment: result.body,

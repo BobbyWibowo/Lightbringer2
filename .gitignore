@@ -1,11 +1,12 @@
-/.vscode/
+.vscode
+.nvmrc
 
 # Folders
-/node_modules/
-/storage/
-/data/
+node_modules
+storage
+data
 
 # Files
-/config.json
-/config.json.bak
-/yarn-error.log
+config.json
+config.json.bak
+yarn-error.log

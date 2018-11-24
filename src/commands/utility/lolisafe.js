@@ -138,8 +138,12 @@ class LoliSafeCommand extends LCommand {
     }
 
     const parsed = path.parse(args.url)
-    const extname = parsed.ext.split(/[?#]/)[0]
-    const filename = `${parsed.name || 'tmp'}${args.ext || extname}`
+    let extname = args.ext || parsed.ext.split(/[?#]/)[0]
+    // Built-in patch for Twitter's file extension
+    if (extname.endsWith(':large')) {
+      extname = extname.slice(0, -6)
+    }
+    const filename = `${parsed.name || 'tmp'}${extname}`
 
     const form = new FormData()
     form.append('files[]', download.body, {
