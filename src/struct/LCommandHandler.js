@@ -14,7 +14,7 @@ class LCommandHandler extends CommandHandler {
 
     this.statusTemplates = {
       success: {
-        icon: '✅',
+        icon: '🆗',
         timeout: this.statusTimeout
       },
       error: {

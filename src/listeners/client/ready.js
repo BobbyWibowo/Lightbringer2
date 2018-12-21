@@ -81,7 +81,7 @@ class ReadyListener extends Listener {
 
     const readyMessage = `Bot is ready - ${this.client.util.formatHrTime(overallTime)}.`
     Logger.info(readyMessage)
-    await this.client.util.sendStatus(`✅\u2000${readyMessage}`)
+    await this.client.util.sendStatus(`🆗\u2000${readyMessage}`)
 
     this.client.stats.set('initiated', true)
   }

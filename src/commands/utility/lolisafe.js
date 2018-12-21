@@ -128,7 +128,7 @@ class LoliSafeCommand extends LCommand {
     await message.status('progress', `Uploading to \`${this.client.util.getHostName(this.url)}\`\u2026`)
 
     const options = this.patch(args.url)
-    const download = await this.client.util.fetch(args.url, options)
+    const download = await this.client.util.fetch(args.url, options, false)
     if (download.status !== 200) {
       return message.status('error', download.text)
     }

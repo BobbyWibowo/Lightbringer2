@@ -78,7 +78,7 @@ class ReloadCommand extends LCommand {
       }
       const string = []
       if (success.length) {
-        string.push(`✅\u2000Reloaded ${typeString}${success.length === 1 ? '' : 's'}: ${success.join(', ')}.`)
+        string.push(`🆗\u2000Reloaded ${typeString}${success.length === 1 ? '' : 's'}: ${success.join(', ')}.`)
       }
       if (failure.length) {
         string.push(`⛔\u2000Could not reload ${typeString}${failure.length === 1 ? '' : 's'}: ${failure.join(', ')}.`)
