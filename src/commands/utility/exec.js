@@ -20,9 +20,8 @@ class ExecCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.command) {
+    if (!args.command)
       return message.status('error', 'You need to specify a command to execute on the shell.')
-    }
 
     const outs = await new Promise((resolve, reject) => {
       const outs = []
@@ -30,9 +29,9 @@ class ExecCommand extends LCommand {
       exec(args.command, {
         timeout: 60000 // 60 seconds
       }, (error, stdout, stderr) => {
-        if (stdout) { outs.push(stdout) }
-        if (stderr) { outs.push(stderr) }
-        if (error) { outs.push(`Exit code: ${error.code}`) }
+        if (stdout) outs.push(stdout)
+        if (stderr) outs.push(stderr)
+        if (error) outs.push(`Exit code: ${error.code}`)
         resolve(outs)
       })
     })

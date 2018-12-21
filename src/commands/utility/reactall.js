@@ -31,9 +31,8 @@ class ReactAllCommand extends LCommand {
     const guild = args.guild || message.guild || null
 
     let channel = message.channel
-    if (args.channel) {
+    if (args.channel)
       channel = await this.client.util.assertChannel(args.channel, guild)
-    }
 
     let msg = null
     if (args.message) {
@@ -62,16 +61,14 @@ class ReactAllCommand extends LCommand {
       }
     }
 
-    if (!msg) {
+    if (!msg)
       return message.status('error', 'Unable to fetch any messages!')
-    }
 
     const reactions = msg.reactions
       .filter(reaction => !reaction.me)
 
-    if (!reactions.size) {
+    if (!reactions.size)
       return message.status('error', 'There are no active reactions that you haven\'t reacted to!')
-    }
 
     await message.status('progress', `Reacting to ${reactions.size} reaction(s) in ${msg.author.tag}'s message\u2026`)
     await Promise.all(reactions.map(reaction => {

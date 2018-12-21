@@ -15,9 +15,9 @@ class CommandStartedListener extends Listener {
   }
 
   tag (message) {
-    if (message.guild) { return message.guild.name }
-    if (message.channel.recipient) { return `${message.channel.recipient.tag}/DM` }
-    if (message.channel.owner) { return `${message.channel.name || message.channel.owner.tag}/Group` }
+    if (message.guild) return message.guild.name
+    if (message.channel.recipient) return `${message.channel.recipient.tag}/DM`
+    if (message.channel.owner) return `${message.channel.name || message.channel.owner.tag}/Group`
     return `${message.channel.id}/Unknown`
   }
 }

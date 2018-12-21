@@ -33,10 +33,9 @@ class SetActivityCommand extends LCommand {
           description: 'The activity type (can either be Playing, Streaming, Listening to, or Watching).',
           type: (word, message, args) => {
             const keys = Object.keys(ACTIVITY_TYPES)
-            if (!word.length) { return keys[0] }
-            for (const key of keys) {
-              if (ACTIVITY_TYPES[key].test(word)) { return key }
-            }
+            if (!word.length) return keys[0]
+            for (const key of keys)
+              if (ACTIVITY_TYPES[key].test(word)) return key
           }
         },
         {
@@ -52,13 +51,11 @@ class SetActivityCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.type) {
+    if (!args.type)
       return message.status('error', 'That type is unavailable! Use `--list` flag to list all available types.')
-    }
 
-    if (args.list) {
+    if (args.list)
       return message.edit(`🎮\u2000|\u2000**Available types:** ${Object.keys(ACTIVITY_TYPES).join(', ')}.`)
-    }
 
     const save = (vals = {}) => {
       this.storage.set('name', vals.name)
@@ -73,12 +70,11 @@ class SetActivityCommand extends LCommand {
 
     if (url) {
       type = 'STREAMING'
-      if (!/^https?:\/\//.test(url)) {
+      if (!/^https?:\/\//.test(url))
         url = `https://www.twitch.tv/${url}`
-      }
-      if (!name) {
+
+      if (!name)
         name = url.split('/').slice(-1)[0]
-      }
     }
 
     if (name) {
@@ -94,7 +90,7 @@ class SetActivityCommand extends LCommand {
 
   setPresenceFromStorage () {
     const name = this.storage.get('name')
-    if (!name) { throw new Error('Missing activity name.') }
+    if (!name) throw new Error('Missing activity name.')
 
     return this.client.user.setPresence({
       activity: {
@@ -108,13 +104,12 @@ class SetActivityCommand extends LCommand {
   onReady () {
     this.storage = this.client.storage('setactivity')
 
-    if (this.storage.get('name')) {
+    if (this.storage.get('name'))
       this.setPresenceFromStorage().then(activity => {
         Logger.info(`Enabled activity: ${this.client.util.formatActivityType(activity.type, true)} ${activity.name}.`, { tag: this.id })
       }).catch(error => {
         Logger.error(error.message, { tag: this.id })
       })
-    }
   }
 
   onReload () {

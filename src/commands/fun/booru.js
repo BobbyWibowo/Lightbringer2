@@ -86,7 +86,7 @@ class BooruCommand extends LCommand {
       return message.edit('⚙\u2000Available booru sites:\n' + this.client.util.formatCode(formatted, 'asciidoc'))
     }
 
-    if (args.defaultSite) {
+    if (args.defaultSite)
       if (args.defaultSite === 'null') {
         this.storage.set('defaultSite')
         this.storage.save()
@@ -98,7 +98,6 @@ class BooruCommand extends LCommand {
         this.storage.save()
         return message.status('success', `Successfully changed default site to \`${args.defaultSite}\`.`)
       }
-    }
 
     const liteMode = this.storage.get('liteMode')
     if (args.liteMode) {
@@ -108,9 +107,9 @@ class BooruCommand extends LCommand {
     }
 
     if (args.last) {
-      if (!this.lastArgs) {
+      if (!this.lastArgs)
         return message.status('error', 'There are no saved arguments.')
-      }
+
       args = this.lastArgs
     } else {
       this.lastArgs = args
@@ -118,9 +117,8 @@ class BooruCommand extends LCommand {
 
     const site = args.site || this.storage.get('defaultSite') || DEFAULT_SITE
     const siteKey = this.getSiteKey(site)
-    if (!siteKey) {
+    if (!siteKey)
       return message.status('error', 'The site you specified is unavailable.')
-    }
 
     const tags = args.tags ? args.tags.split(' ') : []
     const mappedTags = tags.length ? tags.map(t => `\`${t}\``).join(', ') : null
@@ -131,9 +129,8 @@ class BooruCommand extends LCommand {
     await message.status('progress', searchMessage)
 
     const images = await this.client.booruCache.get(siteKey, tags)
-    if (!images.length) {
+    if (!images.length)
       return message.status('error', 'Could not find any images from the booru site.')
-    }
 
     const image = images[0]
     const imageUrl = this.client.util.cleanUrl(image.file_url)

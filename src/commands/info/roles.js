@@ -25,16 +25,14 @@ class RolesCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!message.guild && !args.keyword) {
+    if (!message.guild && !args.keyword)
       return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
-    }
 
     let guild = message.guild
 
     // Assert Guild.
-    if (args.keyword) {
+    if (args.keyword)
       guild = await this.client.util.assertGuild(args.keyword)
-    }
 
     const color = await this.client.guildColors.get(guild)
 
@@ -55,7 +53,7 @@ class RolesCommand extends LCommand {
     } else {
       embed.description = roles
         .map(r => {
-          if (r.position === 0) { return `\\${r.name}` }
+          if (r.position === 0) return `\\${r.name}`
           return `${r.name} – ${r.members.size} member${r.members.size === 1 ? '' : 's'}`
         })
         .join(char)
@@ -63,9 +61,8 @@ class RolesCommand extends LCommand {
     }
 
     let content = 'Roles of the currently viewed guild:'
-    if (args.keyword) {
+    if (args.keyword)
       content = `Roles of the guild matching keyword \`${args.keyword}\`:`
-    }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,

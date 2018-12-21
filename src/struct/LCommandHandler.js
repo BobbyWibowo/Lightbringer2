@@ -33,29 +33,26 @@ class LCommandHandler extends CommandHandler {
   }
 
   async _status (status, message, timeout) {
-    if (!status) { return false }
+    if (!status) return false
 
     const statusTemplates = this.client.commandHandler.statusTemplates
     const template = statusTemplates[status] || statusTemplates[Object.keys(statusTemplates)[status]]
-    if (!template) {
+    if (!template)
       throw new Error(`Template with id: ${status} is not available.`)
-    }
 
     await this.edit(`${template.icon}${message ? `\u2000${message}` : ''}`)
 
-    if (timeout === undefined || timeout === null) {
+    if (timeout === undefined || timeout === null)
       timeout = template.timeout >= 0 ? template.timeout : -1
-    }
 
-    if (timeout >= 0) {
+    if (timeout >= 0)
       return this.delete({ timeout }).catch(() => {})
-    }
   }
 
   async handle (message) {
     if (message.author.id === this.client.user.id) {
       this.client.stats.increment('messages-sent')
-      if (!message.status) { message.status = this._status }
+      if (!message.status) message.status = this._status
     } else {
       this.client.stats.increment('messages-received')
     }
@@ -64,26 +61,26 @@ class LCommandHandler extends CommandHandler {
 
   load (thing, isReload) {
     const mod = super.load(thing, isReload)
-    if (this.ready && isReload && mod && typeof mod.onReady === 'function') { mod.onReady() }
+    if (this.ready && isReload && mod && typeof mod.onReady === 'function') mod.onReady()
     return mod
   }
 
   reload (id) {
     const mod = this.modules.get(id.toString())
-    if (mod && typeof mod.onReload === 'function') { mod.onReload() }
+    if (mod && typeof mod.onReload === 'function') mod.onReload()
     return super.reload(id)
   }
 
   remove (id) {
     const mod = this.modules.get(id.toString())
-    if (mod && typeof mod.onRemove === 'function') { mod.onRemove() }
+    if (mod && typeof mod.onRemove === 'function') mod.onRemove()
     return super.remove(id)
   }
 
   readyAll () {
     this.ready = true
     this.modules.forEach(mod => {
-      if (typeof mod.onReady === 'function') { mod.onReady() }
+      if (typeof mod.onReady === 'function') mod.onReady()
     })
   }
 }

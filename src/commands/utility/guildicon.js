@@ -41,51 +41,44 @@ class GuildIconCommand extends LCommand {
 
   async exec (message, args) {
     // When "--plain" flag is not used in channels where user have no permission to use embeds.
-    if (!args.plain && !this.client.util.hasPermissions(message.channel, ['EMBED_LINKS'])) {
+    if (!args.plain && !this.client.util.hasPermissions(message.channel, ['EMBED_LINKS']))
       return this.handler.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, this, 'client', ['EMBED_LINKS'])
-    }
 
     let guild = message.guild
 
     // Assert Guild.
-    if (args.keyword) {
+    if (args.keyword)
       guild = await this.client.util.assertGuild(args.keyword)
-    }
 
     const color = await this.client.guildColors.get(guild)
 
     let size = 2048
-    if (args.size) {
+    if (args.size)
       if (AllowedImageSizes.includes(args.size)) {
         size = args.size
       } else {
         return message.status('error', `The size you specified was unavailable! Try one of the following: ${AllowedImageSizes.map(s => `\`${s}\``).join(', ')}.`)
       }
-    }
 
     // Get guild's icon.
     let iconURL = guild.iconURL({ size })
 
     // If could not get avatar.
-    if (!iconURL) {
+    if (!iconURL)
       return message.status('error', 'Could not get icon of the specified guild.')
-    }
 
     // "--direct" flag.
-    if (args.direct) {
+    if (args.direct)
       iconURL = iconURL.replace('cdn.discordapp.com', 'images.discordapp.net')
-    }
 
     // Send a plain message when "--plain" flag is used.
-    if (args.plain) {
+    if (args.plain)
       return message.edit(`${escapeMarkdown(guild.name)}\n${iconURL}\n${this.selfdestruct()}`)
-    }
 
     // Otherwise, build embed then send it.
     let content = 'Icon of the currently viewed guild:'
-    if (args.keyword) {
+    if (args.keyword)
       content = `Icon of the guild matching keyword \`${args.keyword}\`:`
-    }
 
     const embed = {
       title: guild.name,

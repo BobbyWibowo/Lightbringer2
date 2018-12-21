@@ -68,9 +68,8 @@ class UserInfoCommand extends LCommand {
       embed.fields[0].value += '\n•  **Bot:** yes'
     } else if (profile) {
       embed.fields[0].value += `\n•  **Nitro${profile.premiumSince ? ' since' : ''}:** ${profile.premiumSince ? this.client.util.formatFromNow(profile.premiumSince) : 'no'}`
-      if (user.id !== message.author.id) {
+      if (user.id !== message.author.id)
         embed.fields[0].value += `\n•  **Mutual guilds:** ${profile.mutualGuilds.size.toLocaleString() || '0'}`
-      }
     } else {
       embed.fields[0].value += '\n•  Could not load profile information. Try again?'
     }
@@ -80,9 +79,8 @@ class UserInfoCommand extends LCommand {
       : 'N/A'}`
 
     // Activity message (in embed description).
-    if (user.presence.activity) {
+    if (user.presence.activity)
       embed.description = this.formatActivityMessage(user.presence.activity)
-    }
 
     // Guild Membership field.
     if (member) {
@@ -120,11 +118,10 @@ class UserInfoCommand extends LCommand {
 
     // Message content (the thing being displayed above the embed).
     let content = 'My information:'
-    if (mention) {
+    if (mention)
       content = `${(member || user).toString()}'s information:`
-    } else if (args.keyword) {
+    else if (args.keyword)
       content = `Information of the user matching keyword \`${args.keyword}\`:`
-    }
 
     // Options for the embed.
     embed.thumbnail = thumbnail

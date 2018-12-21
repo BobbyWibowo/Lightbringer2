@@ -60,7 +60,7 @@ class LoliSafeCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (args.site) {
+    if (args.site)
       if (args.site === 'null') {
         this.storage.set('site')
         this.storage.save()
@@ -74,9 +74,8 @@ class LoliSafeCommand extends LCommand {
         this.url = args.site
         return message.status('success', `Successfully updated site to <${this.url}>.`)
       }
-    }
 
-    if (args.token) {
+    if (args.token)
       if (args.token === 'null') {
         this.storage.set('token')
         this.storage.save()
@@ -88,9 +87,8 @@ class LoliSafeCommand extends LCommand {
         this.token = args.token
         return message.status('success', 'Successfully saved token.')
       }
-    }
 
-    if (args.album) {
+    if (args.album)
       if (args.album === 'null') {
         this.storage.set('token')
         this.storage.save()
@@ -102,7 +100,6 @@ class LoliSafeCommand extends LCommand {
         this.album = args.album
         return message.status('success', 'Successfully saved album ID.')
       }
-    }
 
     if (args.clearOption) {
       const val = this.storage.get(args.clearOption)
@@ -110,39 +107,36 @@ class LoliSafeCommand extends LCommand {
         return message.status('error', `Option with ID \`${args.clearOption}\` was not set.`)
       } else {
         this.storage.set(args.clearOption, null)
-        if (this.storage.get('enabled')) { await this.setPresenceFromStorage() }
+        if (this.storage.get('enabled')) await this.setPresenceFromStorage()
         return message.status('success', `Cleared option with ID \`${args.clearOption}\`.`)
       }
     }
 
-    if (!args.url) {
+    if (!args.url)
       return message.status('error', `Usage: \`${this.usage}\`.`)
-    }
 
     const exec = /^<?(.+?)>?$/.exec(args.url)
-    if (!exec || !exec[1]) {
+    if (!exec || !exec[1])
       return message.status('error', 'Could not parse input.')
-    }
+
     args.url = exec[1].trim()
 
     await message.status('progress', `Uploading to \`${this.client.util.getHostName(this.url)}\`\u2026`)
 
     const options = this.patch(args.url)
     const download = await this.client.util.fetch(args.url, options, false)
-    if (download.status !== 200) {
+    if (download.status !== 200)
       return message.status('error', download.text)
-    }
 
-    if (args.ext && !args.ext.startsWith('.')) {
+    if (args.ext && !args.ext.startsWith('.'))
       args.ext = `.${args.ext}`
-    }
 
     const parsed = path.parse(args.url)
     let extname = args.ext || parsed.ext.split(/[?#]/)[0]
     // Built-in patch for Twitter's file extension
-    if (extname.endsWith(':large')) {
+    if (extname.endsWith(':large'))
       extname = extname.slice(0, -6)
-    }
+
     const filename = `${parsed.name || 'tmp'}${extname}`
 
     const form = new FormData()
@@ -159,23 +153,21 @@ class LoliSafeCommand extends LCommand {
       body: form
     })
 
-    if (fetchPost.status !== 200) {
+    if (fetchPost.status !== 200)
       return message.status('error', `${fetchPost.status} ${fetchPost.statusText}`)
-    }
 
     const result = await fetchPost.json()
-    if (!result.success) {
+    if (!result.success)
       return message.status('error', `Failed to upload <${this.url}>: \`${result.body.description.code}\`.`)
-    }
 
     let _url = result.files[0].url
 
     // Fun patch for safe.fiery.me (use will-always-want.me domain)
     if (this.url === DEFAULT_URL) {
       let subdomain = 'everyone'
-      if (/neko/i.test(args.url)) { subdomain = 'nekos' }
-      if (/(azur|lane)/i.test(args.url)) { subdomain = 'ship-girls' }
-      if (/loli/i.test(args.url)) { subdomain = 'lolis' }
+      if (/neko/i.test(args.url)) subdomain = 'nekos'
+      if (/(azur|lane)/i.test(args.url)) subdomain = 'ship-girls'
+      if (/loli/i.test(args.url)) subdomain = 'lolis'
       _url = _url.replace(/i\.fiery\.me/g, `${subdomain}.will-always-want.me`)
     }
 
@@ -185,7 +177,7 @@ class LoliSafeCommand extends LCommand {
   patch (url, options) {
     // Use patch function of "upload" command, if available
     const uploadCommand = this.handler.modules.get('upload')
-    if (!uploadCommand) { return null }
+    if (!uploadCommand) return null
     return uploadCommand.patch(url, options)
   }
 
@@ -193,19 +185,16 @@ class LoliSafeCommand extends LCommand {
     this.storage = this.client.storage('lolisafe')
 
     const url = this.storage.get('url')
-    if (url) {
+    if (url)
       this.url = url
-    }
 
     const token = this.storage.get('token')
-    if (token) {
+    if (token)
       this.token = token
-    }
 
     const album = this.storage.get('album')
-    if (album) {
+    if (album)
       this.album = album
-    }
   }
 
   onReload () {

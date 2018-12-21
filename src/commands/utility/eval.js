@@ -32,9 +32,8 @@ class EvalCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.codes) {
+    if (!args.codes)
       return message.status('error', `Usage: \`${this.usage}\`.`)
-    }
 
     const time = process.hrtime()
     let result, isError, type
@@ -46,12 +45,11 @@ class EvalCommand extends LCommand {
     }
     const diff = process.hrtime(time)
 
-    if (args.silent) {
+    if (args.silent)
       return Logger.log(inspect(result, { depth: 1 }), { tag: `${this.id}/silent` })
-    }
 
     if (!isError) {
-      if (result && result.constructor) { type = result.constructor.name }
+      if (result && result.constructor) type = result.constructor.name
       result = inspect(result, { depth: 0 })
     }
 
@@ -68,9 +66,8 @@ class EvalCommand extends LCommand {
       `${this.client.util.formatCode(escapeMarkdown(result, true), 'js')}` +
       `${type ? `Type: ${type} | ` : ''}Time taken: \`${this.client.util.formatHrTime(diff)}\` | ${this.selfdestruct(true)}`
 
-    if (string.length > 2000) {
+    if (string.length > 2000)
       return message.status('error', `Output is too long (+${string.length - 2000}).`)
-    }
 
     return message.edit(string)
   }

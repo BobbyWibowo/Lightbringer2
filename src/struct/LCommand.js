@@ -20,9 +20,9 @@ class LCommand extends Command {
   }
 
   selfdestruct (short) {
-    if (!this._selfdestruct) { return null }
+    if (!this._selfdestruct) return null
     const unit = `second${this._selfdestruct === 1 ? '' : 's'}`
-    if (short) { return `Self-destruct in ${this._selfdestruct}s` }
+    if (short) return `Self-destruct in ${this._selfdestruct}s`
     return `*This message will self-destruct in ${this._selfdestruct} ${unit}.*`
   }
 }

@@ -11,9 +11,8 @@ class FeedCommand extends LCommand {
   }
 
   async exec (message) {
-    if (!message.mentions.users.size) {
+    if (!message.mentions.users.size)
       return message.status('error', '@mention some people to feed.')
-    }
 
     const content = message.mentions.users
       .map(m => `*forces ${Foods[Math.round(Math.random() * Foods.length)]} down ${m}'s throat*`)

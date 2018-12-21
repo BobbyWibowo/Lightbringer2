@@ -17,16 +17,14 @@ class EightBallCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.question) {
+    if (!args.question)
       return message.status('error', 'You must provide a question to ask.')
-    }
 
     await message.status('progress', 'Asking the question to 8-ball\u2026')
     const result = await this.client.util.fetch(`https://8ball.delegator.com/magic/JSON/${args.question}`)
 
-    if (result.status !== 200) {
+    if (result.status !== 200)
       return message.status('error', 'Could not retrieve answer from 8-ball.')
-    }
 
     const magic = result.body.magic
     return message.edit(

@@ -37,7 +37,7 @@ class ConfigCommand extends LCommand {
           const right = Object.keys(configKeys[key])
             .map(_key => {
               let _value = configKeys[key][_key]
-              if (Array.isArray(_value)) { _value = _value.join(', ') }
+              if (Array.isArray(_value)) _value = _value.join(', ')
               return `${_key}: ${_value}`
             })
             .join('; ')
@@ -47,9 +47,8 @@ class ConfigCommand extends LCommand {
       return message.edit('⚙\u2000Configuration keys:\n' + this.client.util.formatCode(formatted, 'asciidoc'))
     }
 
-    if (!args.key) {
+    if (!args.key)
       return message.status('error', `Usage: \`${this.usage}\`.`)
-    }
 
     if (!args.value) {
       let value

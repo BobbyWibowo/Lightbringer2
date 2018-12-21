@@ -28,16 +28,14 @@ class MembersCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!message.guild && !args.keyword) {
+    if (!message.guild && !args.keyword)
       return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
-    }
 
     let guild = message.guild
 
     // Assert Guild.
-    if (args.keyword) {
+    if (args.keyword)
       guild = await this.client.util.assertGuild(args.keyword)
-    }
 
     const color = await this.client.guildColors.get(guild)
 
@@ -70,9 +68,8 @@ class MembersCommand extends LCommand {
     }
 
     let content = `${args.online ? 'Online members' : 'Members'} of the currently viewed guild:`
-    if (args.keyword) {
+    if (args.keyword)
       content = `${args.online ? 'Online members' : 'Members'} of the guild matching keyword \`${args.keyword}\`:`
-    }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
@@ -87,9 +84,8 @@ class MembersCommand extends LCommand {
   onReady () {
     const maxUsersListing = this.client.configManager.get('maxUsersListing')
 
-    if (maxUsersListing !== undefined) {
+    if (maxUsersListing !== undefined)
       this.maxUsersListing = Number(maxUsersListing)
-    }
   }
 }
 

@@ -8,13 +8,11 @@ class GuildColors {
   }
 
   async get (guild) {
-    if (!this.storage) {
+    if (!this.storage)
       throw new Error('Storage system of guild colors is not yet ready.')
-    }
 
-    if (!guild.icon) {
+    if (!guild.icon)
       return null
-    }
 
     const tag = `${this.tag}/${guild.id}`
     const saved = this.storage.get(guild.id)
@@ -29,18 +27,15 @@ class GuildColors {
       format: 'png'
     }))
 
-    if (snek.status !== 200) {
+    if (snek.status !== 200)
       throw new Error(snek.text)
-    }
 
     const color = await this.client.util.getAverageColor(snek.body)
 
     // If the average color is pure black, add 1 to red (actually green and blue will do too).
     // When the color is to be used for embed, pure black will instead become the embed's
     // default color, which is generally grey.
-    if (color[0] === 0 && color[1] === 0 && color[2] === 0) {
-      color[0]++
-    }
+    if (color[0] === 0 && color[1] === 0 && color[2] === 0) color[0]++
 
     this.storage.set(guild.id, {
       icon: guild.icon,

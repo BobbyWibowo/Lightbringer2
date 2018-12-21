@@ -24,9 +24,8 @@ class BooruCacheCommand extends LCommand {
     }
 
     const cache = this.client.booruCache.storage
-    if (!cache.keys.length) {
+    if (!cache.keys.length)
       return message.status('error', 'Booru cache is empty.')
-    }
 
     const formatted = cache.keys.map(key => {
       const tag = cache.get(key)

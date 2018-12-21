@@ -29,14 +29,12 @@ class RoleInfoCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.keyword) {
+    if (!args.keyword)
       return message.status('error', 'You must specify a role name.')
-    }
 
     const roleSource = args.guild || message.guild || null
-    if (!roleSource) {
+    if (!roleSource)
       return message.status('error', 'You must be in a guild to run this command without "--guild" flag.')
-    }
 
     // Assert Role.
     const role = await this.client.util.assertRole(args.keyword, roleSource)
@@ -76,9 +74,8 @@ class RoleInfoCommand extends LCommand {
 
     // Message content (the thing being displayed above the embed).
     let content = `Information of the role matching keyword \`${args.keyword}\`:`
-    if (mention) {
+    if (mention)
       content = `${role}'s information:`
-    }
 
     await message.edit(content, {
       embed: this.client.util.embed(embed)

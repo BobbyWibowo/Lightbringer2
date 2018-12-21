@@ -18,23 +18,20 @@ class AverageColorCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.url) {
+    if (!args.url)
       return message.status('error', `Usage: \`${this.usage}\`.`)
-    }
 
     const exec = /^<?(.+?)>?$/.exec(args.url)
 
-    if (!exec) {
+    if (!exec)
       return message.status('error', 'Could not parse input.')
-    }
 
     // This will only prepend a progress icon to the message.
     await message.status('progress', message.content)
 
     const result = await this.client.util.fetch(exec[1])
-    if (result.status !== 200) {
+    if (result.status !== 200)
       return message.status('error', result.text)
-    }
 
     const color = await this.client.util.getAverageColor(result.body).then(convert.rgb.hex)
 

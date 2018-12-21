@@ -11,7 +11,7 @@ class DiscriminatorCommand extends LCommand {
           id: 'discriminator',
           match: 'rest',
           type: (word, message, args) => {
-            if (/^\d{4}$/.test(word)) { return word }
+            if (/^\d{4}$/.test(word)) return word
           }
         }
       ],
@@ -25,9 +25,8 @@ class DiscriminatorCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.discriminator) {
+    if (!args.discriminator)
       return message.status('error', `Usage: \`${this.usage}\`.`)
-    }
 
     let displayCapped = false
     const users = this.client.users.filter(u => u.discriminator === args.discriminator).array()
@@ -55,9 +54,8 @@ class DiscriminatorCommand extends LCommand {
   onReady () {
     const maxUsersListing = this.client.configManager.get('maxUsersListing')
 
-    if (maxUsersListing !== undefined) {
+    if (maxUsersListing !== undefined)
       this.maxUsersListing = Number(maxUsersListing)
-    }
   }
 }
 

@@ -37,9 +37,8 @@ class StorageAdapter {
   }
 
   save () {
-    if (this.data === null) {
+    if (this.data === null)
       throw new Error('Data has yet to be loaded')
-    }
 
     try {
       fse.writeJSONSync(this.storageFile, this.data, { spaces: 2 })
@@ -50,33 +49,28 @@ class StorageAdapter {
   }
 
   get (key) {
-    if (this.data === null) {
+    if (this.data === null)
       throw new Error('Data has yet to be loaded')
-    }
 
-    if (typeof key !== 'string') {
+    if (typeof key !== 'string')
       throw new TypeError('key must be a string')
-    }
 
     return this.data[key]
   }
 
   set (key, value) {
-    if (this.data === null) {
+    if (this.data === null)
       throw new Error('Data has yet to be loaded')
-    }
 
-    if (typeof key !== 'string') {
+    if (typeof key !== 'string')
       throw new TypeError('key must be a string')
-    }
 
     const oldValue = this.get(key)
 
-    if (value === undefined) {
+    if (value === undefined)
       delete this.data[key]
-    } else {
+    else
       this.data[key] = value
-    }
 
     return oldValue
   }

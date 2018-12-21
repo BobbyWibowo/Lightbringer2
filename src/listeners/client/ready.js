@@ -47,7 +47,7 @@ class ReadyListener extends Listener {
       prompt: ''
     }).on('line', line => {
       try {
-        if (line === '.exit') { process.exit(0) }
+        if (line === '.exit') process.exit(0)
         // eslint-disable-next-line no-eval
         process.stdout.write(`${inspect(eval(line), { depth: 0 })}\n`)
       } catch (error) {
@@ -62,17 +62,15 @@ class ReadyListener extends Listener {
     Logger.log('For PM2 users, you can use: pm2 send <id> "<codes>".')
 
     const statusChannel = this.client.configManager.get('statusChannel')
-    if (statusChannel) {
+    if (statusChannel)
       this.client._statusChannel = this.client.channels.get(statusChannel)
-    }
 
     await this.client.user.setAFK(true)
     const onlineStatus = this.client.configManager.get('onlineStatus')
-    if (OnlineStatuses.includes(onlineStatus)) {
+    if (OnlineStatuses.includes(onlineStatus))
       await this.client.user.setStatus(onlineStatus)
         .then(() => Logger.info(`Updated bot's online status to "${onlineStatus}".`))
         .catch(Logger.error)
-    }
 
     this.initAutoRebootTimeout()
 
@@ -88,12 +86,12 @@ class ReadyListener extends Listener {
 
   initAutoRebootTimeout () {
     const autoReboot = this.client.configManager.get('autoReboot')
-    if (!autoReboot) { return }
+    if (!autoReboot) return
     this.client.setTimeout(async () => {
       const shutdownMessage = 'Shutting down bot due to auto-reboot feature.'
-      if (this.client._statusChannel) {
+      if (this.client._statusChannel)
         await this.client._statusChannel.send(`👋\u2000${shutdownMessage}`)
-      }
+
       Logger.info(shutdownMessage)
       process.exit(0)
     }, autoReboot * 1000)

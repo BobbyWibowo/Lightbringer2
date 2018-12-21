@@ -48,16 +48,14 @@ class GuildInfoCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!message.guild && !args.keyword) {
+    if (!message.guild && !args.keyword)
       return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
-    }
 
     let guild = message.guild
 
     // Assert Guild.
-    if (args.keyword) {
+    if (args.keyword)
       guild = await this.client.util.assertGuild(args.keyword)
-    }
 
     const color = await this.client.guildColors.get(guild)
 
@@ -114,15 +112,13 @@ class GuildInfoCommand extends LCommand {
       color
     }
 
-    if (splashURL) {
+    if (splashURL)
       embed.fields[0].value += `\n•  **Splash image:** [${this.client.util.getHostName(splashURL)}](${splashURL})`
-    }
 
     // Message content (the thing being displayed above the embed).
     let content = 'Information of the currently viewed guild:'
-    if (args.keyword) {
+    if (args.keyword)
       content = `Information of the guild matching keyword \`${args.keyword}\`:`
-    }
 
     await message.edit(content, {
       embed: this.client.util.embed(embed)

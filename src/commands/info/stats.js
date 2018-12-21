@@ -81,9 +81,8 @@ class StatsCommand extends LCommand {
   }
 
   onReady () {
-    if (this.client.data.package.repository) {
+    if (this.client.data.package.repository)
       this.git = `https://github.com/${this.client.data.package.repository.replace(/^github:/, '')}`
-    }
   }
 }
 

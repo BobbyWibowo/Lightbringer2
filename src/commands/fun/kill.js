@@ -12,9 +12,8 @@ class KillCommand extends LCommand {
   }
 
   async exec (message) {
-    if (!message.mentions.users.size) {
+    if (!message.mentions.users.size)
       return message.status('error', '@mention some people to kill.')
-    }
 
     const content = message.mentions.users
       .map(m => Kills[Math.round(Math.random() * Kills.length)].replace(/@/g, m))

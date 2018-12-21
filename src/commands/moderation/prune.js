@@ -33,9 +33,8 @@ class PruneCommand extends LCommand {
 
     messages = messages.filter(m => m.author.id === this.client.user.id)
 
-    if (!messages.size) {
+    if (!messages.size)
       return message.status('error', 'There were no messages that you could prune.')
-    }
 
     await message.status('progress', `Pruning ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
     await Promise.all(messages.map(m => m.delete()))

@@ -53,15 +53,13 @@ class AnimalsCommand extends LCommand {
           match: 'rest',
           type: (word, message, args) => {
             const keys = Object.keys(ANIMALS)
-            if (!word.length) {
+            if (!word.length)
               // If unspecified, get a random type
               return keys[Math.floor(Math.random() * keys.length)]
-            }
-            for (const key of keys) {
-              if (ANIMALS[key].regex.test(word)) {
+
+            for (const key of keys)
+              if (ANIMALS[key].regex.test(word))
                 return key
-              }
-            }
           },
           description: 'The type of animal (randomized when not specified).'
         }
@@ -71,13 +69,11 @@ class AnimalsCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.animal) {
+    if (!args.animal)
       return message.status('error', 'That type is unavailable! Use `--list` flag to list all available types.')
-    }
 
-    if (args.list) {
+    if (args.list)
       return message.edit(`🐱\u2000|\u2000**Available types:** ${Object.keys(ANIMALS).join(', ')}.`)
-    }
 
     await message.status('progress', `Fetching a random ${args.animal} image\u2026`)
 
@@ -89,17 +85,16 @@ class AnimalsCommand extends LCommand {
       attempts++
 
       const result = await this.client.util.fetch(animal.api)
-      if (result.status !== 200) {
+      if (result.status !== 200)
         continue
-      }
 
       let _image
       switch (animal.action) {
         case 'regex':
           const exec = animal.data.exec(result.body)
-          if (exec && exec[1]) {
+          if (exec && exec[1])
             _image = exec[1]
-          }
+
           break
         case 'append':
           _image = animal.data + result.body
@@ -113,16 +108,14 @@ class AnimalsCommand extends LCommand {
 
       // It will attempt to re-fetch till MAX_RETRY
       // if the image URL matched exclude regex
-      if (animal.exclude && animal.exclude.test(_image)) {
+      if (animal.exclude && animal.exclude.test(_image))
         continue
-      }
 
       image = _image
     }
 
-    if (!image) {
+    if (!image)
       return message.status('error', `Failed to fetch image after ${MAX_RETRY} retries.`)
-    }
 
     if (args.upload) {
       await message.channel.send({ files: [image] })

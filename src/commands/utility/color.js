@@ -69,19 +69,18 @@ class ColorCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (args.list) {
+    if (args.list)
       return message.edit('🖌\u2000Color configuration preview:\n' + this.client.util.formatCode(stripIndent`
         Width     :: ${String(this.storage.get('width'))}
         Height    :: ${String(this.storage.get('height'))}
         Dimension :: ${String(this.storage.get('dimension'))}
       `, 'asciidoc'))
-    }
 
     if (!args.input) {
       const keys = ['width', 'height', 'dimension']
       const saved = []
       for (const key of keys) {
-        if (!args[key]) { continue }
+        if (!args[key]) continue
         const value = args[key] === 'null' ? undefined : Number(args[key])
         this.storage.set(key, value)
         saved.push(key)
@@ -94,9 +93,8 @@ class ColorCommand extends LCommand {
     }
 
     const parsed = this.parseInput(args.input)
-    if (!parsed) {
+    if (!parsed)
       return message.status('error', 'Could not parse the input color.')
-    }
 
     const width = Number(args.dimension) || Number(args.width) ||
       this.storage.get('dimension') || this.storage.get('width') ||
@@ -130,16 +128,15 @@ class ColorCommand extends LCommand {
   parseInput (value) {
     // TODO: hsv, ansi and ansi16
     const hexColorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/
-    if (hexColorRegex.test(value)) {
+    if (hexColorRegex.test(value))
       return {
         type: 'hex',
         value: value.slice(1)
       }
-    }
 
     const rgbColorRegex = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/
     const rgbColorMatch = rgbColorRegex.exec(value)
-    if (rgbColorMatch) {
+    if (rgbColorMatch)
       return {
         type: 'rgb',
         value: [
@@ -148,11 +145,10 @@ class ColorCommand extends LCommand {
           Number(rgbColorMatch[3])
         ]
       }
-    }
 
     const hslHwbColorRegex = /^(hsl|hwb)\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/
     const hslHwbColorMatch = hslHwbColorRegex.exec(value)
-    if (hslHwbColorMatch) {
+    if (hslHwbColorMatch)
       return {
         type: hslHwbColorMatch[1],
         value: [
@@ -161,11 +157,10 @@ class ColorCommand extends LCommand {
           Number(hslHwbColorMatch[4])
         ]
       }
-    }
 
     const cmykColorRegex = /^cmyk\(\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/
     const cmykColorMatch = cmykColorRegex.exec(value)
-    if (cmykColorMatch) {
+    if (cmykColorMatch)
       return {
         type: 'cmyk',
         value: [
@@ -175,14 +170,12 @@ class ColorCommand extends LCommand {
           Number(cmykColorMatch[4])
         ]
       }
-    }
 
-    if (colors[value]) {
+    if (colors[value])
       return {
         type: 'keyword',
         value
       }
-    }
 
     return false
   }

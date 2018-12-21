@@ -34,13 +34,12 @@ class ConfigManager {
 
   _template () {
     const template = {}
-    for (const key of Object.keys(this._validKeys)) {
-      if (this._validKeys[key].default !== undefined) {
+    for (const key of Object.keys(this._validKeys))
+      if (this._validKeys[key].default !== undefined)
         template[key] = this._validKeys[key].default
-      } else {
+      else
         template[key] = ''
-      }
-    }
+
     return template
   }
 
@@ -70,7 +69,7 @@ class ConfigManager {
   _cast (to, value) {
     switch (to) {
       case 'number':
-        if (value === 'null') { return null }
+        if (value === 'null') return null
         return Number(value)
       case 'boolean':
         return Boolean(value)
@@ -89,27 +88,23 @@ class ConfigManager {
   }
 
   get (key) {
-    if (this._validKeys[key] === undefined) {
+    if (this._validKeys[key] === undefined)
       throw new Error('The key you specified is INVALID.')
-    }
 
     return this._config[key]
   }
 
   set (key, value) {
-    if (this._validKeys[key] === undefined) {
+    if (this._validKeys[key] === undefined)
       throw new Error('The key you specified is INVALID.')
-    }
 
     const allowed = this._validKeys[key].allowed
-    if (allowed && !allowed.includes(value)) {
+    if (allowed && !allowed.includes(value))
       throw new Error(`The key you specified can only be one of the following values: ${allowed.join(', ')}.`)
-    }
 
     const cast = this._validKeys[key].cast
-    if (cast) {
+    if (cast)
       value = this._cast(cast, value)
-    }
 
     this._config[String(key)] = value
     this.save()

@@ -32,17 +32,15 @@ class UrbanCommand extends LCommand {
     /* eslint-disable no-unreachable */
 
     let result
-    if (args.keyword) {
+    if (args.keyword)
       await message.status('progress', `Searching for \`${args.keyword}\` on Urban Dictionary\u2026`)
       // result = await ud.term(args.keyword)
-    } else {
+    else
       await message.status('progress', 'Looking up random definition on Urban Dictionary\u2026')
       // result = await ud.random()
-    }
 
-    if (!result) {
+    if (!result)
       return message.status('error', 'Could not fetch any definition.')
-    }
   }
 
   async displayDefinition (message, index, result, keyword) {

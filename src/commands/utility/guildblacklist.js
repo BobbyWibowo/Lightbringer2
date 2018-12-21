@@ -68,9 +68,8 @@ class GuildBlacklistCommand extends LCommand {
     const guilds = this.storage.get('guilds') || []
 
     if (args.list) {
-      if (!guilds || !guilds.length) {
+      if (!guilds || !guilds.length)
         return message.status('error', 'There are no blacklisted guilds.')
-      }
 
       const char = '\n'
       const embed = {
@@ -88,9 +87,8 @@ class GuildBlacklistCommand extends LCommand {
     } else if (args.add || args.addID) {
       const isID = args.addID !== null
       const { id, display } = await this.resolveSingleGuild(isID ? args.addID : args.add, isID)
-      if (this.homeGuild === id) {
+      if (this.homeGuild === id)
         return message.status('error', 'You can not blacklist the bot\'s home guild.')
-      }
 
       const index = guilds.indexOf(id)
       if (index > -1) {
@@ -123,36 +121,32 @@ class GuildBlacklistCommand extends LCommand {
       }
     }
 
-    if (!message.guild) {
+    if (!message.guild)
       return message.status('error', 'You must use any option when running this command outside of a guild.')
-    }
 
     const index = guilds.indexOf(message.guild.id)
 
-    if (index > -1) {
+    if (index > -1)
       guilds.splice(index, 1)
-    } else {
-      if (this.homeGuild === message.guild.id) {
-        return message.status('error', 'You can not blacklist the bot\'s home guild.')
-      } else {
-        guilds.push(message.guild.id)
-      }
-    }
+    else
+    if (this.homeGuild === message.guild.id)
+      return message.status('error', 'You can not blacklist the bot\'s home guild.')
+    else
+      guilds.push(message.guild.id)
 
     this.stc('guilds', guilds)
 
-    if (index > -1) {
+    if (index > -1)
       return message.status('success', 'Successfully removed the current guild from the blacklist.')
-    } else {
+    else
       return message.status('success', 'Successfully blacklisted the current guild.')
-    }
   }
 
   async resolveSingleGuild (keyword, isID) {
     if (isID) {
-      if (!/^\d+$/.test(keyword)) {
+      if (!/^\d+$/.test(keyword))
         throw new LError('Guild ID is invalid.')
-      }
+
       return { id: keyword, display: keyword }
     } else {
       const guild = await this.client.util.assertGuild(keyword)
@@ -169,17 +163,15 @@ class GuildBlacklistCommand extends LCommand {
   callInhibitor () {
     const inhibitorID = INHIBITOR_ID || this.storage.get('inhibitorID')
     const inhibitor = this.client.inhibitorHandler.modules.get(inhibitorID)
-    if (inhibitor && typeof inhibitor.update === 'function') {
+    if (inhibitor && typeof inhibitor.update === 'function')
       inhibitor.update()
-    }
   }
 
   onReady () {
     const homeGuild = this.client.configManager.get('homeGuild')
 
-    if (homeGuild) {
+    if (homeGuild)
       this.homeGuild = homeGuild
-    }
 
     this.storage = this.client.storage('guild-blacklist')
   }

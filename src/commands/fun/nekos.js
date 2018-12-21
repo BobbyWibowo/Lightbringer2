@@ -30,9 +30,8 @@ class NekosCommand extends LCommand {
 
     const result = await this.client.util.fetch(`https://nekos.life/api/v2/img/${isLewd ? 'lewd' : 'neko'}`)
 
-    if (result.status !== 200) {
+    if (result.status !== 200)
       return message.status('error', 'Failed to fetch image.')
-    }
 
     if (args.upload) {
       await message.channel.send({ files: [result.body.url] })

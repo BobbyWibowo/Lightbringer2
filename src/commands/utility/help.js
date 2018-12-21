@@ -47,9 +47,8 @@ class HelpCommand extends LCommand {
           const id = category.id
           const modules = category.array().filter(m => m.category.id === id && !m.hidden)
 
-          if (!modules.length) {
+          if (!modules.length)
             return false
-          }
 
           const lines = modules.map(m => {
             return `${this.client.util.pad(padding, m.id)} :: ${m.description || '<no description>'}`
@@ -64,9 +63,8 @@ class HelpCommand extends LCommand {
         .filter(f => f)
         .join('\n\n')
 
-      if (this.git) {
+      if (this.git)
         await message.edit(this.git)
-      }
 
       return this.client.util.multiSend(message.channel, formatted, {
         firstMessage: !this.git ? message : null,
@@ -82,13 +80,11 @@ class HelpCommand extends LCommand {
         Description :: ${args.command.description || 'N/A'}
       `
 
-      if (args.command.credits) {
+      if (args.command.credits)
         formatted += '\n' + `Credits     :: ${args.command.credits || 'N/A'}`
-      }
 
-      if (args.command.usage) {
+      if (args.command.usage)
         formatted += '\n' + `Usage       :: ${args.command.usage || 'N/A'}`
-      }
 
       const MIN_PAD = 11 // length of "Description"
 
@@ -148,9 +144,8 @@ class HelpCommand extends LCommand {
   }
 
   onReady () {
-    if (this.client.data.package.repository) {
+    if (this.client.data.package.repository)
       this.git = 'https://github.com/' + this.client.data.package.repository.replace(/^github:/, '')
-    }
   }
 }
 

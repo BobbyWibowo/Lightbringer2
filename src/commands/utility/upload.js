@@ -32,14 +32,13 @@ class UploadCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.url) {
+    if (!args.url)
       return message.status('error', `Usage: \`${this.usage}\`.`)
-    }
 
     const exec = /^<?(.+?)>?$/.exec(args.url)
-    if (!exec || !exec[1]) {
+    if (!exec || !exec[1])
       return message.status('error', 'Could not parse input.')
-    }
+
     args.url = exec[1].trim()
 
     // This will only prepend a progress icon to the message.
@@ -47,16 +46,15 @@ class UploadCommand extends LCommand {
 
     const options = this.patch(args.url)
     const result = await this.client.util.fetch(args.url, options, false)
-    if (result.status !== 200) {
+    if (result.status !== 200)
       return message.status('error', result.text)
-    }
 
     const parsed = path.parse(args.url)
     let extname = parsed.ext.split(/[?#]/)[0]
     // Built-in patch for Twitter's file extension
-    if (extname.endsWith(':large')) {
+    if (extname.endsWith(':large'))
       extname = extname.slice(0, -6)
-    }
+
     await message.channel.send(args.plain ? null : `<${args.url}>`, {
       files: [{
         attachment: result.body,
@@ -67,20 +65,17 @@ class UploadCommand extends LCommand {
   }
 
   patch (url, options = {}) {
-    if (/^https?:\/\/i\.pximg\.net\/img-master\//i.test(url)) {
+    if (/^https?:\/\/i\.pximg\.net\/img-master\//i.test(url))
       throw new LError('Pixiv URLs can not contain "img-master".')
-    }
 
-    if (options.headers === undefined) {
+    if (options.headers === undefined)
       options.headers = {}
-    }
 
     // Only apply referer patch if it was not specified beforehand
-    if (options.headers.referer === undefined) {
+    if (options.headers.referer === undefined)
       if (/^https?:\/\/i\.pximg\.net\/img-original\//.test(url)) {
         options.headers.referer = 'https://www.pixiv.net/member_illust.php?mode=medium&illust_id=0'
       }
-    }
 
     return options
   }

@@ -26,16 +26,14 @@ class UserRolesCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!message.guild && !args.guild) {
+    if (!message.guild && !args.guild)
       return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
-    }
 
     let guild = message.guild
 
     // Assert Guild.
-    if (args.guild) {
+    if (args.guild)
       guild = await this.client.util.assertGuild(args.guild)
-    }
 
     // Assert GuildMember,
     const member = await this.client.util.assertMember(args.keyword, guild, true, true)
@@ -67,11 +65,10 @@ class UserRolesCommand extends LCommand {
 
     // Message content (the thing being displayed above the embed).
     let content = 'My roles:'
-    if (mention) {
+    if (mention)
       content = `${member.toString()}'s roles:`
-    } else if (args.keyword) {
+    else if (args.keyword)
       content = `Roles of the user matching keyword \`${args.keyword}\`:`
-    }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,

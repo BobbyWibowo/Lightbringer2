@@ -21,9 +21,8 @@ class JumboCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.emojis) {
+    if (!args.emojis)
       return message.status('error', `Usage: \`${this.usage}\`.`)
-    }
 
     const files = args.emojis
       .split(' ')
@@ -31,21 +30,19 @@ class JumboCommand extends LCommand {
         const match = EMOJI_REGEX.exec(s)
         if (match && match[1]) {
           const emoji = this.client.emojis.get(match[1])
-          if (emoji) {
+          if (emoji)
             return {
               attachment: emoji.url,
               name: `${emoji.name}${path.extname(emoji.url)}`
             }
-          }
         }
       })
       .filter(f => f)
 
     files.length = Math.min(10, files.length)
 
-    if (!files.length) {
+    if (!files.length)
       return message.status('error', 'Could not parse message into emojis.')
-    }
 
     await message.channel.send({ files })
     await message.delete()

@@ -31,9 +31,8 @@ class FlushCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!message.guild || !this.client.util.hasPermissions(message.channel, 'MANAGE_MESSAGES')) {
+    if (!message.guild || !this.client.util.hasPermissions(message.channel, 'MANAGE_MESSAGES'))
       return message.status('error', 'You do not have permission to delete messages sent by someone else.')
-    }
 
     const limit = Math.min(args.amount, 100)
     await message.status('progress', `Fetching the last ${limit} messages\u2026`)

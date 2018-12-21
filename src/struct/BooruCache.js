@@ -15,22 +15,20 @@ class BooruCache {
   }
 
   async get (sites, tags = []) {
-    if (!this.storage) {
+    if (!this.storage)
       throw new Error('Storage system of booru cache is not yet ready.')
-    }
 
-    if (!sites) {
+    if (!sites)
       throw new Error('You must specify a booru site.')
-    }
 
-    if (!Array.isArray(sites)) { sites = [sites] }
+    if (!Array.isArray(sites)) sites = [sites]
 
     const stringTags = tags.join(' ')
     let matchingKey = this.storage.keys.find(key => {
-      if (key === stringTags) { return true }
+      if (key === stringTags) return true
       const splitKey = key.split(' ')
       const equalLengths = splitKey.length === tags.length
-      for (const tag of tags) { if (!splitKey.includes(tag)) { return false } }
+      for (const tag of tags) if (!splitKey.includes(tag)) return false
       return equalLengths
     })
     if (matchingKey === undefined) {
@@ -68,7 +66,7 @@ class BooruCache {
               Logger.error(`${site}: ${tags}: Error: ${error.message}`, { tag: this.tag })
             })
 
-          if (!_images || !_images.length) { return resolve(null) }
+          if (!_images || !_images.length) return resolve(null)
 
           storedSites[site] = _images
         } else {
@@ -79,7 +77,7 @@ class BooruCache {
         const image = storedSites[site][index]
         storedSites[site].splice(index, 1)
 
-        if (!image) { return resolve(null) }
+        if (!image) return resolve(null)
         Logger.log(`BooruCache: ${site}: ${tags}: ${storedSites[site].length} leftover.`, { tag: this.tag })
         return resolve(image)
       })

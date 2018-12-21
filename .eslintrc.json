@@ -12,7 +12,8 @@
   "rules": {
     "curly": [
       "error",
-      "all"
+      "multi",
+      "consistent"
     ],
     "prefer-const": [
       "error",

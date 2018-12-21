@@ -46,13 +46,11 @@ class BanCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!message.guild) {
+    if (!message.guild)
       return message.status('error', 'You can only use this command in a guild.')
-    }
 
-    if (!args.keyword) {
+    if (!args.keyword)
       return message.status('error', 'You must specify a guild member to ban.')
-    }
 
     if (args.refresh) {
       // Refresh GuildMemberStore.
@@ -63,11 +61,10 @@ class BanCommand extends LCommand {
     // Resolve GuildMember.
     const resolved = this.client.util.resolveMembers(args.keyword, message.guild.members)
 
-    if (resolved.size === 0) {
+    if (resolved.size === 0)
       return message.status('error', 'Could not find matching guild members.')
-    }
 
-    if (resolved.size > 1) {
+    if (resolved.size > 1)
       return message.status('error',
         this.client.util.formatMatchesList(resolved, {
           name: 'guild members',
@@ -75,27 +72,23 @@ class BanCommand extends LCommand {
         }),
         this.client.util.matchesListTimeout
       )
-    }
 
     // Proceed if there was only one result.
     const target = resolved.first()
 
-    if (target.user.id === this.client.user.id) {
+    if (target.user.id === this.client.user.id)
       return message.status('error', 'You can not ban yourself.')
-    }
 
-    if (target.user.id === message.guild.ownerID) {
+    if (target.user.id === message.guild.ownerID)
       return message.status('error', 'You can not ban the server owner.')
-    }
 
     await target.ban({
       days: args.days,
       reason: args.reason
     })
 
-    if (args.soft) {
+    if (args.soft)
       await message.guild.unban(target.user.id)
-    }
 
     return message.status('success', `Successfully ${args.soft ? 'soft-' : ''}banned ${escapeMarkdown(target.user.tag)} (ID: ${target.user.id}).`, -1)
   }

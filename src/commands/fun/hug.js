@@ -11,9 +11,8 @@ class HugCommand extends LCommand {
   }
 
   async exec (message) {
-    if (!message.mentions.users.size) {
+    if (!message.mentions.users.size)
       return message.status('error', '@mention someone to hug.')
-    }
 
     const result = await this.client.util.fetch('https://nekos.life/api/v2/img/hug')
 

@@ -44,7 +44,7 @@ class GuildsCommand extends LCommand {
 
     let diff
     let guilds = this.client.guilds
-    if (!self) {
+    if (!self)
       if (args.brute) {
         await message.status('progress', 'Fetching user from all the guilds which you are a member of\u2026')
         diff = process.hrtime()
@@ -58,52 +58,47 @@ class GuildsCommand extends LCommand {
         const profile = await user.fetchProfile()
         guilds = profile.mutualGuilds
       }
-    }
 
     // Check whether the keyword was a mention or not.
     const mention = args.keyword && this.client.util.isKeywordMentionable(args.keyword)
 
-    if (args.positionsort) {
+    if (args.positionsort)
       // Sort guilds by their position descendingly.
       guilds = guilds.sort((a, b) => a.position - b.position)
-    } else {
+    else
       // Sort guilds by their members count descendingly.
       // If the guilds have equal members count, sort by their name descendingly.
       guilds = guilds.sort((a, b) => b.memberCount - a.memberCount || a.name.localeCompare(b.name))
-    }
 
     const embed = {
       title: `${user.tag} [${guilds.size}]`
     }
 
     const char = '\n'
-    if (args.brief) {
+    if (args.brief)
       embed.description = guilds
         .map(g => g.name)
         .join(char)
-    } else {
+    else
       embed.description = guilds
         .map(g => {
           return `${g.name} – ${g.members.size} member${g.members.size === 1 ? '' : 's'}`
         })
         .join(char)
-    }
 
-    if (user.bot) {
+    if (user.bot)
       if (args.brute) {
         embed.footer = `Time taken with brute mode: ${this.client.util.formatHrTime(diff)}.`
       } else if (user.presence.status === 'offline') {
         embed.footer = 'The specified user is an offline bot, so the result may not be accurate.'
       }
-    }
 
     const sort = `(${args.positionsort ? 'client position' : 'members count'} sort)`
     let content = `My guilds ${sort}:`
-    if (mention) {
+    if (mention)
       content = `Mutual guilds with ${user.toString()} ${sort}:`
-    } else if (args.keyword) {
+    else if (args.keyword)
       content = `Mutual guilds with user matching keyword \`${args.keyword}\` ${sort}:`
-    }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,

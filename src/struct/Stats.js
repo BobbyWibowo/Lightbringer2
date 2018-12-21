@@ -9,11 +9,10 @@ class Stats {
   }
 
   set (key, value) {
-    if (value === undefined) {
+    if (value === undefined)
       delete this.data[key]
-    } else {
+    else
       this.data[key] = value
-    }
   }
 
   increment (key, amount) {

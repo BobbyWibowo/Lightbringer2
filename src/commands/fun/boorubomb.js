@@ -86,18 +86,18 @@ class BooruCommand extends LCommand {
       }
       const defaultSites = args.defaultSites.split(',')
       const invalids = defaultSites.map(s => [s, this.getSiteKey(s)]).filter(s => !s[1]).map(s => s[0])
-      if (invalids.length) {
+      if (invalids.length)
         return message.status('error', `Unavailable sites: ${this.inline(invalids)}.`)
-      }
+
       this.storage.set('defaultSites', defaultSites)
       this.storage.save()
       return message.status('success', `Successfully changed default sites to: ${this.inline(defaultSites)}.`)
     }
 
     if (args.last) {
-      if (!this.lastArgs) {
+      if (!this.lastArgs)
         return message.status('error', 'There are no saved arguments.')
-      }
+
       args = this.lastArgs
     } else {
       this.lastArgs = args
@@ -105,9 +105,8 @@ class BooruCommand extends LCommand {
 
     const sites = (args.sites ? args.sites.split(',') : null) || this.storage.get('defaultSites') || DEFAULT_SITES
     const siteKeys = sites.map(this.getSiteKey).filter(k => k)
-    if (!siteKeys.length) {
+    if (!siteKeys.length)
       return message.status('error', 'The sites you specified are unavailable.')
-    }
 
     const tags = args.tags ? args.tags.split(' ') : []
 
@@ -117,9 +116,8 @@ class BooruCommand extends LCommand {
     await message.status('progress', searchMessage)
 
     const images = await this.client.booruCache.get(siteKeys, tags)
-    if (!images.length) {
+    if (!images.length)
       return message.status('error', 'Could not find any images from the booru sites.')
-    }
 
     const imageUrls = images.map(image => this.client.util.cleanUrl(image.file_url))
     return message.edit(imageUrls.join('\n\n'))

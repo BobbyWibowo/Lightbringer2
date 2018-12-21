@@ -12,9 +12,8 @@ class InsultCommand extends LCommand {
   }
 
   async exec (message) {
-    if (!message.mentions.users.size) {
+    if (!message.mentions.users.size)
       return message.status('error', '@mention some people to insult.')
-    }
 
     const content = message.mentions.users
       .map(m => `${m} ${Insults[Math.round(Math.random() * Insults.length)]}`)

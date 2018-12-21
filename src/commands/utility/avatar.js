@@ -41,9 +41,8 @@ class AvatarCommand extends LCommand {
 
   async exec (message, args) {
     // When "--plain" flag is not used in channels where user have no permission to use embeds.
-    if (!args.plain && !this.client.util.hasPermissions(message.channel, ['EMBED_LINKS'])) {
+    if (!args.plain && !this.client.util.hasPermissions(message.channel, ['EMBED_LINKS']))
       return this.handler.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, this, 'client', ['EMBED_LINKS'])
-    }
 
     // Assert GuildMember or User.
     const memberSource = message.guild || null
@@ -55,44 +54,38 @@ class AvatarCommand extends LCommand {
     const mention = args.keyword && this.client.util.isKeywordMentionable(args.keyword)
 
     let size = 2048
-    if (args.size) {
+    if (args.size)
       if (AllowedImageSizes.includes(args.size)) {
         size = args.size
       } else {
         return message.status('error', `The size you specified was unavailable! Try one of the following: ${AllowedImageSizes.map(s => `\`${s}\``).join(', ')}.`)
       }
-    }
 
     // Get user's avatar.
     let avatarURL = user.displayAvatarURL({ size })
 
     // If could not get avatar.
-    if (!avatarURL) {
+    if (!avatarURL)
       return message.status('error', 'Could not get display avatar of the specified user.')
-    }
 
     // "--direct" flag.
-    if (args.direct) {
+    if (args.direct)
       avatarURL = avatarURL.replace('cdn.discordapp.com', 'images.discordapp.net')
-    }
 
     // When the avatar is a GIF, append "&f=.gif" so that the Discord client will properly play it.
-    if (/\.gif\?size=\d*?$/.test(avatarURL)) {
+    if (/\.gif\?size=\d*?$/.test(avatarURL))
       avatarURL += '&f=.gif'
-    }
 
     // Send a plain message when "--plain" flag is used.
-    if (args.plain) {
+    if (args.plain)
       return message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s avatar:\n${avatarURL}\n${this.selfdestruct()}`)
-    }
 
     // Otherwise, build embed then send it.
     let content = 'My avatar:'
-    if (mention) {
+    if (mention)
       content = `${(member || user).toString()}'s avatar:`
-    } else if (args.keyword) {
+    else if (args.keyword)
       content = `Avatar of the user matching keyword \`${args.keyword}\`:`
-    }
 
     const embed = {
       title: user.tag,

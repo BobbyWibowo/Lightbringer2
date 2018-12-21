@@ -25,16 +25,14 @@ class EmojisCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!message.guild && !args.keyword) {
+    if (!message.guild && !args.keyword)
       return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
-    }
 
     const match = /<a?:\w+?:(\d+?)>/.exec(args.keyword)
     if (match && match[1]) {
       const emoji = this.client.emojis.get(match[1])
-      if (emoji) {
+      if (emoji)
         return message.edit(`${this.formatEmoji(emoji)} is from ${emoji.guild.name} (ID: ${emoji.guild.id}).`)
-      }
     }
 
     const char = args.newline ? '\n' : '\u2000'
@@ -42,17 +40,15 @@ class EmojisCommand extends LCommand {
     let guild = message.guild
 
     // Assert Guild.
-    if (args.keyword) {
+    if (args.keyword)
       guild = await this.client.util.assertGuild(args.keyword)
-    }
 
     const color = await this.client.guildColors.get(guild)
 
     const emojis = guild.emojis
 
-    if (!emojis.size) {
+    if (!emojis.size)
       return message.status('error', 'The specified guild has no emojis.')
-    }
 
     const embed = {
       title: `${guild.name} [${emojis.size}]`,
@@ -62,9 +58,8 @@ class EmojisCommand extends LCommand {
     }
 
     let content = 'Emojis of the currently viewed guild:'
-    if (args.keyword) {
+    if (args.keyword)
       content = `Emojis of the guild matching keyword \`${args.keyword}\`:`
-    }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {
       firstMessage: message,
@@ -75,11 +70,10 @@ class EmojisCommand extends LCommand {
   }
 
   formatEmoji (emoji) {
-    if (emoji.requiresColons) {
+    if (emoji.requiresColons)
       return `${emoji.toString()} \`:${emoji.name}:\``
-    } else {
+    else
       return `${emoji.toString()} \`${emoji.name}\``
-    }
   }
 }
 

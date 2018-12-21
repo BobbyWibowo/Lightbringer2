@@ -73,9 +73,8 @@ class CurrencyCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (args.source) {
+    if (args.source)
       return message.edit('ℹ\u2000Exchange rate provided by https://fixer.io/.')
-    }
 
     if (args.apiKey) {
       this.storage.set('apiKey', args.apiKey)
@@ -84,16 +83,14 @@ class CurrencyCommand extends LCommand {
     }
 
     if (!this.data || args.refresh) {
-      if (!this.storage.get('apiKey')) {
+      if (!this.storage.get('apiKey'))
         return message.status('error', 'Missing API key!\nGet your Fixer.io API key from **https://fixer.io** then run `currency --key=<apiKey>` to save the API key!', -1)
-      }
 
       await message.status('progress', 'Updating exchange rate\u2026')
       await this.updateRates()
 
-      if (args.refresh) {
+      if (args.refresh)
         return message.status('success', 'Successfully updated exchange rate.')
-      }
     }
 
     const base = this.data.base
@@ -101,53 +98,44 @@ class CurrencyCommand extends LCommand {
 
     if (args.default) {
       const curr = args.default
-      if (rates[curr] === undefined && curr !== base) {
+      if (rates[curr] === undefined && curr !== base)
         return message.status('error', `Currency \`${curr}\` is unavailable.`)
-      }
+
       this.default = args.default
       return message.status('success', `Successfully updated default currency to \`${this.default}\`.`)
     }
 
-    if (!args.input || args.input.length < 2) {
+    if (!args.input || args.input.length < 2)
       return message.status('error', `Usage: \`${this.usage}\`.`)
-    }
 
     const val = parseFloat(args.input[0])
-    if (isNaN(val)) {
+    if (isNaN(val))
       return message.status('error', 'Invalid value.')
-    }
 
     const curr1 = args.input[1]
     let curr2 = args.input[2]
 
     // If the 2nd input is "to", then expect the 2nd currency to be in the 3rd input
-    if (/^to$/i.test(curr2)) {
+    if (/^to$/i.test(curr2))
       curr2 = args.input[3]
-    }
 
-    if (!curr2 && this.default) {
+    if (!curr2 && this.default)
       curr2 = this.default
-    }
 
-    if (!curr2) {
+    if (!curr2)
       return message.status('error', 'Missing "to" currency.')
-    }
 
-    for (const curr of [curr1, curr2]) {
-      if (rates[curr] === undefined && curr !== base) {
+    for (const curr of [curr1, curr2])
+      if (rates[curr] === undefined && curr !== base)
         return message.status('error', `Currency \`${curr}\` is unavailable.`)
-      }
-    }
 
     let sum = val
 
-    if (curr1 !== base) {
+    if (curr1 !== base)
       sum /= rates[curr1]
-    }
 
-    if (curr2 !== base) {
+    if (curr2 !== base)
       sum *= rates[curr2]
-    }
 
     const lHand = `${mathjs.round(val, 2).toLocaleString()} ${curr1}`
     const rHand = `${mathjs.round(sum, 2).toLocaleString()} ${curr2}`
@@ -156,27 +144,24 @@ class CurrencyCommand extends LCommand {
   }
 
   async updateRates () {
-    if (!this.storage.get('apiKey')) { return }
+    if (!this.storage.get('apiKey')) return
 
     // Allowing only 1 running instance of this function
-    if (this._updatingRates) {
+    if (this._updatingRates)
       return new Promise(resolve => setInterval(() => {
-        if (!this._updatingRates) { resolve() }
+        if (!this._updatingRates) resolve()
       }, 1000))
-    }
 
     this._updatingRates = true
 
     const _querystring = querystring.stringify({ access_key: this.storage.get('apiKey') })
     const result = await this.client.util.fetch(`http://data.fixer.io/api/latest?${_querystring}`)
 
-    if (result.status !== 200) {
+    if (result.status !== 200)
       throw new Error(result.text)
-    }
 
-    if (!result.body.success) {
+    if (!result.body.success)
       throw new Error(`${result.body.error.code}: ${result.body.error.type}`)
-    }
 
     this.data = result.body
 
@@ -198,7 +183,7 @@ class CurrencyCommand extends LCommand {
   onReady () {
     this.storage = this.client.storage('currency')
     this.default = this.storage.get('default')
-    if (!this.default) { this.default = null }
+    if (!this.default) this.default = null
 
     this.updateRates().catch(error => {
       Logger.error(error, { tag: this.id })

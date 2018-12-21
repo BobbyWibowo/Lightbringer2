@@ -88,9 +88,8 @@ class LastfmCommand extends LCommand {
           description: 'Sets the activity type. Try "setactivity --list" to see available types.',
           type: (word, message, args) => {
             const keys = Object.keys(ACTIVITY_TYPES)
-            for (const key of keys) {
-              if (ACTIVITY_TYPES[key].test(word)) { return key }
-            }
+            for (const key of keys)
+              if (ACTIVITY_TYPES[key].test(word)) return key
           }
         },
         {
@@ -116,20 +115,19 @@ class LastfmCommand extends LCommand {
       { arg: 'autoTimestamp', key: 'autoTimestamp', string: 'auto timestamp' }
     ]
 
-    for (const toggle of toggles) {
+    for (const toggle of toggles)
       if (args[toggle.arg]) {
         const val = Boolean(this.storage.get(toggle.key))
         this.storage.set(toggle.key, !val)
         this.storage.save()
 
-        if (this.storage.get('enabled')) {
+        if (this.storage.get('enabled'))
           await this.setPresenceFromStorage()
-        } else {
+        else
           await this.client.user.setPresence({ activity: null })
-        }
+
         return message.status('success', `${!val ? 'Enabled' : 'Disabled'} ${toggle.string}.`)
       }
-    }
 
     let storageHit
     this._storageKeys.forEach(key => {
@@ -142,7 +140,7 @@ class LastfmCommand extends LCommand {
 
     if (storageHit) {
       this.storage.save()
-      if (this.storage.get('enabled')) { await this.setPresenceFromStorage() }
+      if (this.storage.get('enabled')) await this.setPresenceFromStorage()
       return message.status('success', 'Successfully saved the new value(s).')
     }
 
@@ -152,7 +150,7 @@ class LastfmCommand extends LCommand {
         return message.status('error', `Option with ID \`${args.clearOption}\` was not set.`)
       } else {
         this.storage.set(args.clearOption, null)
-        if (this.storage.get('enabled')) { await this.setPresenceFromStorage() }
+        if (this.storage.get('enabled')) await this.setPresenceFromStorage()
         return message.status('success', `Cleared option with ID \`${args.clearOption}\`.`)
       }
     }
@@ -175,7 +173,7 @@ class LastfmCommand extends LCommand {
 
   setPresenceFromStorage () {
     const clientID = this.storage.get('clientID')
-    if (!clientID) { throw new Error('Missing client ID.') }
+    if (!clientID) throw new Error('Missing client ID.')
 
     return this.client.user.setPresence({
       activity: {
@@ -202,20 +200,19 @@ class LastfmCommand extends LCommand {
   }
 
   getTimestamp () {
-    if (this.storage.get('autoTimestamp')) { return new Date().getTime() }
+    if (this.storage.get('autoTimestamp')) return new Date().getTime()
     return this.storage.get('unixTimestamp') || null
   }
 
   onReady () {
     this.storage = this.client.storage('setrp')
 
-    if (this.storage.get('enabled')) {
+    if (this.storage.get('enabled'))
       this.setPresenceFromStorage().then(() => {
         Logger.info('Enabled Rich Presence activity.', { tag: this.id })
       }).catch(error => {
         Logger.error(error.message, { tag: this.id })
       })
-    }
   }
 
   onReload () {

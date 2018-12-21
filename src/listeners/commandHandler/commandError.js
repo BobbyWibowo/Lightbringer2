@@ -12,11 +12,10 @@ class CommandErrorListener extends Listener {
   }
 
   async exec (error, message, command) {
-    if (error instanceof DiscordAPIError || error instanceof AkairoError) {
+    if (error instanceof DiscordAPIError || error instanceof AkairoError)
       return message.status('error', error.toString())
-    } else if (error instanceof LError) {
+    else if (error instanceof LError)
       return message.status('error', error.toString(), error.timeout)
-    }
 
     Logger.error(error, { tag: command ? command.id : undefined })
     return message.status('error',

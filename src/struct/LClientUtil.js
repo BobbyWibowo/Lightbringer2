@@ -33,39 +33,32 @@ class LClientUtil extends ClientUtil {
     // to apply some extended behavior.
     if (data) {
       // Resolve ColorResolvable to number.
-      if (data.color !== undefined) {
+      if (data.color !== undefined)
         data.color = resolveColor(data.color)
-      }
 
       // Apply default 'inline' property if available
       // onto fields that do NOT yet have them.
-      if (data.inline !== undefined) {
+      if (data.inline !== undefined)
         if (data.fields !== undefined) {
-          for (let i = 0; i < data.fields.length; i++) {
-            if (data.fields[i].inline === undefined) {
+          for (let i = 0; i < data.fields.length; i++)
+            if (data.fields[i].inline === undefined)
               data.fields[i].inline = data.inline
-            }
-          }
+
           delete data.inline
         }
-      }
 
       // String data to its proper Object equivalent.
-      if (typeof data.author === 'string') {
+      if (typeof data.author === 'string')
         data.author = { name: data.author }
-      }
 
-      if (typeof data.footer === 'string') {
+      if (typeof data.footer === 'string')
         data.footer = { text: data.footer }
-      }
 
-      if (typeof data.image === 'string') {
+      if (typeof data.image === 'string')
         data.image = { url: data.image }
-      }
 
-      if (typeof data.thumbnail === 'string') {
+      if (typeof data.thumbnail === 'string')
         data.thumbnail = { url: data.thumbnail }
-      }
 
       // Move 'icon' property to 'iconURL' property since
       // 'icon' will often be used as a shortcut to 'iconURL'.
@@ -86,13 +79,13 @@ class LClientUtil extends ClientUtil {
   resolveUsers (text, users, caseSensitive = false, wholeWord = false, tryExact = false, tryGlobalId = false) {
     if (tryGlobalId) {
       const get = this.client.users.get(text)
-      if (get) { return new Collection([[ get.id, get ]]) }
+      if (get) return new Collection([[ get.id, get ]])
     }
 
     const loose = users.filter(user => this.checkUser(text, user, caseSensitive, wholeWord))
     if (tryExact && !(caseSensitive && wholeWord) && loose.size > 1) {
       const strict = loose.filter(user => this.checkUser(text, user, true, true))
-      if (strict.size) { return strict }
+      if (strict.size) return strict
     }
 
     return loose
@@ -102,9 +95,8 @@ class LClientUtil extends ClientUtil {
     const loose = members.filter(member => this.checkMember(text, member, caseSensitive, wholeWord))
     if (tryExact && !(caseSensitive && wholeWord) && loose.size > 1) {
       const exact = loose.filter(member => this.checkMember(text, member, true, true))
-      if (exact.size) {
+      if (exact.size)
         return exact
-      }
     }
 
     return loose
@@ -113,15 +105,14 @@ class LClientUtil extends ClientUtil {
   resolveChannels (text, channels, caseSensitive = false, wholeWord = false, tryExact = false, tryGlobalId = false) {
     if (tryGlobalId) {
       const get = this.client.channels.get(text)
-      if (get) { return new Collection([[ get.id, get ]]) }
+      if (get) return new Collection([[ get.id, get ]])
     }
 
     const loose = channels.filter(channel => this.checkChannel(text, channel, caseSensitive, wholeWord))
     if (tryExact && !(caseSensitive && wholeWord) && loose.size > 1) {
       const exact = loose.filter(channel => this.checkChannel(text, channel, true, true))
-      if (exact.size) {
+      if (exact.size)
         return exact
-      }
     }
 
     return loose
@@ -131,9 +122,8 @@ class LClientUtil extends ClientUtil {
     const loose = roles.filter(role => this.checkRole(text, role, caseSensitive, wholeWord))
     if (tryExact && !(caseSensitive && wholeWord) && loose.size > 1) {
       const exact = loose.filter(role => this.checkRole(text, role, true, true))
-      if (exact.size) {
+      if (exact.size)
         return exact
-      }
     }
 
     return loose
@@ -142,24 +132,22 @@ class LClientUtil extends ClientUtil {
   resolveGuilds (text, guilds, caseSensitive = false, wholeWord = false, tryExact = false, tryGlobalId = false) {
     if (tryGlobalId) {
       const get = this.client.guilds.get(text)
-      if (get) { return new Collection([[ get.id, get ]]) }
+      if (get) return new Collection([[ get.id, get ]])
     }
 
     const loose = guilds.filter(guild => this.checkGuild(text, guild, caseSensitive, wholeWord))
     if (tryExact && !(caseSensitive && wholeWord) && loose.size > 1) {
       const exact = loose.filter(guild => this.checkGuild(text, guild, true, true))
-      if (exact.size) {
+      if (exact.size)
         return exact
-      }
     }
 
     return loose
   }
 
   async sendStatus (message, options) {
-    if (this.client._statusChannel && this.client._statusChannel instanceof TextChannel) {
+    if (this.client._statusChannel && this.client._statusChannel instanceof TextChannel)
       return this.client._statusChannel.send(message, options || {})
-    }
   }
 
   async fetch (url, options, logError = true) {
@@ -173,7 +161,7 @@ class LClientUtil extends ClientUtil {
         }
       })
       .catch(error => {
-        if (logError) { Logger.error(error) }
+        if (logError) Logger.error(error)
         return {
           status: -1,
           text: error.toString()
@@ -182,20 +170,18 @@ class LClientUtil extends ClientUtil {
   }
 
   async assertSingleItem (items, { name = 'matches', prop, syntax }, disableNotFound = false) {
-    if (items.size === 1) {
+    if (items.size === 1)
       return items.first()
-    } else if (items.size > 1) {
+    else if (items.size > 1)
       throw new LError(this.formatMatchesList(items, { name, prop, syntax }), this.matchesListTimeout)
-    } else if (!disableNotFound) {
+    else if (!disableNotFound)
       throw new LError(`Could not find any ${name} matching the keyword.`)
-    }
   }
 
   async assertUser (keyword, source = this.client.users, fallbackToClient = false, disableNotFound = false) {
     // Return ClientUser.
-    if (keyword === null && fallbackToClient) {
+    if (keyword === null && fallbackToClient)
       return this.client.user
-    }
 
     const resolved = this.resolveUsers(keyword, source, false, false, true, true)
     return this.assertSingleItem(resolved, {
@@ -206,20 +192,17 @@ class LClientUtil extends ClientUtil {
   }
 
   async assertMember (keyword, source, refreshStore = false, fallbackToClient = false, disableNotFound = false) {
-    if (typeof source === 'string') {
+    if (typeof source === 'string')
       source = await this.assertGuild(source)
-    }
 
     if (source instanceof Guild) {
       // Return GuildMember instance of the client.
-      if (keyword === null && fallbackToClient) {
+      if (keyword === null && fallbackToClient)
         return source.me
-      }
 
       // Refresh GuildMemberStore.
-      if (refreshStore) {
+      if (refreshStore)
         await source.members.fetch()
-      }
 
       source = source.members
     }
@@ -233,13 +216,11 @@ class LClientUtil extends ClientUtil {
   }
 
   async assertChannel (keyword, source = this.client.channels) {
-    if (typeof source === 'string') {
+    if (typeof source === 'string')
       source = await this.assertGuild(source)
-    }
 
-    if (source instanceof Guild) {
+    if (source instanceof Guild)
       source = source.channels
-    }
 
     const resolved = this.resolveChannels(keyword, source, false, false, true, true)
     return this.assertSingleItem(resolved, {
@@ -249,13 +230,11 @@ class LClientUtil extends ClientUtil {
   }
 
   async assertRole (keyword, source) {
-    if (typeof source === 'string') {
+    if (typeof source === 'string')
       source = await this.assertGuild(source)
-    }
 
-    if (source instanceof Guild) {
+    if (source instanceof Guild)
       source = source.roles
-    }
 
     const resolved = this.resolveRoles(keyword, source, false, false, true)
     return this.assertSingleItem(resolved, {
@@ -286,14 +265,13 @@ class LClientUtil extends ClientUtil {
     if (result.member === undefined) {
       // When userSource is missing, it will use default, which is this.client.users
       const asserted = await this.assertUser(keyword, userSource, true, true)
-      if (asserted) { result.user = asserted }
+      if (asserted) result.user = asserted
     }
 
-    if (result.user === undefined) {
+    if (result.user === undefined)
       // This should not ever be triggered as "this.assertUser" will
       // throw an Error when it can not find any matches.
       throw new LError('Could not find any members or users matching the keyword.')
-    }
 
     return result
   }
@@ -309,9 +287,8 @@ class LClientUtil extends ClientUtil {
       if (fetch) {
         Logger.log(`Fetching ${userId} from ${guild.id}.`, { tag: 'LClientUtil/fetchMutualGuilds' })
         const fetchResult = await guild.members.fetch(userId).catch(() => false)
-        if (fetchResult) {
+        if (fetchResult)
           mutualGuilds.set(guild.id, guild)
-        }
       }
     }
 
@@ -319,39 +296,34 @@ class LClientUtil extends ClientUtil {
   }
 
   formatMatchesList (matches, { name = 'matches', prop, syntax = 'css' }) {
-    if (typeof prop === 'string') {
+    if (typeof prop === 'string')
       prop = [prop]
-    }
 
     const size = matches.size
 
     const list = matches
       .map(match => {
-        if (!prop) {
+        if (!prop)
           return match
-        }
 
         let value
         for (const p of prop) {
           value = this.getProp(match, p)
-          if (value !== undefined) {
+          if (value !== undefined)
             break
-          }
         }
 
-        if (value) {
+        if (value)
           return escapeMarkdown(value, true)
-        } else {
+        else
           return 'undefined'
-        }
       })
       .sort((a, b) => a.localeCompare(b))
 
     if (!isNaN(this.maxMatchesListLength) && this.maxMatchesListLength > 0) {
       list.length = Math.min(this.maxMatchesListLength, size)
-      if (size > this.maxMatchesListLength) {
+      if (size > this.maxMatchesListLength)
         list.push(`and ${size - list.length} more \u2026`)
-      }
     }
 
     return `Multiple ${name} found, please be more specific:\n` +
@@ -363,17 +335,16 @@ class LClientUtil extends ClientUtil {
     // such as MANAGE_MESSAGES. This function was made to be primarily
     // used to check EMBED_LINKS permission since it's bound
     // to be always available in DMChannel and GroupDMChannel.
-    if (!(channel instanceof TextChannel)) {
+    if (!(channel instanceof TextChannel))
       return true
-    }
 
     return channel.permissionsFor(channel.guild.me).has(permissions)
   }
 
   getProp (object, props) {
-    if (!object || !props) { return }
+    if (!object || !props) return
 
-    if (typeof props === 'string') {
+    if (typeof props === 'string')
       if (props.includes('.')) {
         const propsArr = props.split('.')
         props = []
@@ -391,16 +362,14 @@ class LClientUtil extends ClientUtil {
       } else {
         props = [props]
       }
-    } else if (!Array.isArray(props)) {
+    else if (!Array.isArray(props))
       return object
-    }
 
     for (let i = 0; i < props.length; i++) {
       object = object[props[i]]
 
-      if (object === undefined) {
+      if (object === undefined)
         break
-      }
     }
 
     return object
@@ -433,46 +402,43 @@ class LClientUtil extends ClientUtil {
 
     const result = []
     for (let i = 0; i < parsed.length; i++) {
-      if (!result.length && parsed[i].int === 0) {
+      if (!result.length && parsed[i].int === 0)
         continue
-      }
 
-      if (maxUnits && (result.length >= maxUnits)) {
+      if (maxUnits && (result.length >= maxUnits))
         break
-      }
 
       let int = parsed[i].int
-      if (!result.length && fraction && i === parsed.length - 1) {
+      if (!result.length && fraction && i === parsed.length - 1)
         int = int.toFixed(1)
-      } else {
+      else
         int = int.toFixed(0)
-      }
 
       let substring = `${int}`
       if (short) {
         substring += parsed[i].name.charAt(0)
       } else {
         substring += ` ${parsed[i].name}`
-        if (parseFloat(int) !== 1) { substring += 's' }
+        if (parseFloat(int) !== 1) substring += 's'
       }
 
       result.push(substring)
     }
 
     return result.map((res, i) => {
-      if (!short) {
+      if (!short)
         if (i === result.length - 2) {
           return res + ' and'
         } else if (i !== result.length - 1) {
           return res + ','
         }
-      }
+
       return res
     }).join(' ')
   }
 
   fromNow (date) {
-    if (!date) { return false }
+    if (!date) return false
 
     const timeMs = new Date().getTime() - date.getTime()
 
@@ -489,38 +455,32 @@ class LClientUtil extends ClientUtil {
   }
 
   formatCode (text, lang, inline) {
-    if (typeof lang !== 'string') {
+    if (typeof lang !== 'string')
       lang = ''
-    }
 
-    if (inline) {
+    if (inline)
       return '`' + text + '`'
-    } else {
+    else
       return '```' + lang + '\n' + text + '\n' + '```'
-    }
   }
 
   formatHrTime (timeHr) {
-    if (!Array.isArray(timeHr)) {
+    if (!Array.isArray(timeHr))
       throw new Error('timeHr must be an instance of Array.')
-    }
 
     let prefix = ''
-    if (timeHr[0] > 0) {
+    if (timeHr[0] > 0)
       prefix = this.humanizeDuration(timeHr[0] * 1000, null, true, false)
-    }
 
     const timeMs = timeHr[1] / 1e6
-    if (timeMs === 0) {
+    if (timeMs === 0)
       return prefix || '0.000ms'
-    }
 
     let suffix = ''
-    if (timeMs < 100) {
+    if (timeMs < 100)
       suffix = `${timeMs.toFixed(3)}ms`
-    } else {
+    else
       suffix = `${timeMs.toFixed(1)}ms`
-    }
 
     return `${prefix} ${suffix}`.trim()
   }
@@ -532,9 +492,9 @@ class LClientUtil extends ClientUtil {
 
   isKeywordMentionable (keyword, type) {
     // Role mention.
-    if (type === 1) { return PATTERNS.ROLES.test(keyword) }
+    if (type === 1) return PATTERNS.ROLES.test(keyword)
     // Channel mention.
-    if (type === 2) { return PATTERNS.CHANNELS.test(keyword) }
+    if (type === 2) return PATTERNS.CHANNELS.test(keyword)
     // User/Member mention.
     return PATTERNS.USERS.test(keyword)
   }
@@ -549,29 +509,25 @@ class LClientUtil extends ClientUtil {
   }
 
   formatActivityType (type, lower) {
-    if (typeof type !== 'string') {
+    if (typeof type !== 'string')
       type = ActivityTypes[type]
-    }
 
     type = lower ? type.toLowerCase() : type.charAt(0) + type.slice(1).toLowerCase()
 
-    if (/^listening$/i.test(type)) {
+    if (/^listening$/i.test(type))
       type += ' to'
-    }
 
     return type
   }
 
   pad (padding, string, paddingLeft) {
-    if (string === undefined) {
+    if (string === undefined)
       return padding
-    }
 
-    if (paddingLeft) {
+    if (paddingLeft)
       return (padding + string).slice(-padding.length)
-    } else {
+    else
       return (string + padding).substring(0, padding.length)
-    }
   }
 
   async multiSend (channel, text, options) {
@@ -585,28 +541,24 @@ class LClientUtil extends ClientUtil {
       maxLength = 2000
     } = options
 
-    if (typeof code === 'string') {
+    if (typeof code === 'string')
       // 3 (```); code; 1 (\n); 1 (\n); 3 (```)
       maxLength -= 3 + code.length + 1 + 1 + 3
-    }
 
     let messages = splitMessage(text, { maxLength, char })
 
-    if (!Array.isArray(messages)) {
+    if (!Array.isArray(messages))
       messages = [messages]
-    }
 
-    if (typeof code === 'string') {
+    if (typeof code === 'string')
       messages = messages.map(s => this.formatCode(s, code))
-    }
 
-    for (let i = 0; i < messages.length; i++) {
-      if (firstMessage instanceof Message && i === 0) {
+    for (let i = 0; i < messages.length; i++)
+      if (firstMessage instanceof Message && i === 0)
         await firstMessage.edit(messages[i])
-      } else {
+      else
         await channel.send(messages[i])
-      }
-    }
+
     return true
   }
 
@@ -629,42 +581,35 @@ class LClientUtil extends ClientUtil {
       maxLength = 2000
     } = options
 
-    if (typeof code === 'string') {
+    if (typeof code === 'string')
       // 3 (```); code; 1 (\n); 1 (\n); 3 (```)
       maxLength -= 3 + code.length + 1 + 1 + 3
-    }
 
     let firstExtraLength = 0
     let lastExtraLength = 0
 
     // Calculate extra lengths.
-    if (content) {
+    if (content)
       firstExtraLength += content.length
-    }
 
-    if (prefix) {
+    if (prefix)
       firstExtraLength += prefix.length
-    }
 
-    if (data.title) {
+    if (data.title)
       firstExtraLength += data.title.length
-    }
 
-    if (typeof data.author === 'string') {
+    if (typeof data.author === 'string')
       firstExtraLength += data.author.length
-    } else if (data.author !== undefined && data.author.name !== undefined) {
+    else if (data.author !== undefined && data.author.name !== undefined)
       firstExtraLength += data.author.name.length
-    }
 
-    if (suffix) {
+    if (suffix)
       lastExtraLength += suffix.length
-    }
 
-    if (typeof data.footer === 'string') {
+    if (typeof data.footer === 'string')
       lastExtraLength += data.footer.length
-    } else if (data.footer !== undefined && data.footer.text !== undefined) {
+    else if (data.footer !== undefined && data.footer.text !== undefined)
       lastExtraLength += data.footer.text.length
-    }
 
     const splitDescs = description.split(char)
     let tempDesc = ''
@@ -678,9 +623,8 @@ class LClientUtil extends ClientUtil {
         color: data.color
       }
 
-      if (typeof code === 'string') {
+      if (typeof code === 'string')
         desc = this.formatCode(desc, code)
-      }
 
       if (first) {
         desc = (prefix || '') + desc
@@ -706,11 +650,10 @@ class LClientUtil extends ClientUtil {
 
       let tempMaxLength = maxLength
 
-      if (!messages.length) {
+      if (!messages.length)
         tempMaxLength -= firstExtraLength
-      } else if (isLast) {
+      else if (isLast)
         tempMaxLength -= lastExtraLength
-      }
 
       if ((tempDesc.length + splitDescs[i].length + char.length) > tempMaxLength) {
         push(tempDesc)
@@ -719,11 +662,10 @@ class LClientUtil extends ClientUtil {
         tempDesc += splitDescs[i]
       }
 
-      if (isLast) {
+      if (isLast)
         push(tempDesc, isLast)
-      } else {
+      else
         tempDesc += char
-      }
     }
 
     const msgs = []
@@ -741,18 +683,16 @@ class LClientUtil extends ClientUtil {
   }
 
   truncate (string, max, append = '') {
-    if (!string || !max || (1 + append.length) >= max) {
+    if (!string || !max || (1 + append.length) >= max)
       return ''
-    }
 
-    if (string.length <= max && !append) {
+    if (string.length <= max && !append)
       return string
-    }
 
     string = string.slice(0, max - 1 - append.length)
-    if (/\s/.test(string.charAt(string.length - 1))) {
+    if (/\s/.test(string.charAt(string.length - 1)))
       string = string.replace(/\s+?$/, '')
-    }
+
     return string + '\u2026' + append
   }
 
@@ -771,7 +711,7 @@ class LClientUtil extends ClientUtil {
   shuffle (array, iteration = 1) {
     const newArray = array.slice(0)
     // Simple array shuffling function.
-    for (let i = 0; i < iteration; i++) {
+    for (let i = 0; i < iteration; i++)
       for (let j = 0; j < newArray.length; j++) {
         // Get new position.
         const newIndex = this.client.util.rand(0, newArray.length - 1)
@@ -780,7 +720,7 @@ class LClientUtil extends ClientUtil {
         newArray[newIndex] = newArray[j]
         newArray[j] = t
       }
-    }
+
     // Return shuffled array.
     return newArray
   }
@@ -788,9 +728,9 @@ class LClientUtil extends ClientUtil {
   async getAverageColor (source) {
     return new Promise((resolve, reject) => {
       pixelAverage(source, (err, averages) => {
-        if (err) {
+        if (err)
           return reject(new Error('shit happened'))
-        }
+
         return resolve([Math.round(averages.red), Math.round(averages.green), Math.round(averages.blue)])
       })
     })
@@ -799,11 +739,11 @@ class LClientUtil extends ClientUtil {
   getPrettyBytes (num) {
     // MIT License
     // Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
-    if (!Number.isFinite(num)) { return num }
+    if (!Number.isFinite(num)) return num
 
     const neg = num < 0
-    if (neg) { num = -num }
-    if (num < 1) { return (neg ? '-' : '') + num + ' B' }
+    if (neg) num = -num
+    if (num < 1) return (neg ? '-' : '') + num + ' B'
 
     const exponent = Math.min(Math.floor(Math.log10(num) / 3), units.length - 1)
     const numStr = Number((num / Math.pow(1000, exponent)).toPrecision(3))

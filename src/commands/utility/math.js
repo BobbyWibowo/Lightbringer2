@@ -57,13 +57,11 @@ class MathCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (args.documentation) {
+    if (args.documentation)
       return message.status('success', 'Math.js documentation: http://mathjs.org/docs/.', -1)
-    }
 
-    if (args.printScope) {
+    if (args.printScope)
       return message.edit(`⚙\u2000Global scope of \`${this.id}\` command:\n${this.client.util.formatCode(require('util').inspect(this.scope), 'js')}`)
-    }
 
     if (args.clearScope && !args.expressions) {
       this.scope = {}
@@ -72,9 +70,8 @@ class MathCommand extends LCommand {
       return message.status('success', 'Cleared global scope.')
     }
 
-    if (!args.expressions) {
+    if (!args.expressions)
       return message.status('error', `Usage: \`${this.usage}\`.`)
-    }
 
     const scope = args.localScope ? {} : this.scope
 

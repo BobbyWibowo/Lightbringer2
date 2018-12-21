@@ -38,13 +38,11 @@ class PurgeCommand extends LCommand {
       before: args.before || message.id
     })
 
-    if (!message.guild || !this.client.util.hasPermissions(message.channel, 'MANAGE_MESSAGES')) {
+    if (!message.guild || !this.client.util.hasPermissions(message.channel, 'MANAGE_MESSAGES'))
       messages = messages.filter(m => m.author.id === this.client.user.id)
-    }
 
-    if (!messages.size) {
+    if (!messages.size)
       return message.status('error', 'There are no messages that you can purge.')
-    }
 
     await message.status('progress', `Purging ${messages.size} message${messages.size !== 1 ? 's' : ''}\u2026`)
     await Promise.all(messages.map(m => m.delete({ reason: args.reason })))

@@ -27,10 +27,9 @@ class FortuneCommand extends LCommand {
           id: 'type',
           match: 'rest',
           type: (word, message, args) => {
-            if (!word.length) { return '' }
-            for (const key of Object.keys(CATEGORIES)) {
-              if (CATEGORIES[key].test(word)) { return key }
-            }
+            if (!word.length) return ''
+            for (const key of Object.keys(CATEGORIES))
+              if (CATEGORIES[key].test(word)) return key
           },
           description: 'The type of fortune cookie (randomized when not specified).'
         }
@@ -40,20 +39,17 @@ class FortuneCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (args.type === null) {
+    if (args.type === null)
       return message.status('error', 'That type is unavailable! Use `--list` flag to list all available types.')
-    }
 
-    if (args.list) {
+    if (args.list)
       return message.edit(`🔮\u2000|\u2000**Available types:** ${Object.keys(CATEGORIES).join(', ')}.`)
-    }
 
     await message.edit('🔄\u2000Getting a fortune cookie\u2026')
     const result = await this.client.util.fetch(`http://yerkee.com/api/fortune/${args.type}`)
 
-    if (result.status !== 200) {
+    if (result.status !== 200)
       return message.status('error', 'Could not retrieve fortune.')
-    }
 
     await message.edit(`🔮\u2000|\u2000**Fortune cookie${args.type.length ? ` (${args.type})` : ''}:**\n\n${result.body.fortune}`)
   }

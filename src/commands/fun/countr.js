@@ -13,7 +13,7 @@ class CountrCommand extends LCommand {
     // as we expect that the message will be deleted by Countr
     const topic = message.channel.topic
     const match = topic.match(/^\*\*next count:\*\* (\d*)/i)
-    if (!match) { return message.status('error', 'Could not parse next count from channel\'s topic.').catch(() => {}) }
+    if (!match) return message.status('error', 'Could not parse next count from channel\'s topic.').catch(() => {})
     await message.channel.send(parseInt(match[1]))
     return message.delete().catch(() => {})
   }

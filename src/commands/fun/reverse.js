@@ -38,18 +38,16 @@ class ReverseCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.content) {
+    if (!args.content)
       return message.status('error', `Usage: \`${this.usage}\`.`)
-    }
 
     const content = args.content.split('').reverse().join('')
 
     if (args.new || args.prefix) {
       const newMessage = await message.channel.send((args.prefix ? `${args.prefix} ` : '') + content)
       await message.delete()
-      if (args.delete) {
+      if (args.delete)
         await newMessage.delete()
-      }
     } else {
       await message.edit(content)
     }

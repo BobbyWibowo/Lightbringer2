@@ -17,16 +17,14 @@ class MembersFetchCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!message.guild && !args.keyword) {
+    if (!message.guild && !args.keyword)
       return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
-    }
 
     let guild = message.guild
 
     // Assert Guild.
-    if (args.keyword) {
+    if (args.keyword)
       guild = await this.client.util.assertGuild(args.keyword)
-    }
 
     await message.status('progress', 'Fetching guild members\u2026')
     await guild.members.fetch()

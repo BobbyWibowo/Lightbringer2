@@ -20,14 +20,12 @@ class TimeCommand extends LCommand {
   }
 
   async exec (message, args) {
-    if (!args.location) {
+    if (!args.location)
       return message.status('error', `Usage: \`${this.usage}\`.`)
-    }
 
     const result = await this.client.util.fetch(`https://time.is/en/${args.location}`)
-    if (result.status !== 200) {
+    if (result.status !== 200)
       return message.status('error', 'Failed to fetch time info of the specified location.')
-    }
 
     const text = result.text || result.body.toString()
 

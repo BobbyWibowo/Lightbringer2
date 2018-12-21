@@ -34,7 +34,7 @@ class UpTimeCommand extends LCommand {
 
   async exec (message, args) {
     let timeMs = Date.now() - this.client.startTimestamp
-    if (args.online) { timeMs = this.client.uptime }
+    if (args.online) timeMs = this.client.uptime
     await message.edit(`⏰\u2000${args.short ? 'Up' : 'Uptime'}: ${this.client.util.humanizeDuration(timeMs, args.maxUnits, args.short)} | ${this.selfdestruct(true)}`)
   }
 }

@@ -4,14 +4,13 @@ const StorageAdapter = require('./StorageAdapter')
 
 class Storage {
   constructor ({ directory }) {
-    if (!fse.existsSync(directory)) {
+    if (!fse.existsSync(directory))
       fse.mkdirSync(directory)
-    }
 
     const cache = {}
     const factory = function (file) {
       let realPath = path.resolve(directory, file)
-      if (!realPath.endsWith('.json')) { realPath += '.json' }
+      if (!realPath.endsWith('.json')) realPath += '.json'
       return cache[file] || (cache[file] = new StorageAdapter(realPath))
     }
 
@@ -20,9 +19,8 @@ class Storage {
   }
 
   saveAll () {
-    for (const key in this.cache) {
+    for (const key in this.cache)
       this.cache[key].save()
-    }
   }
 }
 

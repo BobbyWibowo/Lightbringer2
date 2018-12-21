@@ -43,25 +43,21 @@ class InRoleCommand extends LCommand {
 
   async exec (message, args) {
     // When "--plain" flag is not used in channels where user have no permission to use embeds.
-    if (!args.plain && !this.client.util.hasPermissions(message.channel, ['EMBED_LINKS'])) {
+    if (!args.plain && !this.client.util.hasPermissions(message.channel, ['EMBED_LINKS']))
       return this.handler.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, this, 'client', ['EMBED_LINKS'])
-    }
 
-    if (!args.keyword) {
+    if (!args.keyword)
       return message.status('error', 'You must specify a role name.')
-    }
 
     const roleSource = args.guild || message.guild || null
-    if (!roleSource) {
+    if (!roleSource)
       return message.status('error', 'You must be in a guild to run this command without "--guild" flag.')
-    }
 
     // Assert Role.
     const role = await this.client.util.assertRole(args.keyword, roleSource)
 
-    if (!role.members.size) {
+    if (!role.members.size)
       return message.status('error', 'The specified role has no members.')
-    }
 
     // Check whether the keyword was a mention or not.
     const mention = args.keyword && this.client.util.isKeywordMentionable(args.keyword, 1)
@@ -84,9 +80,8 @@ class InRoleCommand extends LCommand {
     }
 
     let content = `${args.online ? 'Online members' : 'Members'} of the role matching keyword \`${args.keyword}\`:`
-    if (mention) {
+    if (mention)
       content = `${role}'s ${args.online ? 'online ' : ''}members:`
-    }
 
     const prefix = `**Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})` +
       (displayCapped ? `\nDisplaying the first ${this.maxUsersListing} members alphabetically.` : '')
@@ -94,7 +89,7 @@ class InRoleCommand extends LCommand {
     const code = 'css'
     const char = ', '
 
-    if (args.plain) {
+    if (args.plain)
       return this.client.util.multiSend(
         message.channel,
         stripIndents`/* ${content.replace(/`/g, '"')} */
@@ -107,7 +102,6 @@ class InRoleCommand extends LCommand {
           char
         }
       )
-    }
 
     const embed = {
       title: `${role.name} [${memberCount}]`,
@@ -128,9 +122,8 @@ class InRoleCommand extends LCommand {
   onReady () {
     const maxUsersListing = this.client.configManager.get('maxUsersListing')
 
-    if (maxUsersListing !== undefined) {
+    if (maxUsersListing !== undefined)
       this.maxUsersListing = Number(maxUsersListing)
-    }
   }
 }
 

@@ -45,9 +45,9 @@ class MarkAsReadCommand extends LCommand {
     let target
     if (args.keyword) {
       const resolved = this.client.util.resolveGuilds(args.keyword, this.client.guilds)
-      if (resolved.size === 1) {
+      if (resolved.size === 1)
         target = resolved.first()
-      } else if (resolved.size > 1) {
+      else if (resolved.size > 1)
         return message.status('error',
           this.client.util.formatMatchesList(resolved, {
             name: 'guilds',
@@ -55,13 +55,12 @@ class MarkAsReadCommand extends LCommand {
           }),
           this.client.util.matchesListTimeout
         )
-      } else {
+      else
         return message.status('error', 'Could not find any matching guilds.')
-      }
     } else {
-      if (!message.guild) {
+      if (!message.guild)
         return message.status('error', 'You must be in a guild to run this command without parameter.')
-      }
+
       target = message.guild
     }
 

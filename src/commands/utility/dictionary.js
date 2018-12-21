@@ -59,29 +59,25 @@ class DictionaryCommand extends LCommand {
       return message.status('success', 'Successfully saved the API key.')
     }
 
-    if (!this.storage.get('apiKey')) {
+    if (!this.storage.get('apiKey'))
       return message.status('error', 'Missing API key!\nGet your Merriam-Webster\'s Collegiate® Dictionary API key from **http://dictionaryapi.com/** then run `dict --key=<apiKey>` to save the API key!', -1)
-    }
 
-    if (!this.dictClient) {
+    if (!this.dictClient)
       await this.initDictClient()
-    }
 
     let keyword = args.keyword
     let index = args.index !== null ? (args.index - 1) : 0
 
-    if (!args.keyword && !args.next) {
+    if (!args.keyword && !args.next)
       return message.status('error', 'You must specify something to search.')
-    }
 
-    if (args.next) {
+    if (args.next)
       if (this.lastKeyword) {
         keyword = this.lastKeyword
         index = (this.lastIndex || 0) + 1
       } else {
         return message.status('error', 'You have not previously used the command to look up a definition.')
       }
-    }
 
     await message.status('progress', `Searching for \`${keyword}\` on Merriam-Webster\u2026`)
 
@@ -89,7 +85,7 @@ class DictionaryCommand extends LCommand {
     try {
       result = await this.dictClient.lookup(keyword)
     } catch (error) {
-      if (error instanceof WordNotFoundError) {
+      if (error instanceof WordNotFoundError)
         return message.edit(`⛔\u2000\`${keyword}\` was not found!`, {
           embed: this.client.util.embed({
             title: 'Suggestions',
@@ -101,15 +97,13 @@ class DictionaryCommand extends LCommand {
             color: '#ff0000'
           })
         })
-      } else {
+      else
         throw new Error(error) // Re-throw to let commandError listener to handle it
-      }
     }
 
     const selected = result[index]
-    if (!selected) {
+    if (!selected)
       return message.status('error', `Index \`${index + 1}\` of the search result is unavailable.`)
-    }
 
     await this.displayDefinition(message, index, result, keyword, args.more)
 
@@ -138,7 +132,7 @@ class DictionaryCommand extends LCommand {
       color: '#2d5f7c'
     }
 
-    if (result.length > 1 && more) {
+    if (result.length > 1 && more)
       embed.fields.push({
         name: 'More',
         value: result
@@ -147,7 +141,6 @@ class DictionaryCommand extends LCommand {
           .join('\n') +
           '\n\n*Use --index=<index> to display definition of search result with a specific index.*'
       })
-    }
 
     return message.edit(
       `Search result of \`${keyword}\` at \`${index + 1}/${result.length}\` on Merriam-Webster:`, {
@@ -160,69 +153,61 @@ class DictionaryCommand extends LCommand {
     let temp = ''
     const hasContent = m.meanings || m.synonyms || m.illustrations || m.senses
 
-    if (m.senses && (m.senses.findIndex(s => s.number === m.number) !== -1)) {
+    if (m.senses && (m.senses.findIndex(s => s.number === m.number) !== -1))
       // Skip current Sense if it has additional Senses
       // in which the current Sense exist
       // This is a workaround for a particular bug in mw-dict library
       return m.senses.map(s => this.beautify(s, depth)).join('\n')
-    }
 
     temp += '    '.repeat(depth)
 
-    if (m.number) {
+    if (m.number)
       if (/^\(\d+?\)$/.test(m.number)) {
         temp += m.number + ' '
       } else {
         temp += `**${m.number}** `
       }
-    }
 
-    if (m.status) {
+    if (m.status)
       temp += m.status + ' '
-    }
 
     if (!hasContent) {
       Logger.log(require('util').inspect(m), { tag: this.id })
       return temp + '*This meaning may not have any content. Check your console\u2026*'
     }
 
-    if (m.meanings) {
+    if (m.meanings)
       temp += m.meanings.map((m, i, a) => {
         // Trim whitespaces (some meanings have unexpected whitespace)
         m = m.trim()
 
-        if (m.includes(':')) {
+        if (m.includes(':'))
           // Format semicolons
           m = m.split(':').map(m => m.trim()).join(' : ').trim()
-        } else {
+        else
           // Italicizes if the meaning does not start with a colon (:)
           m = `*${m}*`
-        }
 
         // Starts meaning with a semicolon (;) if it does not start with
         // a colon (:) and there was a precedent meaning
-        if (!m.startsWith(':') && a[i - 1] !== undefined) {
+        if (!m.startsWith(':') && a[i - 1] !== undefined)
           m = `; ${m}`
-        }
 
         return m
       }).join(' ')
-    }
 
     if (m.synonyms) {
       // Adds an extra whitespace if there was
       // a meaning that ends with semicolon (;)
-      if (temp.endsWith(':')) {
+      if (temp.endsWith(':'))
         temp += ' '
-      }
 
       // Underlines all synonyms
       temp += m.synonyms.map(s => `__${s.trim()}__`).join(', ')
     }
 
-    if (m.illustrations) {
+    if (m.illustrations)
       temp += ' ' + m.illustrations.map(i => `\u2022 ${i}`).join(' ')
-    }
 
     if (m.senses) {
       depth++
@@ -243,9 +228,8 @@ class DictionaryCommand extends LCommand {
   onReady () {
     this.storage = this.client.storage('dictionary')
 
-    if (this.storage.get('apiKey')) {
+    if (this.storage.get('apiKey'))
       this.initDictClient()
-    }
   }
 }
 

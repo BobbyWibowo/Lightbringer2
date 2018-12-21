@@ -10,7 +10,7 @@ class CommandFinishedListener extends Listener {
   }
 
   async exec (message, command, args, returnValue) {
-    if (!command._selfdestruct) { return }
+    if (!command._selfdestruct) return
 
     const msgs = []
     if (Array.isArray(returnValue)) {

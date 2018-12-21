@@ -16,12 +16,11 @@ class BlacklistInhibitor extends Inhibitor {
   }
 
   exec (message) {
-    if (message.guild && this.guilds.includes(message.guild.id) && this.homeGuild !== message.guild.id) {
+    if (message.guild && this.guilds.includes(message.guild.id) && this.homeGuild !== message.guild.id)
       // Returns true to block messages from the said guild
       return true
-    } else {
+    else
       return false
-    }
   }
 
   update () {
@@ -32,9 +31,8 @@ class BlacklistInhibitor extends Inhibitor {
   onReady () {
     const homeGuild = this.client.configManager.get('homeGuild')
 
-    if (homeGuild) {
+    if (homeGuild)
       this.homeGuild = homeGuild
-    }
 
     this.storage = this.client.storage('guild-blacklist')
     this.update()

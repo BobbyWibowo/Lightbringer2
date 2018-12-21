@@ -77,9 +77,8 @@ class LastfmCommand extends LCommand {
           description: 'Sets the activity type. Try "setactivity --list" to see available types.',
           type: (word, message, args) => {
             const keys = Object.keys(ACTIVITY_TYPES)
-            for (const key of keys) {
-              if (ACTIVITY_TYPES[key].test(word)) { return key }
-            }
+            for (const key of keys)
+              if (ACTIVITY_TYPES[key].test(word)) return key
           }
         },
         {
@@ -120,21 +119,20 @@ class LastfmCommand extends LCommand {
       { arg: 'monitorMode', key: 'monitorMode', string: 'Monitor Mode' }
     ]
 
-    for (const toggle of toggles) {
+    for (const toggle of toggles)
       if (args[toggle.arg]) {
         const val = Boolean(this.storage.get(toggle.key))
         this.storage.set(toggle.key, !val)
         this.storage.save()
 
         this.clearRecentTrackTimeout()
-        if (this.storage.get('enabled')) {
+        if (this.storage.get('enabled'))
           await this.getRecentTrack()
-        } else {
+        else
           await this.client.user.setPresence({ activity: null })
-        }
+
         return message.status('success', `${!val ? 'Enabled' : 'Disabled'} ${toggle.string}.`)
       }
-    }
 
     let storageHit
     this._storageKeys.forEach(key => {
@@ -146,7 +144,7 @@ class LastfmCommand extends LCommand {
 
     if (storageHit) {
       this.storage.save()
-      if (this.storage.get('enabled')) { await this.getRecentTrack() }
+      if (this.storage.get('enabled')) await this.getRecentTrack()
       return message.status('success', 'Successfully saved the new value(s).')
     }
 
@@ -156,7 +154,7 @@ class LastfmCommand extends LCommand {
         return message.status('error', `Option with ID \`${args.clearOption}\` was not set.`)
       } else {
         this.storage.set(args.clearOption, null)
-        if (this.storage.get('enabled')) { await this.setPresenceFromStorage() }
+        if (this.storage.get('enabled')) await this.setPresenceFromStorage()
         return message.status('success', `Cleared option with ID \`${args.clearOption}\`.`)
       }
     }
@@ -176,15 +174,14 @@ class LastfmCommand extends LCommand {
   }
 
   setPresenceToTrack () {
-    if (!this.artist || !this.trackName) {
+    if (!this.artist || !this.trackName)
       return
-    }
 
     const rich = this.storage.get('rich')
     const clientID = this.storage.get('clientID')
     const username = this.storage.get('username')
 
-    if (rich && clientID) {
+    if (rich && clientID)
       return this.client.user.setPresence({
         activity: {
           application: clientID,
@@ -203,7 +200,6 @@ class LastfmCommand extends LCommand {
           }
         }
       })
-    }
 
     return this.client.user.setPresence({
       activity: {
@@ -214,9 +210,8 @@ class LastfmCommand extends LCommand {
   }
 
   async getRecentTrack () {
-    if (!this.storage.get('enabled') || !this.storage.get('username') || !this.storage.get('apiKey')) {
+    if (!this.storage.get('enabled') || !this.storage.get('username') || !this.storage.get('apiKey'))
       return
-    }
 
     const _querystring = querystring.stringify({
       method: 'user.getrecenttracks',
@@ -234,9 +229,8 @@ class LastfmCommand extends LCommand {
 
     const tracks = this.client.util.getProp(result, 'body.recenttracks.track')
 
-    if (!tracks || !tracks.length) {
+    if (!tracks || !tracks.length)
       return this.setRecentTrackTimeout()
-    }
 
     this.totalScrobbles = Number(result.body.recenttracks['@attr'].total) || this.totalScrobbles
 
@@ -253,9 +247,8 @@ class LastfmCommand extends LCommand {
       timestamp = new Date().getTime() - Math.ceil(POLL_TIMEOUT / 1000 / 2)
     }
 
-    if (this.trackName === trackName && this.artist === artist) {
+    if (this.trackName === trackName && this.artist === artist)
       return this.setRecentTrackTimeout()
-    }
 
     try {
       if (!artist || !trackName) {
@@ -269,7 +262,7 @@ class LastfmCommand extends LCommand {
         this.artist = artist
         this.trackName = trackName
         this.timestamp = timestamp
-        if (!monitorMode) { await this.setPresenceToTrack() }
+        if (!monitorMode) await this.setPresenceToTrack()
         await this.client.util.sendStatus(`🎵\u2000Last fm${monitorMode ? ' [M] ' : ''}: ${artist} – ${trackName}`)
       }
       return this.setRecentTrackTimeout()
@@ -280,16 +273,14 @@ class LastfmCommand extends LCommand {
   }
 
   setRecentTrackTimeout (isError) {
-    if (!this.storage.get('enabled')) {
+    if (!this.storage.get('enabled'))
       return
-    }
 
     if (MAX_RETRY !== undefined && MAX_RETRY > 0) {
-      if (isError) {
+      if (isError)
         this._error += 1
-      } else {
+      else
         this._error = 0
-      }
 
       if (this._error >= 3) {
         this.clearRecentTrackTimeout()
