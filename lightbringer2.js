@@ -23,9 +23,8 @@ if (!token) {
 const client = new LightbringerClient(configManager)
 
 process.on('exit', () => {
-  if (client.storage) {
+  if (client.storage)
     client.storage.saveAll()
-  }
 })
 
 client.start(token)
