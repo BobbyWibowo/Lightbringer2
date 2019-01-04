@@ -57,7 +57,7 @@ class EvalCommand extends LCommand {
     const rev = this.client.token.split('').reverse().join('[^]{0,2}')
     const tokenRegex = new RegExp(`${token}|${rev}`, 'g')
 
-    result = result.replace(tokenRegex, '[TOKEN]')
+    result = `${result}`.replace(tokenRegex, '[TOKEN]')
 
     const string =
       '**JavaScript:**\n' +

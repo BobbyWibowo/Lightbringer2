@@ -17,7 +17,7 @@ class CommandErrorListener extends Listener {
     else if (error instanceof LError)
       return message.status('error', error.toString(), error.timeout)
 
-    Logger.error(error, { tag: command ? command.id : undefined })
+    Logger.error(error, { tag: command ? command.id : this.id })
     return message.status('error',
       'An unexpected error occurred (this message will self-destruct in 15 seconds):\n' +
         this.client.util.formatCode(error, 'js'),

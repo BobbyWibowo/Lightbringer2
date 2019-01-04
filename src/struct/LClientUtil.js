@@ -14,8 +14,6 @@ const PATTERNS = {
   CHANNELS: new RegExp(`^${MessageMentions.CHANNELS_PATTERN.source}$`)
 }
 
-const units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
 class LClientUtil extends ClientUtil {
   constructor (client, {
     matchesListTimeout = -1,
@@ -736,20 +734,49 @@ class LClientUtil extends ClientUtil {
     })
   }
 
-  getPrettyBytes (num) {
+  getPrettyBytes (num, si) {
     // MIT License
     // Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
     if (!Number.isFinite(num)) return num
 
-    const neg = num < 0
+    const neg = num < 0 ? '-' : ''
     if (neg) num = -num
-    if (num < 1) return (neg ? '-' : '') + num + ' B'
+    if (num < 1) return `${neg}${num} B`
 
-    const exponent = Math.min(Math.floor(Math.log10(num) / 3), units.length - 1)
-    const numStr = Number((num / Math.pow(1000, exponent)).toPrecision(3))
-    const unit = units[exponent]
+    const exponent = Math.min(Math.floor(Math.log10(num) / 3), 8) // 8 is count of KMGTPEZY
+    const numStr = Number((num / Math.pow(si ? 1000 : 1024, exponent)).toPrecision(3))
+    const pre = (si ? 'kMGTPEZY' : 'KMGTPEZY').charAt(exponent - 1) + (si ? '' : 'i')
+    return `${neg}${numStr} ${pre}B`
+  }
 
-    return (neg ? '-' : '') + numStr + ' ' + unit
+  getLinuxMemoryUsage () {
+    return new Promise((resolve, reject) => {
+      const spawn = require('child_process').spawn
+      const prc = spawn('free', ['-b'])
+
+      prc.stdout.setEncoding('utf8')
+      prc.stdout.on('data', data => {
+        const parsed = {}
+        const str = data.toString()
+        const lines = str.split(/\n/g)
+        for (let i = 0; i < lines.length; i++) {
+          lines[i] = lines[i].split(/\s+/)
+          if (i === 0) continue
+          const id = lines[i][0].toLowerCase().slice(0, -1)
+          if (!id) continue
+          if (!parsed[id]) parsed[id] = {}
+          for (let j = 1; j < lines[i].length; j++) {
+            const bytes = parseInt(lines[i][j])
+            parsed[id][lines[0][j]] = isNaN(bytes) ? null : bytes
+          }
+        }
+        resolve(parsed)
+      })
+
+      prc.on('close', code => {
+        reject(new Error(`Process exited with code ${code}.`))
+      })
+    })
   }
 }
 

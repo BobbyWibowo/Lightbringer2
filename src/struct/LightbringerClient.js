@@ -16,6 +16,12 @@ class LightbringerClient extends AkairoClient {
       messageCacheMaxSize: 10,
       sync: true,
       disabledEvents: [
+        'GUILD_BAN_ADD',
+        'GUILD_BAN_REMOVE',
+        'GUILD_INTEGRATIONS_UPDATE',
+        'MESSAGE_REACTION_ADD',
+        'MESSAGE_REACTION_REMOVE_ALL',
+        'MESSAGE_REACTION_REMOVE',
         'TYPING_START'
       ]
     })
@@ -87,8 +93,9 @@ class LightbringerClient extends AkairoClient {
     this.startTimestamp = Date.now()
     this.startHrTime = process.hrtime()
 
-    Logger.info('Logging in\u2026')
-    Logger.warn('Users with large amount of guilds may take a few minutes to login!')
+    const tag = 'start'
+    Logger.info('Logging in\u2026', { tag })
+    Logger.warn('Users with large amount of guilds may take a few minutes to login!', { tag })
     await this.login(token)
 
     this.commandHandler.readyAll()

@@ -1,10 +1,10 @@
-.vscode
 .nvmrc
+.vscode
 
 # Folders
+data
 node_modules
 storage
-data
 
 # Files
 config.json

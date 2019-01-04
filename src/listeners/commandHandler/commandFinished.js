@@ -23,8 +23,7 @@ class CommandFinishedListener extends Listener {
       await message.delete({ timeout: command._selfdestruct * 1000 }).catch(() => {})
     }
 
-    const unit = `second${command._selfdestruct === 1 ? '' : 's'}`
-    Logger.log(`Self-destruct ${msgs.join(', ')} (${command._selfdestruct} ${unit}).`, { tag: command.id })
+    Logger.log(`Self-destruct ${msgs.join(', ')} (${command._selfdestruct}s).`, { tag: command.id })
   }
 }
 

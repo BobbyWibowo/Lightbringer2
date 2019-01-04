@@ -15,14 +15,14 @@ class ReadyListener extends Listener {
 
   async exec () {
     if (this.client.stats.get('initiated')) {
-      Logger.info('Connection resumed.')
+      Logger.info('Connection resumed.', { tag: 'client.ready' })
       this.initAutoRebootTimeout()
       return this.client.util.sendStatus('🔄\u2000Connection resumed.')
     }
 
     const loginTime = process.hrtime(this.client.startHrTime)
 
-    Logger.info(`Successfully logged in. That took ${this.client.util.formatHrTime(loginTime)}.`)
+    Logger.info(`Successfully logged in. That took ${this.client.util.formatHrTime(loginTime)}.`, { tag: this.id })
     Logger.log(stripIndent`
       Stats:
       – User: ${this.client.user.tag} (ID: ${this.client.user.id})
@@ -30,7 +30,7 @@ class ReadyListener extends Listener {
       – Channels: ${this.client.channels.size.toLocaleString()}
       – Modules : ${this.client.commandHandler.modules.size.toLocaleString()}
       – Prefix: ${this.client.commandHandler.prefix}
-    `)
+    `, { tag: this.id })
 
     // These either do not work or d.js will re-add them after this
     delete this.client.user.verified
@@ -57,9 +57,9 @@ class ReadyListener extends Listener {
       process.exit(0)
     })
 
-    Logger.log('Created readline interface.')
-    Logger.log('You can now evaluate JavaScript codes from your terminal.')
-    Logger.log('For PM2 users, you can use: pm2 send <id> "<codes>".')
+    Logger.log('Created readline interface.', { tag: this.id })
+    Logger.log('You can now evaluate JavaScript codes from your terminal.', { tag: this.id })
+    Logger.log('For PM2 users, you can use: pm2 send <id> "<codes>".', { tag: this.id })
 
     const statusChannel = this.client.configManager.get('statusChannel')
     if (statusChannel)
@@ -69,7 +69,7 @@ class ReadyListener extends Listener {
     const onlineStatus = this.client.configManager.get('onlineStatus')
     if (OnlineStatuses.includes(onlineStatus))
       await this.client.user.setStatus(onlineStatus)
-        .then(() => Logger.info(`Updated bot's online status to "${onlineStatus}".`))
+        .then(() => Logger.info(`Updated bot's online status to "${onlineStatus}".`, { tag: this.id }))
         .catch(Logger.error)
 
     this.initAutoRebootTimeout()
@@ -78,7 +78,7 @@ class ReadyListener extends Listener {
     delete this.client.startHrTime
 
     const readyMessage = `Bot is ready - ${this.client.util.formatHrTime(overallTime)}.`
-    Logger.info(readyMessage)
+    Logger.info(readyMessage, { tag: this.id })
     await this.client.util.sendStatus(`🆗\u2000${readyMessage}`)
 
     this.client.stats.set('initiated', true)
@@ -95,7 +95,7 @@ class ReadyListener extends Listener {
       Logger.info(shutdownMessage)
       process.exit(0)
     }, autoReboot * 1000)
-    Logger.info(`Bot will shutdown in ${autoReboot} second(s) due to auto-reboot feature.`)
+    Logger.info(`Bot will shutdown in ${autoReboot} second(s) due to auto-reboot feature.`, { tag: this.id })
   }
 }
 

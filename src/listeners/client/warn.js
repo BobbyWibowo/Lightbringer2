@@ -10,7 +10,7 @@ class WarnListener extends Listener {
   }
 
   async exec (warn) {
-    Logger.warn(warn.stack || warn)
+    Logger.warn(warn, { tag: this.id })
   }
 }
 

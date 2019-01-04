@@ -41,7 +41,7 @@ class StorageAdapter {
       throw new Error('Data has yet to be loaded')
 
     try {
-      fse.writeJSONSync(this.storageFile, this.data, { spaces: 2 })
+      fse.writeJSONSync(this.storageFile, this.data)
     } catch (error) {
       Logger.error(`Failed to save data to ${this.storageFile}.`)
       Logger.error(error)

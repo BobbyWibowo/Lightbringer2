@@ -10,7 +10,7 @@ class CommandStartedListener extends Listener {
   }
 
   async exec (message, command, args) {
-    Logger.log(`=> ${command.id}`, { tag: this.tag(message) })
+    Logger.log(`${this.tag(message)} => ${command.id}`, { tag: this.id })
     this.client.stats.increment('commands-started')
   }
 

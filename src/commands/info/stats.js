@@ -7,7 +7,7 @@ class StatsCommand extends LCommand {
     super('stats', {
       aliases: ['statistics', 'stats'],
       description: 'Shows you stats about Lightbringer.',
-      selfdestruct: 30,
+      selfdestruct: 60,
       clientPermissions: ['EMBED_LINKS']
     })
 
@@ -21,59 +21,76 @@ class StatsCommand extends LCommand {
     modules += this.client.inhibitorHandler.modules.size
     modules += this.client.listenerHandler.modules.size
 
+    let version = this.client.data.package.version
+    const author = {
+      name: 'Lightbringer Statistics',
+      icon: 'https://i.fiery.me/Ec8h.png'
+    }
+
+    if (this.git) {
+      version = `[${version}](${this.git})`
+      author.url = this.git
+    }
+
+    const platform = os.platform()
+
     const embed = {
       fields: [
+        {
+          name: 'Lightbringer2',
+          value: stripIndent`
+            •  **Version:** ${version}
+            •  **Modules:** ${modules.toLocaleString()}
+            •  **Prefix:** \`${this.client.commandHandler.prefix}\`
+            •  **Uptime:** ${this.client.util.humanizeDuration(Date.now() - this.client.startTimestamp, 2, true)}
+            •  **Memory usage:** ${this.client.util.getPrettyBytes(process.memoryUsage().rss)}
+            •  **Heartbeat:** \`${this.client.ping.toFixed(0)}ms\`
+          `
+        },
         {
           name: 'System',
           value: stripIndent`
             •  **Node.js:** [${process.versions.node}](${process.release.sourceUrl})
-            •  **Heap:** ${this.client.util.getPrettyBytes(process.memoryUsage().heapUsed)}
-            •  **Heartbeat:** \`${this.client.ping.toFixed(0)}ms\`
-            •  **Uptime:** ${this.client.util.humanizeDuration(Date.now() - this.client.startTimestamp, 2, true)}
-            •  **Platform:** ${os.platform()}-${os.arch()}
+            •  **Platform:** ${platform}-${os.arch()}
+            •  **Uptime:** ${this.client.util.humanizeDuration(os.uptime * 1000, 2, true)}
           `
         },
         {
           name: 'Statistics',
           value: stripIndent`
-            •  **Sent:** ${this.client.stats.get('messages-sent').toLocaleString()}
-            •  **Received:** ${this.client.stats.get('messages-received').toLocaleString()}
-            •  **Executed:** ${this.client.stats.get('commands-started').toLocaleString()}
+            •  Sent **${this.client.stats.get('messages-sent').toLocaleString()}** message${this.client.stats.get('messages-sent') === 1 ? '' : 's'}
+            •  Received **${this.client.stats.get('messages-received').toLocaleString()}** message${this.client.stats.get('messages-received') === 1 ? '' : 's'}
+            •  Executed **${this.client.stats.get('commands-started').toLocaleString()}** command${this.client.stats.get('commands-started') === 1 ? '' : 's'}
             •  **Guilds:** ${this.client.guilds.size.toLocaleString()}
             •  **Channels:** ${this.client.channels.size.toLocaleString()}
+            •  Caching **${this.client.users.size.toLocaleString()}** user${this.client.users.size === 1 ? '' : 's'}
           `
         },
         {
-          name: 'Others',
+          name: 'Libraries',
           value: stripIndent`
-            •  **Lightbringer:** [${this.client.data.package.version}](${this.git})
             •  **discord.js:** [${require('discord.js').version}](https://github.com/hydrabolt/discord.js)
             •  **discord-akairo:** [${require('discord-akairo').version}](https://github.com/1Computer1/discord-akairo)
-            •  **Modules:** ${modules.toLocaleString()}
-            •  **Prefix:** \`${this.client.commandHandler.prefix}\`
           `
         }
       ],
-      inline: true,
-      author: {
-        name: 'Lightbringer Statistics',
-        icon: 'https://i.fiery.me/Ec8h.png'
-      },
+      inline: false,
+      author,
       color: '#ff0000',
-      footer: `Currently caching ${this.client.users.size.toLocaleString()} users | ${this.selfdestruct(true)}`
+      footer: `${this.selfdestruct(true)}`
     }
 
-    if (os.platform() !== 'win32') {
-      embed.fields[0].value += '\n'
-      embed.fields[0].value += stripIndent`
-        •  **Load:** ${os.loadavg().map(load => load.toFixed(1)).join(', ')}
+    if (platform === 'linux') {
+      const memoryUsage = await this.client.util.getLinuxMemoryUsage()
+      embed.fields[1].value += '\n' + stripIndent`
+        •  **Memory:** ${this.client.util.getPrettyBytes(memoryUsage.mem.used)} / ${this.client.util.getPrettyBytes(memoryUsage.mem.total)}
       `
     }
 
-    if (this.git !== null) {
-      embed.description = `[Click here](${this.git}) to view this self-bot's public GitHub repository.`
-      embed.author.url = this.git
-    }
+    if (platform !== 'win32')
+      embed.fields[1].value += '\n' + stripIndent`
+        •  **Average load:** ${os.loadavg().map(load => load.toFixed(1)).join(', ')}
+      `
 
     await message.edit(message.content, {
       embed: this.client.util.embed(embed)
