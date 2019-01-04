@@ -1,8 +1,6 @@
 const { exec } = require('child_process')
 const LCommand = require('./../../struct/LCommand')
-const os = require('os')
-
-const USERNAME = true
+const stripAnsi = require('strip-ansi')
 
 class ExecCommand extends LCommand {
   constructor () {
@@ -25,19 +23,18 @@ class ExecCommand extends LCommand {
 
     const outs = await new Promise((resolve, reject) => {
       const outs = []
-      outs.push(`${USERNAME ? `${os.userInfo().username} ` : ''}$ ${args.command}`)
-      exec(args.command, {
-        timeout: 60000 // 60 seconds
-      }, (error, stdout, stderr) => {
+      outs.push(`$ ${args.command}`)
+      // timeout: 30 seconds
+      exec(args.command, { timeout: 30000 }, (error, stdout, stderr) => {
         if (stdout) outs.push(stdout)
         if (stderr) outs.push(stderr)
         if (error) outs.push(`Exit code: ${error.code}`)
-        resolve(outs)
+        resolve(outs.map(out => stripAnsi(out)))
       })
     })
 
     await this.client.util.multiSend(message.channel, outs.join('\n'), {
-      code: ''
+      code: 'shell'
     })
     return message.delete()
   }

@@ -83,13 +83,13 @@ class StatsCommand extends LCommand {
     if (platform === 'linux') {
       const memoryUsage = await this.client.util.getLinuxMemoryUsage()
       embed.fields[1].value += '\n' + stripIndent`
-        •  **Memory:** ${this.client.util.getPrettyBytes(memoryUsage.mem.used)} / ${this.client.util.getPrettyBytes(memoryUsage.mem.total)}
+        •  **Memory:** ${this.client.util.getPrettyBytes(memoryUsage.mem.used)} / ${this.client.util.getPrettyBytes(memoryUsage.mem.total)} (${Math.round((memoryUsage.mem.used / memoryUsage.mem.total) * 100)}%)
       `
     }
 
     if (platform !== 'win32')
       embed.fields[1].value += '\n' + stripIndent`
-        •  **Average load:** ${os.loadavg().map(load => load.toFixed(1)).join(', ')}
+        •  **Load average:** ${os.loadavg().map(load => load.toFixed(2)).join(', ')}
       `
 
     await message.edit(message.content, {

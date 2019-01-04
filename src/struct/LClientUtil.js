@@ -2,6 +2,7 @@ const { ActivityTypes } = require('discord.js').Constants
 const { ClientUtil } = require('discord-akairo')
 const { Collection, Guild, Message, MessageEmbed, MessageMentions, TextChannel } = require('discord.js')
 const { resolveColor, escapeMarkdown, splitMessage } = require('discord.js').Util
+const { spawn } = require('child_process')
 const encodeUrl = require('encodeurl')
 const LError = require('./../util/LError')
 const Logger = require('./../util/Logger')
@@ -747,9 +748,7 @@ class LClientUtil extends ClientUtil {
 
   getLinuxMemoryUsage () {
     return new Promise((resolve, reject) => {
-      const spawn = require('child_process').spawn
       const prc = spawn('free', ['-b'])
-
       prc.stdout.setEncoding('utf8')
       prc.stdout.on('data', data => {
         const parsed = {}
@@ -768,7 +767,6 @@ class LClientUtil extends ClientUtil {
         }
         resolve(parsed)
       })
-
       prc.on('close', code => {
         reject(new Error(`Process exited with code ${code}.`))
       })

@@ -38,6 +38,7 @@
     "pixel-average": "^1.0.1",
     "querystring": "^0.2.0",
     "readline": "^1.3.0",
+    "strip-ansi": "^5.0.0",
     "txtgen": "^2.2.2",
     "uws": "discordjs/uws#6d010c830553123cddbb4fcd2b6a9592fcb41478"
   },
