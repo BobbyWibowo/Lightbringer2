@@ -377,10 +377,6 @@ class LClientUtil extends ClientUtil {
     const round = timeMs > 0 ? Math.floor : Math.ceil
     const parsed = [
       {
-        name: 'week',
-        int: round(timeMs / 604800000)
-      },
-      {
         name: 'day',
         int: round(timeMs / 86400000) % 7
       },
