@@ -15,7 +15,7 @@ class TimeCommand extends LCommand {
         }
       ],
       usage: 'time <location>',
-      selfdestruct: 15
+      selfdestruct: 30
     })
   }
 
@@ -43,7 +43,7 @@ class TimeCommand extends LCommand {
     const formattedTime = moment(`${parsedDate} ${parsedTime}`, 'dddd, MMMM D, YYYY HH:mm:ss A')
       .format('dddd, MMMM Do YYYY @ h:mm:ss a')
 
-    return message.edit(`${clockEmoji} The time in '${parsedPlace}' is ${formattedTime} | ${this.selfdestruct(true)}`)
+    return message.edit(`${clockEmoji} The time in '${parsedPlace}' is ${formattedTime}`)
   }
 }
 

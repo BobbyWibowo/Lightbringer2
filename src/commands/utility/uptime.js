@@ -1,4 +1,6 @@
+const { stripIndents } = require('common-tags')
 const LCommand = require('./../../struct/LCommand')
+const os = require('os')
 
 class UpTimeCommand extends LCommand {
   constructor () {
@@ -28,14 +30,17 @@ class UpTimeCommand extends LCommand {
         }
       ],
       usage: 'uptime [--maxUnits=] [--short] [--online]',
-      selfdestruct: 15
+      selfdestruct: 30
     })
   }
 
   async exec (message, args) {
     let timeMs = Date.now() - this.client.startTimestamp
     if (args.online) timeMs = this.client.uptime
-    await message.edit(`⏰\u2000${args.short ? 'Up' : 'Uptime'}: ${this.client.util.humanizeDuration(timeMs, args.maxUnits, args.short)} | ${this.selfdestruct(true)}`)
+    await message.edit(stripIndents`
+      ⏰\u2000Bot${args.short ? '' : ' uptime'}${args.online ? ' (lib)' : ''}: ${this.client.util.humanizeDuration(timeMs, args.maxUnits, args.short)}
+      🖥\u2000Sys${args.short ? '' : 'tem uptime'}: ${this.client.util.humanizeDuration(os.uptime * 1000, args.maxUnits, args.short)}
+    `)
   }
 }
 

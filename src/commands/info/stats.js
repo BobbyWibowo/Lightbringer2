@@ -42,7 +42,7 @@ class StatsCommand extends LCommand {
             •  **Version:** ${version}
             •  **Modules:** ${modules.toLocaleString()}
             •  **Prefix:** \`${this.client.commandHandler.prefix}\`
-            •  **Uptime:** ${this.client.util.humanizeDuration(Date.now() - this.client.startTimestamp, 2, true)}
+            •  **Uptime:** ${this.client.util.humanizeDuration(Date.now() - this.client.startTimestamp, null, true)}
             •  **Memory usage:** ${this.client.util.getPrettyBytes(process.memoryUsage().rss)}
             •  **Heartbeat:** \`${this.client.ping.toFixed(0)}ms\`
           `
@@ -52,7 +52,7 @@ class StatsCommand extends LCommand {
           value: stripIndent`
             •  **Node.js:** [${process.versions.node}](${process.release.sourceUrl})
             •  **Platform:** ${platform}-${os.arch()}
-            •  **Uptime:** ${this.client.util.humanizeDuration(os.uptime * 1000, 2, true)}
+            •  **Uptime:** ${this.client.util.humanizeDuration(os.uptime * 1000, null, true)}
           `
         },
         {

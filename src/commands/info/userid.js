@@ -13,7 +13,7 @@ class UserIdCommand extends LCommand {
         }
       ],
       usage: 'userid [keyword]',
-      selfdestruct: 15
+      selfdestruct: 30
     })
   }
 
