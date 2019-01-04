@@ -378,7 +378,7 @@ class LClientUtil extends ClientUtil {
     const parsed = [
       {
         name: 'day',
-        int: round(timeMs / 86400000) % 7
+        int: round(timeMs / 86400000)
       },
       {
         name: 'hour',
