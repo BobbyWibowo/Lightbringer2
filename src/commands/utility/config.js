@@ -62,7 +62,7 @@ class ConfigCommand extends LCommand {
       const rev = this.client.token.split('').reverse().join('[^]{0,2}')
       const tokenRegex = new RegExp(`${token}|${rev}`, 'g')
 
-      value = value.replace(tokenRegex, '[TOKEN]')
+      value = `${value}`.replace(tokenRegex, '[TOKEN]')
 
       return message.edit(`⚙\u2000Configuration: \`${args.key}\` = \`${value}\`.`)
     }
