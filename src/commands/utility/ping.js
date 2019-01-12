@@ -10,7 +10,7 @@ class PingCommand extends LCommand {
     })
   }
 
-  async exec (message) {
+  async run (message) {
     message = await message.edit('🏓\u2000Pong!')
 
     // Elapsed time

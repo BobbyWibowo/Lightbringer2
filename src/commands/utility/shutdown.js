@@ -8,7 +8,7 @@ class ShutDownCommand extends LCommand {
     })
   }
 
-  async exec (message) {
+  async run (message) {
     await message.edit('👋\u2000Shutting down\u2026 See you next time.')
     process.exit(0)
   }

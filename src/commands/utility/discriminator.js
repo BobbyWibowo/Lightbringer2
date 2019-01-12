@@ -24,7 +24,7 @@ class DiscriminatorCommand extends LCommand {
     this.maxUsersListing = null
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (!args.discriminator)
       return message.status('error', `Usage: \`${this.usage}\`.`)
 

@@ -2,6 +2,16 @@ const { Command } = require('discord-akairo')
 
 class LCommand extends Command {
   constructor (id, options = {}) {
+    if (!Array.isArray(options.args))
+      options.args = []
+
+    options.args.unshift({
+      id: 'help',
+      match: 'flag',
+      flag: ['--help', '-h'],
+      description: 'Shows help information of this command.'
+    })
+
     super(id, options)
 
     const {
@@ -17,6 +27,17 @@ class LCommand extends Command {
     this.hidden = hidden
     this.usage = usage
     this._selfdestruct = selfdestruct
+  }
+
+  exec (...args) {
+    console.log(this.id, require('util').inspect(args.slice(1)))
+    if (typeof args[1] === 'object' && args[1].help) {
+      const helpCommand = this.handler.modules.get('help')
+      if (!helpCommand)
+        return args[0].status('error', 'Help module is missing!')
+      return helpCommand.run(args[0], { command: this })
+    }
+    return this.run(...args)
   }
 
   selfdestruct (short) {

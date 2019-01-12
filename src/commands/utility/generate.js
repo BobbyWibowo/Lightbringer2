@@ -8,7 +8,7 @@ class GenerateCommand extends LCommand {
     })
   }
 
-  async exec (message) {
+  async run (message) {
     // TODO: ...
     return message.status('error', 'Work in progress.')
   }

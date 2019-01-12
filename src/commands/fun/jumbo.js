@@ -20,7 +20,7 @@ class JumboCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (!args.emojis)
       return message.status('error', `Usage: \`${this.usage}\`.`)
 

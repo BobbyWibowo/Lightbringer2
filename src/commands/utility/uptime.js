@@ -34,7 +34,7 @@ class UpTimeCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     let timeMs = Date.now() - this.client.startTimestamp
     if (args.online) timeMs = this.client.uptime
     await message.edit(stripIndents`

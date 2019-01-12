@@ -14,7 +14,7 @@ class StatsCommand extends LCommand {
     this.git = null
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     let modules = 0
 
     modules += this.client.commandHandler.modules.size

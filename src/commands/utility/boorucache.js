@@ -17,7 +17,7 @@ class BooruCacheCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (args.clear) {
       this.client.booruCache.clear()
       return message.status('success', 'Booru cache cleared.')

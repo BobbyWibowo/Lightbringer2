@@ -28,7 +28,7 @@ class RoleInfoCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (!args.keyword)
       return message.status('error', 'You must specify a role name.')
 

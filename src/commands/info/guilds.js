@@ -35,7 +35,7 @@ class GuildsCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     // Assert GuildMember or User.
     const memberSource = args.guild || message.guild || null
     const resolved = await this.client.util.assertMemberOrUser(args.keyword, memberSource, true)

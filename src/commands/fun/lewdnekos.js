@@ -18,7 +18,7 @@ class LewdNekosCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     const nekoCommand = this.handler.modules.get('nekos')
     if (nekoCommand) {
       args.lewd = true

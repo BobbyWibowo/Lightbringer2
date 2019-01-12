@@ -27,7 +27,7 @@ class ReactAllCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     const guild = args.guild || message.guild || null
 
     let channel = message.channel

@@ -64,7 +64,7 @@ class GuildBlacklistCommand extends LCommand {
     this.homeGuild = null
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     const guilds = this.storage.get('guilds') || []
 
     if (args.list) {

@@ -31,7 +31,7 @@ class KickCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (!message.guild)
       return message.status('error', 'You can only use this command in a guild.')
 

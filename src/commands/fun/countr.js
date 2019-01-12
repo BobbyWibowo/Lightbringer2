@@ -8,7 +8,7 @@ class CountrCommand extends LCommand {
     })
   }
 
-  async exec (message) {
+  async run (message) {
     // We catch all functions that attempts to manipulate the current message then do nothing
     // as we expect that the message will be deleted by Countr
     const topic = message.channel.topic

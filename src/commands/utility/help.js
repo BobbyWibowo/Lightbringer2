@@ -31,13 +31,14 @@ class HelpCommand extends LCommand {
           content: 'help reload',
           description: 'Shows help of a command named "reload".'
         }
-      ]
+      ],
+      selfdestruct: 120
     })
 
     this.git = null
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (args.all) {
       // Use length of the longest command's ID as padding.
       const padding = ' '.repeat(this.handler.modules.reduce((a, v, k) => (a > k.length) ? a : k.length, 0))

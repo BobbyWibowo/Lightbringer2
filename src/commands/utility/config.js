@@ -26,7 +26,7 @@ class ConfigCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (args.list) {
       const configKeys = this.client.configManager.getKeys()
       const objectKeys = Object.keys(configKeys)

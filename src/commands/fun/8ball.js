@@ -16,7 +16,7 @@ class EightBallCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (!args.question)
       return message.status('error', 'You must provide a question to ask.')
 

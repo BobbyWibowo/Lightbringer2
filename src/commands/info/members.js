@@ -27,7 +27,7 @@ class MembersCommand extends LCommand {
     this.maxUsersListing = 20
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (!message.guild && !args.keyword)
       return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
 

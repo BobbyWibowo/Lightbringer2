@@ -111,7 +111,7 @@ class LastfmCommand extends LCommand {
     this._error = 0
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     // Can only toggle one option at a time
     const toggles = [
       { arg: 'toggle', key: 'enabled', string: 'Last fm status updater' },

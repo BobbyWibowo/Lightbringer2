@@ -23,7 +23,7 @@ class NekosCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     const isLewd = args.lewd
 
     await message.status('progress', `Fetching a random ${isLewd ? 'lewd ' : ''}nekos image\u2026`)

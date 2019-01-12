@@ -10,11 +10,6 @@ class ErrorListener extends Listener {
   }
 
   async exec (error) {
-    const whitelistedErrors = ['ErrorEvent']
-    if (error.constructor &&
-      error.constructor.name &&
-      whitelistedErrors.includes(error.constructor.name))
-      error = error.toString()
     Logger.error(error, { tag: this.id })
   }
 }

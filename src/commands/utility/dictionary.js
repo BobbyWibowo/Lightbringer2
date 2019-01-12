@@ -52,7 +52,7 @@ class DictionaryCommand extends LCommand {
     this.lastIndex = null
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (args.apiKey) {
       this.storage.set('apiKey', args.apiKey)
       this.storage.save()

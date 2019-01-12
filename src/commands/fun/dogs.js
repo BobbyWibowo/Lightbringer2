@@ -18,7 +18,7 @@ class DogsCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     const nekoCommand = this.handler.modules.get('animals')
     if (nekoCommand) {
       args.animal = 'dog'

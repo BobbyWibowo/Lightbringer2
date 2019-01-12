@@ -37,7 +37,7 @@ class ReverseCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (!args.content)
       return message.status('error', `Usage: \`${this.usage}\`.`)
 

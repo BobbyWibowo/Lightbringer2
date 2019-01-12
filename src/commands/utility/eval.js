@@ -31,7 +31,7 @@ class EvalCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (!args.codes)
       return message.status('error', `Usage: \`${this.usage}\`.`)
 

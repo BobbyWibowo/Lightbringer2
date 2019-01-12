@@ -62,7 +62,7 @@ class ReloadCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     const typeString = TYPE_STRINGS[args.type || 0].toLowerCase()
     if (args.modules && args.modules.length) {
       const success = []

@@ -39,7 +39,7 @@ class EmojiManageCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if ((args.action === 1 || args.action === 3) && !message.guild)
       return message.status('error', 'You must be in a guild when using this command with add/create action.')
 

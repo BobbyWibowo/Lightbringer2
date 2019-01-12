@@ -38,7 +38,7 @@ class FortuneCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (args.type === null)
       return message.status('error', 'That type is unavailable! Use `--list` flag to list all available types.')
 

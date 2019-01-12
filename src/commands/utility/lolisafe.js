@@ -59,7 +59,7 @@ class LoliSafeCommand extends LCommand {
     this.album = null
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (args.site)
       if (args.site === 'null') {
         this.storage.set('site')

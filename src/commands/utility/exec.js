@@ -11,13 +11,15 @@ class ExecCommand extends LCommand {
         {
           id: 'command',
           match: 'rest',
-          description: 'The command that you want to execute.'
+          description: 'The shell command that you want to execute.'
         }
-      ]
+      ],
+      usage: 'exec <command>',
+      selfdestruct: 60
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (!args.command)
       return message.status('error', 'You need to specify a command to execute on the shell.')
 

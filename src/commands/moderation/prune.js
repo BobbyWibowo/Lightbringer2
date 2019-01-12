@@ -23,7 +23,7 @@ class PruneCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     const limit = Math.min(args.amount, 100)
     await message.status('progress', `Fetching the last ${limit} messages\u2026`)
     let messages = await message.channel.messages.fetch({

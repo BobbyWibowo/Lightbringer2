@@ -59,7 +59,7 @@ class BooruCommand extends LCommand {
     this.lastArgs = null
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (args.list) {
       const sites = Object.keys(booru.sites)
       const padding = ' '.repeat(sites.reduce((a, v) => (a > v.length) ? a : v.length, 0))

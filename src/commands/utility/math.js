@@ -56,7 +56,7 @@ class MathCommand extends LCommand {
     this.storage = null
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (args.documentation)
       return message.status('success', 'Math.js documentation: http://mathjs.org/docs/.', -1)
 

@@ -41,7 +41,7 @@ class InRoleCommand extends LCommand {
     this.maxUsersListing = 20
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     // When "--plain" flag is not used in channels where user have no permission to use embeds.
     if (!args.plain && !this.client.util.hasPermissions(message.channel, ['EMBED_LINKS']))
       return this.handler.emit(CommandHandlerEvents.MISSING_PERMISSIONS, message, this, 'client', ['EMBED_LINKS'])

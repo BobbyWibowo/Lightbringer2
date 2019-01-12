@@ -19,7 +19,7 @@ class TimeCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (!args.location)
       return message.status('error', `Usage: \`${this.usage}\`.`)
 

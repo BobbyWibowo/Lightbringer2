@@ -25,7 +25,7 @@ class UserRolesCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (!message.guild && !args.guild)
       return message.status('error', 'You must specify a guild name when running this command outside of a guild.')
 

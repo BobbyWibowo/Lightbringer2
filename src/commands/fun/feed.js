@@ -10,7 +10,7 @@ class FeedCommand extends LCommand {
     })
   }
 
-  async exec (message) {
+  async run (message) {
     if (!message.mentions.users.size)
       return message.status('error', '@mention some people to feed.')
 

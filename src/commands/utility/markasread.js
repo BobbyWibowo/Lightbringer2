@@ -28,7 +28,7 @@ class MarkAsReadCommand extends LCommand {
     })
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (args.all) {
       let acknowledged = 0
       await message.status('progress', 'Marking all guilds as read\u2026')

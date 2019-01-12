@@ -72,7 +72,7 @@ class CurrencyCommand extends LCommand {
     this._updatingRates = false
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (args.source)
       return message.edit('ℹ\u2000Exchange rate provided by https://fixer.io/.')
 

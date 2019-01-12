@@ -68,7 +68,7 @@ class ColorCommand extends LCommand {
     this.storage = null
   }
 
-  async exec (message, args) {
+  async run (message, args) {
     if (args.list)
       return message.edit('🖌\u2000Color configuration preview:\n' + this.client.util.formatCode(stripIndent`
         Width     :: ${String(this.storage.get('width'))}
