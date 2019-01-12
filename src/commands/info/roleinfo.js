@@ -69,7 +69,7 @@ class RoleInfoCommand extends LCommand {
         }
       ],
       color: role.color !== 0 ? role.hexColor : null,
-      footer: `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`
+      footer: `Use "memfetch" to refresh members cache | ${this.sd(true)}`
     }
 
     // Message content (the thing being displayed above the embed).

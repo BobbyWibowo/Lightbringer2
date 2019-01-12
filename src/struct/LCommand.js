@@ -26,7 +26,7 @@ class LCommand extends Command {
     this.examples = examples
     this.hidden = hidden
     this.usage = usage
-    this._selfdestruct = selfdestruct
+    this.selfdestruct = selfdestruct
   }
 
   exec (...args) {
@@ -39,11 +39,11 @@ class LCommand extends Command {
     return this.run(...args)
   }
 
-  selfdestruct (short) {
-    if (!this._selfdestruct) return null
-    const unit = `second${this._selfdestruct === 1 ? '' : 's'}`
-    if (short) return `Self-destruct in ${this._selfdestruct}s`
-    return `*This message will self-destruct in ${this._selfdestruct} ${unit}.*`
+  sd (short) {
+    if (!this.selfdestruct) return null
+    const unit = `second${this.selfdestruct === 1 ? '' : 's'}`
+    if (short) return `Self-destruct in ${this.selfdestruct}s`
+    return `*This message will self-destruct in ${this.selfdestruct} ${unit}.*`
   }
 }
 

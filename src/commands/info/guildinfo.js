@@ -108,7 +108,7 @@ class GuildInfoCommand extends LCommand {
         }
       ],
       thumbnail: iconURL,
-      footer: `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`,
+      footer: `Use "memfetch" to refresh members cache | ${this.sd(true)}`,
       color
     }
 

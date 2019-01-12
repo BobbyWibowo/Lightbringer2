@@ -107,7 +107,7 @@ class InRoleCommand extends LCommand {
       title: `${role.name} [${memberCount}]`,
       description,
       color: role.color !== 0 ? role.hexColor : null,
-      footer: `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`
+      footer: `Use "memfetch" to refresh members cache | ${this.sd(true)}`
     }
 
     return this.client.util.multiSendEmbed(message.channel, embed, {

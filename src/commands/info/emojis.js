@@ -53,7 +53,7 @@ class EmojisCommand extends LCommand {
     const embed = {
       title: `${guild.name} [${emojis.size}]`,
       description: emojis.map(e => this.formatEmoji(e)).join(char),
-      footer: this.selfdestruct(true),
+      footer: this.sd(true),
       color
     }
 

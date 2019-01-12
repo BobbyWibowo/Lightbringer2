@@ -77,7 +77,7 @@ class StatsCommand extends LCommand {
       inline: false,
       author,
       color: '#ff0000',
-      footer: `${this.selfdestruct(true)}`
+      footer: `${this.sd(true)}`
     }
 
     if (platform === 'linux') {

@@ -73,7 +73,7 @@ class GuildIconCommand extends LCommand {
 
     // Send a plain message when "--plain" flag is used.
     if (args.plain)
-      return message.edit(`${escapeMarkdown(guild.name)}\n${iconURL}\n${this.selfdestruct()}`)
+      return message.edit(`${escapeMarkdown(guild.name)}\n${iconURL}\n${this.sd()}`)
 
     // Otherwise, build embed then send it.
     let content = 'Icon of the currently viewed guild:'
@@ -85,7 +85,7 @@ class GuildIconCommand extends LCommand {
       description: `ID: ${guild.id}\n[Click here to view in a browser](${iconURL})`,
       color,
       image: iconURL,
-      footer: (args.size ? `Specified size: ${args.size} | ` : '') + this.selfdestruct(true)
+      footer: (args.size ? `Specified size: ${args.size} | ` : '') + this.sd(true)
     }
 
     return message.edit(content, {

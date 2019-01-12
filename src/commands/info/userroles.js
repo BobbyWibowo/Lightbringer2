@@ -74,7 +74,7 @@ class UserRolesCommand extends LCommand {
       firstMessage: message,
       content,
       prefix: `**Guild:** ${escapeMarkdown(guild.name)} (ID: ${guild.id})\n\n`,
-      footer: this.selfdestruct(true),
+      footer: this.sd(true),
       char
     })
   }

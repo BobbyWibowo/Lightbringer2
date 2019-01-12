@@ -78,7 +78,7 @@ class AvatarCommand extends LCommand {
 
     // Send a plain message when "--plain" flag is used.
     if (args.plain)
-      return message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s avatar:\n${avatarURL}\n${this.selfdestruct()}`)
+      return message.edit(`${mention ? user : escapeMarkdown(user.tag)}'s avatar:\n${avatarURL}\n${this.sd()}`)
 
     // Otherwise, build embed then send it.
     let content = 'My avatar:'
@@ -92,7 +92,7 @@ class AvatarCommand extends LCommand {
       description: `[Click here to view in a browser](${avatarURL})`,
       color: (member && member.displayColor !== 0) ? member.displayColor : null,
       image: avatarURL,
-      footer: (args.size ? `Specified size: ${args.size} | ` : '') + this.selfdestruct(true)
+      footer: (args.size ? `Specified size: ${args.size} | ` : '') + this.sd(true)
     }
 
     return message.edit(content, {

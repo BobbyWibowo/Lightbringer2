@@ -130,7 +130,7 @@ class UserInfoCommand extends LCommand {
       name: user.tag,
       icon: thumbnail
     }
-    embed.footer = this.selfdestruct(true)
+    embed.footer = this.sd(true)
 
     await message.edit(content, {
       embed: this.client.util.embed(embed)

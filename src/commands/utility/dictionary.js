@@ -126,7 +126,7 @@ class DictionaryCommand extends LCommand {
         }
       ],
       footer: {
-        text: `Merriam-Webster's Collegiate® Dictionary | ${this.selfdestruct(true)}`,
+        text: `Merriam-Webster's Collegiate® Dictionary | ${this.sd(true)}`,
         icon: 'https://i.fiery.me/ucGj.png'
       },
       color: '#2d5f7c'

@@ -117,7 +117,7 @@ class MathCommand extends LCommand {
       this.client.util.formatCode(strExpressions, eln ? 'asciidoc' : 'js') + '\n' +
       `**Result${results.length > 1 ? 's' : ''}:**\n` +
       this.client.util.formatCode(strResults, rln ? 'asciidoc' : 'js') + '\n' +
-      this.selfdestruct(true)
+      this.sd(true)
 
     return message.edit(strs)
   }

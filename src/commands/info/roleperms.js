@@ -85,7 +85,7 @@ class RolePermsCommand extends LCommand {
         **Guild:** ${escapeMarkdown(role.guild.name)} (ID: ${role.guild.id})
       `,
       fields: [],
-      footer: this.selfdestruct(true),
+      footer: this.sd(true),
       color: role.hexColor
     }
 

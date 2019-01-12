@@ -63,7 +63,7 @@ class MembersCommand extends LCommand {
     const embed = {
       title: `${guild.name} [${memberCount}]`,
       description: members.map(m => escapeMarkdown(m.user.tag, true)).join(', '),
-      footer: `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`,
+      footer: `Use "memfetch" to refresh members cache | ${this.sd(true)}`,
       color
     }
 

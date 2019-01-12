@@ -57,7 +57,7 @@ class RolesCommand extends LCommand {
           return `${r.name} – ${r.members.size} member${r.members.size === 1 ? '' : 's'}`
         })
         .join(char)
-      embed.footer = `Use "memfetch" to refresh members cache | ${this.selfdestruct(true)}`
+      embed.footer = `Use "memfetch" to refresh members cache | ${this.sd(true)}`
     }
 
     let content = 'Roles of the currently viewed guild:'
