@@ -30,7 +30,6 @@ class LCommand extends Command {
   }
 
   exec (...args) {
-    console.log(this.id, require('util').inspect(args.slice(1)))
     if (typeof args[1] === 'object' && args[1].help) {
       const helpCommand = this.handler.modules.get('help')
       if (!helpCommand)
