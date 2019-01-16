@@ -61,9 +61,9 @@ class EvalCommand extends LCommand {
 
     const string =
       '**JavaScript:**\n' +
-      `${this.client.util.formatCode(escapeMarkdown(args.codes, true), 'js')}` +
+      `${this.client.util.formatCode(escapeMarkdown(`${args.codes}`, true), 'js')}` +
       `${isError ? '**Error:**' : '**Result:**'}\n` +
-      `${this.client.util.formatCode(escapeMarkdown(result, true), 'js')}` +
+      `${this.client.util.formatCode(escapeMarkdown(`${result}`, true), 'js')}` +
       `${type ? `Type: ${type} | ` : ''}Time taken: \`${this.client.util.formatHrTime(diff)}\` | ${this.sd(true)}`
 
     if (string.length > 2000)
