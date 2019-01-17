@@ -23,6 +23,8 @@ class ExecCommand extends LCommand {
     if (!args.command)
       return message.status('error', 'You need to specify a command to execute on the shell.')
 
+    args.command = args.command.replace(/\\(.)/g, '$1')
+
     const outs = await new Promise((resolve, reject) => {
       const outs = []
       outs.push(`$ ${args.command}`)

@@ -35,6 +35,8 @@ class EvalCommand extends LCommand {
     if (!args.codes)
       return message.status('error', `Usage: \`${this.usage}\`.`)
 
+    args.codes = args.codes.replace(/\\(.)/g, '$1')
+
     const time = process.hrtime()
     let result, isError, type
     try {
