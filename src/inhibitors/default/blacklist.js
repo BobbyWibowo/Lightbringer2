@@ -16,11 +16,10 @@ class BlacklistInhibitor extends Inhibitor {
   }
 
   exec (message) {
-    if (message.guild && this.guilds.includes(message.guild.id) && this.homeGuild !== message.guild.id)
-      // Returns true to block messages from the said guild
-      return true
-    else
-      return false
+    // Return true to block message from the said guild
+    return message.guild &&
+      this.guilds.includes(message.guild.id) &&
+      this.homeGuild !== message.guild.id
   }
 
   update () {
