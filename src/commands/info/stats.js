@@ -16,10 +16,11 @@ class StatsCommand extends LCommand {
 
   async run (message, args) {
     let modules = 0
-
     modules += this.client.commandHandler.modules.size
     modules += this.client.inhibitorHandler.modules.size
     modules += this.client.listenerHandler.modules.size
+
+    const members = this.client.guilds.reduce((a, v) => a + v.members.size, 0)
 
     let version = this.client.data.package.version
     const author = {
@@ -51,6 +52,8 @@ class StatsCommand extends LCommand {
           name: 'System',
           value: stripIndent`
             •  **Node.js:** [${process.versions.node}](${process.release.sourceUrl})
+            •  **discord.js:** [${require('discord.js').version}](https://github.com/hydrabolt/discord.js)
+            •  **discord-akairo:** [${require('discord-akairo').version}](https://github.com/1Computer1/discord-akairo)
             •  **Platform:** ${platform}-${os.arch()}
             •  **Uptime:** ${this.client.util.humanizeDuration(os.uptime * 1000, null, true)}
           `
@@ -65,17 +68,11 @@ class StatsCommand extends LCommand {
             •  **Guilds:** ${this.client.guilds.size.toLocaleString()}
             •  **Channels:** ${this.client.channels.size.toLocaleString()}
             •  Caching **${this.client.users.size.toLocaleString()}** user${this.client.users.size === 1 ? '' : 's'}
-          `
-        },
-        {
-          name: 'Libraries',
-          value: stripIndent`
-            •  **discord.js:** [${require('discord.js').version}](https://github.com/hydrabolt/discord.js)
-            •  **discord-akairo:** [${require('discord-akairo').version}](https://github.com/1Computer1/discord-akairo)
+            •  Caching **${members.toLocaleString()}** member${members === 1 ? '' : 's'}
           `
         }
       ],
-      inline: false,
+      inline: true,
       author,
       color: '#ff0000',
       footer: `${this.sd(true)}`
