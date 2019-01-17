@@ -59,8 +59,9 @@ class StatsCommand extends LCommand {
           name: 'Statistics',
           value: stripIndent`
             •  Sent **${this.client.stats.get('messages-sent').toLocaleString()}** message${this.client.stats.get('messages-sent') === 1 ? '' : 's'}
-            •  Received **${this.client.stats.get('messages-received').toLocaleString()}** message${this.client.stats.get('messages-received') === 1 ? '' : 's'}
             •  Executed **${this.client.stats.get('commands-started').toLocaleString()}** command${this.client.stats.get('commands-started') === 1 ? '' : 's'}
+            •  Received **${this.client.stats.get('messages-received').toLocaleString()}** message${this.client.stats.get('messages-received') === 1 ? '' : 's'}
+            •  Mentioned **${this.client.stats.get('mentions').toLocaleString()}** time${this.client.stats.get('mentions') === 1 ? '' : 's'}
             •  **Guilds:** ${this.client.guilds.size.toLocaleString()}
             •  **Channels:** ${this.client.channels.size.toLocaleString()}
             •  Caching **${this.client.users.size.toLocaleString()}** user${this.client.users.size === 1 ? '' : 's'}

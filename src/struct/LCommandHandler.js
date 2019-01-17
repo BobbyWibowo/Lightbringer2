@@ -56,6 +56,8 @@ class LCommandHandler extends CommandHandler {
     } else {
       this.client.stats.increment('messages-received')
     }
+    if (message.mentions.has(this.client.user))
+      this.client.stats.increment('mentions')
     return super.handle(message)
   }
 

@@ -38,7 +38,7 @@ class HelpCommand extends LCommand {
     this.git = null
   }
 
-  async run (message, args) {
+  async run (message, args, helpCommandCalled = false) {
     if (args.all) {
       // Use length of the longest command's ID as padding.
       const padding = ' '.repeat(this.handler.modules.reduce((a, v, k) => (a > k.length) ? a : k.length, 0))

@@ -20,17 +20,17 @@ class EmojiManageCommand extends LCommand {
           description: 'Can be "add", "create", "delete", "remove" or "rename". Add/create action will create the emoji in the currently viewed guild, while delete/remove and rename actions will delete/rename the emoji globally unless the resolvable is only a name (instead of an ID or the emoji itself).'
         },
         {
-          id: 'name',
+          id: 'emojiResolvable',
           match: 'phrase',
           description: 'With add/create action, this must be the name that will be used as a new emoji. With delete/remove and rename actions, this can be an emoji resolvable (ID, name or the emoji itself). Using name (for delete/remove/rename actions) will make the command only search for emojis in the currently viewed guild. It is also not case-sensitive and do not have to be typed in full.'
         },
         {
-          id: 'extra',
+          id: 'data',
           match: 'rest',
           description: 'With add/create action, this must be the URL of the image that will be used as a new emoji. With rename action, this must be the new name.'
         }
       ],
-      usage: 'emojis <action> <resolvable> [extra]',
+      usage: 'emojis <action> <emojiResolvable> [data]',
       examples: [
         'emojimanage add emojiname http://url/to/image',
         'emojimanage delete emojiname',
@@ -43,40 +43,40 @@ class EmojiManageCommand extends LCommand {
     if ((args.action === 1 || args.action === 3) && !message.guild)
       return message.status('error', 'You must be in a guild when using this command with add/create action.')
 
-    if (!args.action || ((args.action === 1 || args.action === 3) && !args.extra))
+    if (!args.action || ((args.action === 1 || args.action === 3) && !args.data))
       return message.status('error', `Usage: \`${this.usage}\`.`)
 
     if (args.action === 1) {
-      const exec = /^<?(.+?)>?$/.exec(args.extra)
+      const exec = /^<?(.+?)>?$/.exec(args.data)
       if (!exec || !exec[1])
         return message.status('error', 'Could not parse input.')
 
-      args.extra = exec[1].trim()
+      args.data = exec[1].trim()
 
-      const result = await this.client.util.fetch(args.extra)
+      const result = await this.client.util.fetch(args.data)
       if (result.status !== 200)
         return message.status('error', result.text)
 
-      await message.guild.emojis.create(result.body, args.name)
-      return message.status('success', `Created an emoji named \`${args.name}\`.`)
+      await message.guild.emojis.create(result.body, args.emojiResolvable)
+      return message.status('success', `Created an emoji named \`${args.emojiResolvable}\`.`)
     } else if (args.action === 2 || args.action === 3) {
       let emoji
-      const match = EMOJI_REGEX.exec(args.name)
+      const match = EMOJI_REGEX.exec(args.emojiResolvable)
       if (match && match[1])
         emoji = this.client.emojis.get(match[1])
       else
-        emoji = this.client.util.resolveEmojis(args.name, message.guild.emojis).first()
+        emoji = this.client.util.resolveEmojis(args.emojiResolvable, message.guild.emojis).first()
 
       if (!emoji)
-        return message.status('error', `Could not find emoji with keyword \`${args.name}\`.`)
+        return message.status('error', `Could not find emoji with keyword \`${args.emojiResolvable}\`.`)
 
       const oldName = emoji.name
       if (args.action === 2) {
         await emoji.delete()
         return message.status('success', `Successfully deleted an emoji named: \`${oldName}\`.`)
       } else if (args.action === 3) {
-        await emoji.setName(args.extra)
-        return message.status('success', `Successfully renamed emoji \`${oldName}\` to \`${args.extra}\`.`)
+        await emoji.setName(args.data)
+        return message.status('success', `Successfully renamed emoji \`${oldName}\` to \`${args.data}\`.`)
       }
     }
   }

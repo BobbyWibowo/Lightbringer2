@@ -26,16 +26,20 @@ class LCommand extends Command {
     this.examples = examples
     this.hidden = hidden
     this.usage = usage
-    this.selfdestruct = selfdestruct
+    this._selfdestruct = selfdestruct
   }
 
-  exec (...args) {
+  async exec (...args) {
     if (typeof args[1] === 'object' && args[1].help) {
       const helpCommand = this.handler.modules.get('help')
       if (!helpCommand)
         return args[0].status('error', 'Help module is missing!')
+
+      this.selfdestruct = helpCommand._selfdestruct
       return helpCommand.run(args[0], { command: this })
     }
+
+    this.selfdestruct = this._selfdestruct
     return this.run(...args)
   }
 
