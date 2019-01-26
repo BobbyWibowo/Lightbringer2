@@ -13,8 +13,6 @@ const Storage = require('./Storage')
 class LightbringerClient extends AkairoClient {
   constructor (configManager) {
     super({}, {
-      messageCacheMaxSize: 10,
-      sync: true,
       disabledEvents: [
         'GUILD_BAN_ADD',
         'GUILD_BAN_REMOVE',

@@ -1,3 +1,4 @@
+const { MessageStore } = require('discord.js')
 const { stripIndent } = require('common-tags')
 const LCommand = require('./../../struct/LCommand')
 const os = require('os')
@@ -21,6 +22,10 @@ class StatsCommand extends LCommand {
     modules += this.client.listenerHandler.modules.size
 
     const members = this.client.guilds.reduce((a, v) => a + v.members.size, 0)
+    const messages = this.client.channels.reduce((a, v) => {
+      if (!(v.messages instanceof MessageStore)) return a
+      return a + v.messages.size
+    }, 0)
 
     let version = this.client.data.package.version
     const author = {
@@ -61,14 +66,15 @@ class StatsCommand extends LCommand {
         {
           name: 'Statistics',
           value: stripIndent`
+            •  **Guilds:** ${this.client.guilds.size.toLocaleString()}
+            •  **Channels:** ${this.client.channels.size.toLocaleString()}
             •  Sent **${this.client.stats.get('messages-sent').toLocaleString()}** message${this.client.stats.get('messages-sent') === 1 ? '' : 's'}
             •  Executed **${this.client.stats.get('commands-started').toLocaleString()}** command${this.client.stats.get('commands-started') === 1 ? '' : 's'}
             •  Received **${this.client.stats.get('messages-received').toLocaleString()}** message${this.client.stats.get('messages-received') === 1 ? '' : 's'}
             •  Mentioned **${this.client.stats.get('mentions').toLocaleString()}** time${this.client.stats.get('mentions') === 1 ? '' : 's'}
-            •  **Guilds:** ${this.client.guilds.size.toLocaleString()}
-            •  **Channels:** ${this.client.channels.size.toLocaleString()}
             •  Caching **${this.client.users.size.toLocaleString()}** user${this.client.users.size === 1 ? '' : 's'}
             •  Caching **${members.toLocaleString()}** member${members === 1 ? '' : 's'}
+            •  Caching **${messages.toLocaleString()}** message${messages === 1 ? '' : 's'}
           `
         }
       ],
