@@ -32,7 +32,7 @@
     "form-data": "^2.3.3",
     "fs-extra": "^8.0.1",
     "mathjs": "^6.0.2",
-    "moment": "^2.23.0",
+    "moment": "^2.24.0",
     "mw-dict": "^3.0.0",
     "node-fetch": "^2.6.0",
     "pixel-average": "^1.0.1",
