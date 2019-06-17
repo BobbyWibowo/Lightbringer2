@@ -43,7 +43,7 @@
     "uws": "discordjs/uws#6d010c830553123cddbb4fcd2b6a9592fcb41478"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
+    "eslint": "^5.16.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-node": "^8.0.1",
