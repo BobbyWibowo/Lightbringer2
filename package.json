@@ -19,9 +19,9 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "booru": "^1.3.4",
+    "booru": "^1.3.6",
     "canvas": "^1.6.13",
-    "chalk": "^2.4.1",
+    "chalk": "^2.4.2",
     "color-convert": "^1.9.3",
     "color-name": "^1.1.4",
     "common-tags": "^1.8.0",
@@ -31,24 +31,24 @@
     "erlpack": "discordapp/erlpack#674ebfd3439ba4b7ce616709821d27630f7cdc61",
     "form-data": "^2.3.3",
     "fs-extra": "^5.0.0",
-    "mathjs": "^5.4.0",
-    "moment": "^2.23.0",
+    "mathjs": "^5.10.3",
+    "moment": "^2.24.0",
     "mw-dict": "^3.0.0",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.6.0",
     "pixel-average": "^1.0.1",
     "querystring": "^0.2.0",
     "readline": "^1.3.0",
-    "strip-ansi": "^5.0.0",
+    "strip-ansi": "^5.2.0",
     "txtgen": "^2.2.2",
     "uws": "discordjs/uws#6d010c830553123cddbb4fcd2b6a9592fcb41478"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-standard": "^3.1.0"
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0"
   },
   "resolutions": {
     "discord.js/prism-media": "amishshah/prism-media#7146426e462bf91b39053de4cf8b78c72490cd54"
