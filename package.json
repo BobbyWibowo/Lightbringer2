@@ -30,7 +30,7 @@
     "encodeurl": "^1.0.2",
     "erlpack": "discordapp/erlpack#674ebfd3439ba4b7ce616709821d27630f7cdc61",
     "form-data": "^2.3.3",
-    "fs-extra": "^5.0.0",
+    "fs-extra": "^8.1.0",
     "mathjs": "^5.10.3",
     "moment": "^2.24.0",
     "mw-dict": "^3.0.0",
